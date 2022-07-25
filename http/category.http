@@ -6,3 +6,18 @@ Content-Type: application/json
   "name": "질문",
   "type": "question"
 }
+
+### get category
+GET http://localhost:8080/api/category/1
+
+### edit category
+PUT http://localhost:8080/api/category/1
+Content-Type: application/json
+
+{
+  "name": "질문A",
+  "type": "questionA"
+}
+
+### delete category
+DELETE http://localhost:8080/api/category/1

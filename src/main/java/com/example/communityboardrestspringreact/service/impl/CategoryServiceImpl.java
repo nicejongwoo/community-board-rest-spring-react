@@ -37,19 +37,20 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryResponse getOne(Long id) {
         Category category = categoryRepository.findById(id).orElseThrow(() -> new RuntimeException(""));
-        //todo category -> response
-        return null;
+        return CategoryDtoMapper.MAPPER.toDto(category);
     }
 
+    @Transactional
     @Override
     public void edit(Long id, CategoryRequest request) {
-        //todo check category exist return category
-        //todo category update
+        Category category = categoryRepository.findById(id).orElseThrow(() -> new RuntimeException(""));
+        category.update(request.getName(), request.getType());
     }
 
     @Override
     public void delete(Long id) {
-        //todo check category exist
-        //todo delete
+        Category category = categoryRepository.findById(id).orElseThrow(() -> new RuntimeException(""));
+        categoryRepository.delete(category);
     }
+
 }

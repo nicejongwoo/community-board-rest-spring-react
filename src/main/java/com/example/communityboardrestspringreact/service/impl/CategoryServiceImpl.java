@@ -3,6 +3,7 @@ package com.example.communityboardrestspringreact.service.impl;
 import com.example.communityboardrestspringreact.domain.Category;
 import com.example.communityboardrestspringreact.repository.CategoryRepository;
 import com.example.communityboardrestspringreact.service.CategoryService;
+import com.example.communityboardrestspringreact.web.dto.mapper.CategoryDtoMapper;
 import com.example.communityboardrestspringreact.web.dto.request.CategoryRequest;
 import com.example.communityboardrestspringreact.web.dto.response.CategoryResponse;
 import com.example.communityboardrestspringreact.web.dto.search.CategorySearch;
@@ -23,8 +24,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     @Override
     public Long register(CategoryRequest request) {
-        //todo request -> category
-        Category category = new Category();
+        Category category = CategoryDtoMapper.MAPPER.toEntity(request);
         categoryRepository.save(category);
         return category.getId();
     }

@@ -21,3 +21,6 @@ Content-Type: application/json
 
 ### delete category
 DELETE http://localhost:8080/api/category/1
+
+### search category
+GET http://localhost:8080/api/category?page=0&size=10&sort=id,desc&type=name&keyword=TEST

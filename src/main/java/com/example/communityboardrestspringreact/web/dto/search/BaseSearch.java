@@ -5,4 +5,8 @@ import lombok.Setter;
 
 @Getter @Setter
 public class BaseSearch {
+
+    String type; //search
+    String keyword;
+
 }

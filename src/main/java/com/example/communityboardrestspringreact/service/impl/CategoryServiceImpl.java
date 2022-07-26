@@ -31,7 +31,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Page<CategoryResponse> search(CategorySearch search, Pageable pageable) {
-        return null;
+        return categoryRepository.search(search, pageable);
     }
 
     @Override

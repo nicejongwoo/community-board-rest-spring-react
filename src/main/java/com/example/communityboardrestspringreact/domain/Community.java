@@ -1,5 +1,7 @@
 package com.example.communityboardrestspringreact.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -7,6 +9,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Entity
@@ -18,6 +22,7 @@ public class Community extends BaseEntity {
 
     private String title;
 
+    @Lob
     private String content;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "community")
@@ -30,4 +35,7 @@ public class Community extends BaseEntity {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    public void updateCategory(Category category) {
+        this.category = category;
+    }
 }

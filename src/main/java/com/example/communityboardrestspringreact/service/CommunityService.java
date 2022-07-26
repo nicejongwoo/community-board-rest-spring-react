@@ -1,4 +1,20 @@
 package com.example.communityboardrestspringreact.service;
 
+import com.example.communityboardrestspringreact.web.dto.request.CommunityRequest;
+import com.example.communityboardrestspringreact.web.dto.response.CommunityResponse;
+import com.example.communityboardrestspringreact.web.dto.search.CommunitySearch;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 public interface CommunityService {
+    Long register(CommunityRequest request);
+
+    Page<CommunityResponse> search(CommunitySearch search, Pageable pageable);
+
+    CommunityResponse getOne(Long id);
+
+    void edit(Long id, CommunityRequest request);
+
+    void delete(Long id);
+
 }

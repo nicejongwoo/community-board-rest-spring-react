@@ -1,16 +1,79 @@
 package com.example.communityboardrestspringreact.service.impl;
 
-import com.example.communityboardrestspringreact.repository.CommentRepository;
+import com.example.communityboardrestspringreact.domain.Category;
+import com.example.communityboardrestspringreact.domain.Community;
+import com.example.communityboardrestspringreact.domain.Tag;
+import com.example.communityboardrestspringreact.repository.CategoryRepository;
+import com.example.communityboardrestspringreact.repository.CommunityRepository;
+import com.example.communityboardrestspringreact.repository.TagRepository;
 import com.example.communityboardrestspringreact.service.CommunityService;
+import com.example.communityboardrestspringreact.web.dto.mapper.CommunityDtoMapper;
+import com.example.communityboardrestspringreact.web.dto.mapper.TagDtoMapper;
+import com.example.communityboardrestspringreact.web.dto.request.CommunityRequest;
+import com.example.communityboardrestspringreact.web.dto.request.TagRequest;
+import com.example.communityboardrestspringreact.web.dto.response.CommunityResponse;
+import com.example.communityboardrestspringreact.web.dto.search.CommunitySearch;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class CommunityServiceImpl implements CommunityService {
 
-    private final CommentRepository commentRepository;
+    private final CommunityRepository communityRepository;
+    private final TagRepository tagRepository;
+    private final CategoryRepository categoryRepository;
 
+    @Transactional
+    @Override
+    public Long register(CommunityRequest request) {
+        Community community = CommunityDtoMapper.MAPPER.toEntity(request);
+
+        String[] tags = request.getTags();
+        if (tags != null && tags.length > 0) {
+            for (String tagName : tags) {
+                if (StringUtils.hasText(tagName)) {
+                    TagRequest tagRequest = TagRequest.builder().name(tagName).build();
+                    Tag tag = TagDtoMapper.MAPPER.toEntity(tagRequest);
+                    tag.updateCommunity(community);
+                    tagRepository.save(tag);
+                }
+            }
+        }
+
+        Category category = categoryRepository.findById(request.getCategoryId()).orElseThrow(
+                () -> new RuntimeException("Category Not Found")
+        );
+        community.updateCategory(category);
+
+        communityRepository.save(community);
+
+        return community.getId();
+    }
+
+    @Override
+    public Page<CommunityResponse> search(CommunitySearch search, Pageable pageable) {
+        return null;
+    }
+
+    @Override
+    public CommunityResponse getOne(Long id) {
+        return null;
+    }
+
+    @Override
+    public void edit(Long id, CommunityRequest request) {
+
+    }
+
+    @Override
+    public void delete(Long id) {
+
+    }
 }

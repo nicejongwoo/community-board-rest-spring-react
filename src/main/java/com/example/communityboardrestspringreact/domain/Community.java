@@ -38,4 +38,9 @@ public class Community extends BaseEntity {
     public void updateCategory(Category category) {
         this.category = category;
     }
+
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 }

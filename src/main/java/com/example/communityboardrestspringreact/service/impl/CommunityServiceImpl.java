@@ -34,10 +34,7 @@ public class CommunityServiceImpl implements CommunityService {
     @Override
     public Long register(CommunityRequest request) {
         Community community = CommunityDtoMapper.MAPPER.toEntity(request);
-
-        Category category = categoryRepository.findById(request.getCategoryId()).orElseThrow(
-                () -> new RuntimeException("Category Not Found")
-        );
+        Category category = checkCategory(request.getCategoryId());
 
         String[] tags = request.getTags();
         if (tags != null && tags.length > 0) {
@@ -63,17 +60,52 @@ public class CommunityServiceImpl implements CommunityService {
 
     @Override
     public CommunityResponse getOne(Long id) {
-        Community community = communityRepository.findById(id).orElseThrow(() -> new RuntimeException("Not Found Community"));
+        Community community = checkCommunity(id);
         return CommunityDtoMapper.MAPPER.toDto(community);
     }
 
+    @Transactional
     @Override
     public void edit(Long id, CommunityRequest request) {
+        Community community = checkCommunity(id);
+        Category category = checkCategory(request.getCategoryId());
 
+        String[] tags = request.getTags();
+        //기존의 tag는 모두 지우고 다시 새로 등록하는 전략
+        Long tagCount = tagRepository.countByCommunityId(id);
+        if (tagCount > 0) {
+            tagRepository.deleteAllByCommunityId(id);
+        }
+
+        if (tags != null && tags.length > 0) {
+            for (String tagName : tags) {
+                if (StringUtils.hasText(tagName)) {
+                    TagRequest tagRequest = TagRequest.builder().name(tagName).build();
+                    Tag tag = TagDtoMapper.MAPPER.toEntity(tagRequest);
+                    tag.updateCommunity(community);
+                    tagRepository.save(tag);
+                }
+            }
+        }
+
+        community.update(request.getTitle(), request.getContent());
+        community.updateCategory(category);
+    }
+
+    private Category checkCategory(Long id) {
+        return categoryRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Not Found Category")
+        );
     }
 
     @Override
     public void delete(Long id) {
 
+    }
+
+    private Community checkCommunity(Long id) {
+        return communityRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Not Found Community")
+        );
     }
 }

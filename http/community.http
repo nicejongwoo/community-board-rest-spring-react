@@ -19,8 +19,12 @@ PUT http://localhost:8080/api/community/1
 Content-Type: application/json
 
 {
-  "name": "질문A",
-  "type": "questionA"
+  "title": "수정~",
+  "content": "수정 내용...",
+  "tags": [
+    "jpa", "spring", "h2", "mariadb"
+  ],
+  "categoryId": 1
 }
 
 ### delete community

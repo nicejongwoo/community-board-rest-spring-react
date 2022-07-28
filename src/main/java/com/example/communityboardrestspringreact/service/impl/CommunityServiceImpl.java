@@ -35,6 +35,10 @@ public class CommunityServiceImpl implements CommunityService {
     public Long register(CommunityRequest request) {
         Community community = CommunityDtoMapper.MAPPER.toEntity(request);
 
+        Category category = categoryRepository.findById(request.getCategoryId()).orElseThrow(
+                () -> new RuntimeException("Category Not Found")
+        );
+
         String[] tags = request.getTags();
         if (tags != null && tags.length > 0) {
             for (String tagName : tags) {
@@ -46,12 +50,7 @@ public class CommunityServiceImpl implements CommunityService {
                 }
             }
         }
-
-        Category category = categoryRepository.findById(request.getCategoryId()).orElseThrow(
-                () -> new RuntimeException("Category Not Found")
-        );
         community.updateCategory(category);
-
         communityRepository.save(community);
 
         return community.getId();
@@ -64,7 +63,8 @@ public class CommunityServiceImpl implements CommunityService {
 
     @Override
     public CommunityResponse getOne(Long id) {
-        return null;
+        Community community = communityRepository.findById(id).orElseThrow(() -> new RuntimeException("Not Found Community"));
+        return CommunityDtoMapper.MAPPER.toDto(community);
     }
 
     @Override

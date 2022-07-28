@@ -2,18 +2,12 @@ package com.example.communityboardrestspringreact.web.dto.response;
 
 import lombok.*;
 
-import java.util.List;
-
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter @Setter
-public class CommunityResponse {
-
+@Getter
+@Setter
+public class CommentResponse {
     private Long id;
-    private String title;
     private String content;
-    private List<TagResponse> tags;
-    private List<AnswerResponse> answers;
-
 }

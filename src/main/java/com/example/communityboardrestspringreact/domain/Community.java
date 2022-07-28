@@ -25,7 +25,7 @@ public class Community extends BaseEntity {
     @Lob
     private String content;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "community")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "community")
     private List<Tag> tags = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "community")

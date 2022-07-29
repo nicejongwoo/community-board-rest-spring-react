@@ -1,0 +1,21 @@
+### register answer
+POST http://localhost:8080/api/answer
+Content-Type: application/json
+
+{
+  "content": "TEST answer content",
+  "communityId": 1
+}
+
+### edit answer
+PUT http://localhost:8080/api/answer/1
+Content-Type: application/json
+
+{
+  "content": "수정 내용...",
+  "communityId": 1
+}
+
+### delete tag
+DELETE http://localhost:8080/api/answer/1
+

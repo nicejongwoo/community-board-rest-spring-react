@@ -1,5 +1,7 @@
 package com.example.communityboardrestspringreact.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -7,6 +9,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Entity
@@ -24,4 +28,11 @@ public class Answer extends BaseEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "answer", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
 
+    public void update(String content) {
+        this.content = content;
+    }
+
+    public void updateCommunity(Community community) {
+        this.community = community;
+    }
 }

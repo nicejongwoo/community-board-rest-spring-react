@@ -2,6 +2,7 @@ package com.example.communityboardrestspringreact.web.api;
 
 import com.example.communityboardrestspringreact.service.CommunityService;
 import com.example.communityboardrestspringreact.web.dto.request.CommunityRequest;
+import com.example.communityboardrestspringreact.web.dto.response.CommunityListResponse;
 import com.example.communityboardrestspringreact.web.dto.response.CommunityResponse;
 import com.example.communityboardrestspringreact.web.dto.search.CommunitySearch;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,7 @@ public class CommunityController {
 
     @GetMapping("")
     public ResponseEntity<?> search(CommunitySearch search, Pageable pageable) {
-        Page<CommunityResponse> page = communityService.search(search, pageable);
+        Page<CommunityListResponse> page = communityService.search(search, pageable);
         return new ResponseEntity<>(page, HttpStatus.OK);
     }
 

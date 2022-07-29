@@ -3,6 +3,7 @@ package com.example.communityboardrestspringreact.service.impl;
 import com.example.communityboardrestspringreact.domain.Category;
 import com.example.communityboardrestspringreact.domain.Community;
 import com.example.communityboardrestspringreact.domain.Tag;
+import com.example.communityboardrestspringreact.repository.AnswerRepository;
 import com.example.communityboardrestspringreact.repository.CategoryRepository;
 import com.example.communityboardrestspringreact.repository.CommunityRepository;
 import com.example.communityboardrestspringreact.repository.TagRepository;
@@ -11,6 +12,7 @@ import com.example.communityboardrestspringreact.web.dto.mapper.CommunityDtoMapp
 import com.example.communityboardrestspringreact.web.dto.mapper.TagDtoMapper;
 import com.example.communityboardrestspringreact.web.dto.request.CommunityRequest;
 import com.example.communityboardrestspringreact.web.dto.request.TagRequest;
+import com.example.communityboardrestspringreact.web.dto.response.CommunityListResponse;
 import com.example.communityboardrestspringreact.web.dto.response.CommunityResponse;
 import com.example.communityboardrestspringreact.web.dto.search.CommunitySearch;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,7 @@ public class CommunityServiceImpl implements CommunityService {
     private final CommunityRepository communityRepository;
     private final TagRepository tagRepository;
     private final CategoryRepository categoryRepository;
+    private final AnswerRepository answerRepository;
 
     @Transactional
     @Override
@@ -45,8 +48,13 @@ public class CommunityServiceImpl implements CommunityService {
     }
 
     @Override
-    public Page<CommunityResponse> search(CommunitySearch search, Pageable pageable) {
-        return null;
+    public Page<CommunityListResponse> search(CommunitySearch search, Pageable pageable) {
+        Page<CommunityListResponse> page = communityRepository.search(search, pageable);
+        page.stream().forEach((item) -> {
+            Long communityId = item.getId();
+            item.setAnswerCount(answerRepository.countByCommunityId(communityId));
+        });
+        return page;
     }
 
     @Override

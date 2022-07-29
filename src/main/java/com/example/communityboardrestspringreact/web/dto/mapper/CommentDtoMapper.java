@@ -1,6 +1,7 @@
 package com.example.communityboardrestspringreact.web.dto.mapper;
 
 import com.example.communityboardrestspringreact.domain.Comment;
+import com.example.communityboardrestspringreact.web.dto.request.CommentRequest;
 import com.example.communityboardrestspringreact.web.dto.response.CommentResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -14,4 +15,5 @@ public interface CommentDtoMapper {
 
     List<CommentResponse> toDtoList(List<Comment> comments);
 
+    Comment toEntity(CommentRequest request);
 }

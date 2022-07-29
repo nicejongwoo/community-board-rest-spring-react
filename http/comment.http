@@ -1,0 +1,21 @@
+### register comment
+POST http://localhost:8080/api/comment
+Content-Type: application/json
+
+{
+  "content": "TEST comment content",
+  "answerId": 2
+}
+
+### edit comment
+PUT http://localhost:8080/api/comment/2
+Content-Type: application/json
+
+{
+  "content": "수정 내용...",
+  "answerId": 2
+}
+
+### delete comment
+DELETE http://localhost:8080/api/comment/2
+

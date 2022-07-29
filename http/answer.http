@@ -4,7 +4,7 @@ Content-Type: application/json
 
 {
   "content": "TEST answer content",
-  "communityId": 1
+  "communityId": 2
 }
 
 ### edit answer

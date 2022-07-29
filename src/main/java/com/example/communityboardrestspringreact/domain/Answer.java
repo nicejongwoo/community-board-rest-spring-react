@@ -21,7 +21,7 @@ public class Answer extends BaseEntity {
     @JoinColumn(name = "community_id")
     private Community community;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "answer")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "answer", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
 
 }

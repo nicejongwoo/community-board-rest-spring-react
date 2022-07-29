@@ -1,0 +1,15 @@
+### register tag
+POST http://localhost:8080/api/tag
+Content-Type: application/json
+
+{
+  "name": "JPA",
+  "community_id": 1
+}
+
+### get tags by community
+GET http://localhost:8080/api/tag/bycommunity/1
+
+### delete tag
+DELETE http://localhost:8080/api/tag/1
+

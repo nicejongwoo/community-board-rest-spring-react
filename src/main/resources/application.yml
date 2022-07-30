@@ -21,6 +21,16 @@ spring:
         use_sql_comments: true
     defer-datasource-initialization: true
 
+#  security:
+#    oauth2:
+#      client:
+#        registration:
+#          google:
+#            client-id: 756480474200-8ko607h14vf3n0b0hckp85jnstgq576r.apps.googleusercontent.com
+#            client-secret: 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
+#            scope: openid, profile, email
+#            redirect-uri: "{baseUrl}/login/oauth2/code/google"
+
 logging:
   level:
     org:

@@ -1,0 +1,10 @@
+### register account
+POST http://localhost:8080/api/auth/signup
+Content-Type: application/json
+
+{
+  "name": "leejongwoo",
+  "username": "leejongwoo",
+  "email": "leejongwoo.dev@gmail.com",
+  "password": "123"
+}

@@ -1,6 +1,7 @@
 ### register community
 POST http://localhost:8080/api/community
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 {
   "title": "영상에 관한 질문입니다.",
@@ -17,6 +18,7 @@ GET http://localhost:8080/api/community/1
 ### edit community
 PUT http://localhost:8080/api/community/1
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 {
   "title": "수정~",
@@ -29,6 +31,7 @@ Content-Type: application/json
 
 ### delete community
 DELETE http://localhost:8080/api/community/1
+Authorization: Bearer {{auth_token}}
 
 ### search community
 GET http://localhost:8080/api/community?page=0&size=10&sort=id,desc&type=name&keyword=TEST

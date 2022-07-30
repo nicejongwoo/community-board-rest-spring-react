@@ -1,6 +1,7 @@
 ### register tag
 POST http://localhost:8080/api/tag
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 {
   "name": "JPA",
@@ -12,4 +13,5 @@ GET http://localhost:8080/api/tag/bycommunity/1
 
 ### delete tag
 DELETE http://localhost:8080/api/tag/1
+Authorization: Bearer {{auth_token}}
 

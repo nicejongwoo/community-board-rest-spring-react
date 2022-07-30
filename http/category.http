@@ -1,6 +1,7 @@
 ### register category
 POST http://localhost:8080/api/category/
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 {
   "name": "질문",
@@ -13,6 +14,7 @@ GET http://localhost:8080/api/category/1
 ### edit category
 PUT http://localhost:8080/api/category/1
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 {
   "name": "질문A",
@@ -21,6 +23,7 @@ Content-Type: application/json
 
 ### delete category
 DELETE http://localhost:8080/api/category/1
+Authorization: Bearer {{auth_token}}
 
 ### search category
 GET http://localhost:8080/api/category?page=0&size=10&sort=id,desc&type=name&keyword=TEST

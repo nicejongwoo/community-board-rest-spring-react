@@ -1,6 +1,7 @@
 ### register comment
 POST http://localhost:8080/api/comment
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 {
   "content": "TEST comment content",
@@ -10,6 +11,7 @@ Content-Type: application/json
 ### edit comment
 PUT http://localhost:8080/api/comment/2
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 {
   "content": "수정 내용...",
@@ -18,4 +20,5 @@ Content-Type: application/json
 
 ### delete comment
 DELETE http://localhost:8080/api/comment/2
+Authorization: Bearer {{auth_token}}
 

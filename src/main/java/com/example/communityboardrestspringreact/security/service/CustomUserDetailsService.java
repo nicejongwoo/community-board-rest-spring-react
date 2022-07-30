@@ -24,10 +24,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final AccountRepository accountRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        Account account = accountRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail).orElseThrow(
-                () -> new UsernameNotFoundException("Not Found User with username or email: " + usernameOrEmail)
+        Account account = accountRepository.findByEmail(email).orElseThrow(
+                () -> new UsernameNotFoundException("Not Found User with email: " + email)
         );
 
         return new CustomUser(account, mapRolesToAuthorities(account.getRoles()));

@@ -13,7 +13,6 @@ import java.util.Set;
 @Table(
         name = "account",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"username"}),
                 @UniqueConstraint(columnNames = {"email"})
         }
 )
@@ -23,7 +22,6 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String username;
     private String email;
     private String password;
 

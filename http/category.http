@@ -1,7 +1,7 @@
 ### register category
 POST http://localhost:8080/api/category/
 Content-Type: application/json
-Authorization: Bearer 1231231123
+Authorization: Bearer {{auth_token}}
 
 {
   "name": "질문",

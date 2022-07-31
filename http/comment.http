@@ -5,7 +5,7 @@ Authorization: Bearer {{auth_token}}
 
 {
   "content": "TEST comment content",
-  "answerId": 2
+  "answerId": 1
 }
 
 ### edit comment
@@ -15,7 +15,7 @@ Authorization: Bearer {{auth_token}}
 
 {
   "content": "수정 내용...",
-  "answerId": 2
+  "answerId": 1
 }
 
 ### delete comment

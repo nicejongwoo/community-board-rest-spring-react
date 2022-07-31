@@ -41,7 +41,11 @@ public class CategoryRepositoryImpl implements CategoryRepositoryCustom {
                                 CategoryResponse.class,
                                 category.id,
                                 category.name,
-                                category.type
+                                category.type,
+                                category.createdBy,
+                                category.createdAt,
+                                category.updatedBy,
+                                category.updatedAt
                         )
                 )
                 .from(category)

@@ -1,14 +1,16 @@
 package com.example.communityboardrestspringreact.web.dto.response;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter @Setter
-public class CategoryResponse {
+public class CategoryResponse extends BaseResponse {
 
     private Long id;
     private String name;
     private String type;
+
 }

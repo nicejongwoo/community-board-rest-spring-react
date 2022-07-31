@@ -43,7 +43,11 @@ public class CommunityRepositoryImpl implements CommunityRepositoryCustom {
                                 CommunityListResponse.class,
                                     community.id,
                                     community.title,
-                                    community.content
+                                    community.content,
+                                    community.createdBy,
+                                    community.createdAt,
+                                    community.updatedBy,
+                                    community.updatedAt
                                 )
                 )
                 .from(community)

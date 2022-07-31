@@ -1,7 +1,7 @@
 package com.example.communityboardrestspringreact.security.filter;
 
-import com.example.communityboardrestspringreact.security.service.JwtTokenService;
 import com.example.communityboardrestspringreact.security.service.CustomUserDetailsService;
+import com.example.communityboardrestspringreact.security.service.JwtTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,9 +30,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = getJwtFromRequest(request);
 
         if (StringUtils.hasText(token) && tokenService.validateToken(token)) {
-
             String email = tokenService.getEmailFromToken(token);
-
             UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
             UsernamePasswordAuthenticationToken authenticationToken =
@@ -40,9 +38,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-
-
         }
+
         filterChain.doFilter(request, response);
     }
 

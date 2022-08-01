@@ -27,6 +27,7 @@ logging:
       hibernate:
         SQL: debug
         type: trace
+    root: debug
 
 app:
   jwt-secret: jwt-secret

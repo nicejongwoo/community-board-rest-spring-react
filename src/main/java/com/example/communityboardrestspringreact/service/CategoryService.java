@@ -16,4 +16,5 @@ public interface CategoryService {
     void edit(Long id, CategoryRequest request);
 
     void delete(Long id);
+
 }

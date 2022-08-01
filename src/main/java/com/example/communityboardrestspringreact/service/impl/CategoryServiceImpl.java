@@ -11,8 +11,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collection;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -36,21 +42,42 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryResponse getOne(Long id) {
-        Category category = categoryRepository.findById(id).orElseThrow(() -> new RuntimeException(""));
+        Category category = checkCategory(id);
         return CategoryDtoMapper.MAPPER.toDto(category);
     }
 
     @Transactional
     @Override
     public void edit(Long id, CategoryRequest request) {
-        Category category = categoryRepository.findById(id).orElseThrow(() -> new RuntimeException(""));
+        Category category = checkCategory(id);
+        authorityCheck(category.getCreatedBy());
+
         category.update(request.getName(), request.getType());
     }
 
+    @Transactional
     @Override
     public void delete(Long id) {
-        Category category = categoryRepository.findById(id).orElseThrow(() -> new RuntimeException(""));
+        Category category = checkCategory(id);
+        authorityCheck(category.getCreatedBy());
+
         categoryRepository.delete(category);
+    }
+
+    private void authorityCheck(String createdBy) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+
+        boolean owner = createdBy.equals(authentication.getName());
+        boolean admin = authorities.stream().anyMatch(grantedAuthority -> grantedAuthority.getAuthority().contains("ADMIN"));
+
+        if(!(owner || admin)) {
+            throw new AccessDeniedException("해당 요청에 대한 권한이 없습니다.");
+        }
+    }
+
+    public Category checkCategory(Long id) {
+        return categoryRepository.findById(id).orElseThrow(() -> new RuntimeException(""));
     }
 
 }

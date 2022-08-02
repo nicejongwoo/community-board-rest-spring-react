@@ -1,5 +1,6 @@
 package com.example.communityboardrestspringreact.service;
 
+import com.example.communityboardrestspringreact.domain.Category;
 import com.example.communityboardrestspringreact.web.dto.request.CategoryRequest;
 import com.example.communityboardrestspringreact.web.dto.response.CategoryResponse;
 import com.example.communityboardrestspringreact.web.dto.search.CategorySearch;
@@ -13,8 +14,9 @@ public interface CategoryService {
 
     CategoryResponse getOne(Long id);
 
-    void edit(Long id, CategoryRequest request);
+    void edit(CategoryRequest request, Category category);
 
-    void delete(Long id);
+    void delete(Category category);
 
+    Category checkCategory(Long id);
 }

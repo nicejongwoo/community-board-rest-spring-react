@@ -9,11 +9,11 @@ Authorization: Bearer {{auth_token}}
 }
 
 ### get category
-GET http://localhost:8080/api/category/2
+GET http://localhost:8080/api/category/4
 
 
 ### edit category
-PUT http://localhost:8080/api/category/1
+PUT http://localhost:8080/api/category/4
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 
@@ -23,7 +23,7 @@ Authorization: Bearer {{auth_token}}
 }
 
 ### delete category
-DELETE http://localhost:8080/api/category/1
+DELETE http://localhost:8080/api/category/4
 Authorization: Bearer {{auth_token}}
 
 ### search category

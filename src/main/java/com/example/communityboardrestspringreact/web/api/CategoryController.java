@@ -1,5 +1,6 @@
 package com.example.communityboardrestspringreact.web.api;
 
+import com.example.communityboardrestspringreact.domain.Category;
 import com.example.communityboardrestspringreact.service.CategoryService;
 import com.example.communityboardrestspringreact.web.dto.request.CategoryRequest;
 import com.example.communityboardrestspringreact.web.dto.response.CategoryResponse;
@@ -40,13 +41,15 @@ public class CategoryController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> edit(@PathVariable Long id, @RequestBody CategoryRequest request) {
-        categoryService.edit(id, request);
+        Category category = categoryService.checkCategory(id);
+        categoryService.edit(request, category);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
-        categoryService.delete(id);
+        Category category = categoryService.checkCategory(id);
+        categoryService.delete(category);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

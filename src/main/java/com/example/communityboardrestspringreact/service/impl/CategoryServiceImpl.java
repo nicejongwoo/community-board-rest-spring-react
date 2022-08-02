@@ -24,6 +24,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
     @Override
     public Long register(CategoryRequest request) {

@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,7 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final AnswerRepository answerRepository;
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @Transactional
     @Override
     public Long register(CommentRequest request) {
@@ -36,31 +38,34 @@ public class CommentServiceImpl implements CommentService {
         return comment.getId();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Page<CommentResponse> search(CommentSearch search, Pageable pageable) {
         return null;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public CommentResponse getOne(Long id) {
         return null;
     }
 
+    @PreAuthorize("#comment.createdBy == authentication.name OR hasRole('ROLE_ADMIN')")
     @Transactional
     @Override
-    public void edit(Long id, CommentRequest request) {
-        Comment comment = checkComment(id);
+    public void edit(CommentRequest request, Comment comment) {
         comment.update(request.getContent());
     }
 
+    @PreAuthorize("#comment.createdBy == authentication.name OR hasRole('ROLE_ADMIN')")
     @Transactional
     @Override
-    public void delete(Long id) {
-        Comment comment = checkComment(id);
+    public void delete(Comment comment) {
         commentRepository.delete(comment);
     }
 
-    private Comment checkComment(Long id) {
+    @Override
+    public Comment checkComment(Long id) {
         return commentRepository.findById(id).orElseThrow(() -> new RuntimeException("Not Found Comment"));
     }
 }

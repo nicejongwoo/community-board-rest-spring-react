@@ -1,5 +1,6 @@
 package com.example.communityboardrestspringreact.web.api;
 
+import com.example.communityboardrestspringreact.domain.Comment;
 import com.example.communityboardrestspringreact.service.CommentService;
 import com.example.communityboardrestspringreact.web.dto.request.CommentRequest;
 import com.example.communityboardrestspringreact.web.dto.response.CommentResponse;
@@ -39,13 +40,15 @@ public class CommentController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> edit(@PathVariable Long id, @RequestBody CommentRequest request) {
-        commentService.edit(id, request);
+        Comment comment = commentService.checkComment(id);
+        commentService.edit(request, comment);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
-        commentService.delete(id);
+        Comment comment = commentService.checkComment(id);
+        commentService.delete(comment);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.communityboardrestspringreact.service;
 
+import com.example.communityboardrestspringreact.domain.Comment;
 import com.example.communityboardrestspringreact.web.dto.request.CommentRequest;
 import com.example.communityboardrestspringreact.web.dto.response.CommentResponse;
 import com.example.communityboardrestspringreact.web.dto.search.CommentSearch;
@@ -13,8 +14,9 @@ public interface CommentService {
 
     CommentResponse getOne(Long id);
 
-    void edit(Long id, CommentRequest request);
+    void edit(CommentRequest request, Comment comment);
 
-    void delete(Long id);
+    void delete(Comment comment);
 
+    Comment checkComment(Long id);
 }

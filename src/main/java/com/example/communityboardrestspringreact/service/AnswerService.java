@@ -1,5 +1,6 @@
 package com.example.communityboardrestspringreact.service;
 
+import com.example.communityboardrestspringreact.domain.Answer;
 import com.example.communityboardrestspringreact.web.dto.request.AnswerRequest;
 import com.example.communityboardrestspringreact.web.dto.response.AnswerResponse;
 import com.example.communityboardrestspringreact.web.dto.search.AnswerSearch;
@@ -13,7 +14,9 @@ public interface AnswerService {
 
     AnswerResponse getOne(Long id);
 
-    void edit(Long id, AnswerRequest request);
+    void edit(AnswerRequest request, Answer answer);
 
-    void delete(Long id);
+    void delete(Answer answer);
+
+    Answer checkAnswer(Long id);
 }

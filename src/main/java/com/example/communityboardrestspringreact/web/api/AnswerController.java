@@ -1,5 +1,6 @@
 package com.example.communityboardrestspringreact.web.api;
 
+import com.example.communityboardrestspringreact.domain.Answer;
 import com.example.communityboardrestspringreact.service.AnswerService;
 import com.example.communityboardrestspringreact.web.dto.request.AnswerRequest;
 import com.example.communityboardrestspringreact.web.dto.response.AnswerResponse;
@@ -39,13 +40,15 @@ public class AnswerController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> edit(@PathVariable Long id, @RequestBody AnswerRequest request) {
-        answerService.edit(id, request);
+        Answer answer = answerService.checkAnswer(id);
+        answerService.edit(request, answer);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
-        answerService.delete(id);
+        Answer answer = answerService.checkAnswer(id);
+        answerService.delete(answer);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

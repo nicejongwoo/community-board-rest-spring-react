@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,7 @@ public class AnswerServiceImpl implements AnswerService {
     private final AnswerRepository answerRepository;
     private final CommunityRepository communityRepository;
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @Transactional
     @Override
     public Long register(AnswerRequest request) {
@@ -35,35 +37,39 @@ public class AnswerServiceImpl implements AnswerService {
         return answer.getId();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Page<AnswerResponse> search(AnswerSearch search, Pageable pageable) {
         return null;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public AnswerResponse getOne(Long id) {
         return null;
     }
 
+    @PreAuthorize("#answer.createdBy == authentication.name OR hasRole('ROLE_ADMIN')")
     @Transactional
     @Override
-    public void edit(Long id, AnswerRequest request) {
-        Answer answer = checkAnswer(id);
+    public void edit(AnswerRequest request, Answer answer) {
         answer.update(request.getContent());
     }
 
+    @PreAuthorize("#answer.createdBy == authentication.name OR hasRole('ROLE_ADMIN')")
     @Transactional
     @Override
-    public void delete(Long id) {
-        Answer answer = checkAnswer(id);
+    public void delete(Answer answer) {
         answerRepository.delete(answer);
+    }
+
+    @Override
+    public Answer checkAnswer(Long id) {
+        return answerRepository.findById(id).orElseThrow(() -> new RuntimeException("Not Found Answer"));
     }
 
     private Community checkCommunity(AnswerRequest request) {
         return communityRepository.findById(request.getCommunityId()).orElseThrow(() -> new RuntimeException("Not Found Community"));
     }
 
-    private Answer checkAnswer(Long id) {
-        return answerRepository.findById(id).orElseThrow(() -> new RuntimeException("Not Found Answer"));
-    }
 }

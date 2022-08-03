@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -33,6 +34,7 @@ public class CommunityServiceImpl implements CommunityService {
     private final CategoryRepository categoryRepository;
     private final AnswerRepository answerRepository;
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @Transactional
     @Override
     public Long register(CommunityRequest request) {
@@ -47,6 +49,7 @@ public class CommunityServiceImpl implements CommunityService {
         return community.getId();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Page<CommunityListResponse> search(CommunitySearch search, Pageable pageable) {
         Page<CommunityListResponse> page = communityRepository.search(search, pageable);
@@ -57,23 +60,24 @@ public class CommunityServiceImpl implements CommunityService {
         return page;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public CommunityResponse getOne(Long id) {
         Community community = checkCommunity(id);
         return CommunityDtoMapper.MAPPER.toDto(community);
     }
 
+    @PreAuthorize("#community.createdBy == authentication.name OR hasRole('ROLE_ADMIN')")
     @Transactional
     @Override
-    public void edit(Long id, CommunityRequest request) {
-        Community community = checkCommunity(id);
+    public void edit(CommunityRequest request, Community community) {
         Category category = checkCategory(request.getCategoryId());
 
         String[] tags = request.getTags();
         //기존의 tag는 모두 지우고 다시 새로 등록하는 전략
-        Long tagCount = tagRepository.countByCommunityId(id);
+        Long tagCount = tagRepository.countByCommunityId(community.getId());
         if (tagCount > 0) {
-            tagRepository.deleteAllByCommunityId(id);
+            tagRepository.deleteAllByCommunityId(community.getId());
         }
 
         community.update(request.getTitle(), request.getContent());
@@ -81,10 +85,18 @@ public class CommunityServiceImpl implements CommunityService {
         saveTags(community, tags);
     }
 
+    @PreAuthorize("#community.createdBy == authentication.name OR hasRole('ROLE_ADMIN')")
+    @Transactional
     @Override
-    public void delete(Long id) {
-        Community community = checkCommunity(id);
+    public void delete(Community community) {
         communityRepository.delete(community);
+    }
+
+    @Override
+    public Community checkCommunity(Long id) {
+        return communityRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Not Found Community")
+        );
     }
 
     private void saveTags(Community community, String[] tags) {
@@ -103,12 +115,6 @@ public class CommunityServiceImpl implements CommunityService {
     private Category checkCategory(Long id) {
         return categoryRepository.findById(id).orElseThrow(
                 () -> new RuntimeException("Not Found Category")
-        );
-    }
-
-    private Community checkCommunity(Long id) {
-        return communityRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Not Found Community")
         );
     }
 }

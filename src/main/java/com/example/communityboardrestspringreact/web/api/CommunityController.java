@@ -1,5 +1,6 @@
 package com.example.communityboardrestspringreact.web.api;
 
+import com.example.communityboardrestspringreact.domain.Community;
 import com.example.communityboardrestspringreact.service.CommunityService;
 import com.example.communityboardrestspringreact.web.dto.request.CommunityRequest;
 import com.example.communityboardrestspringreact.web.dto.response.CommunityListResponse;
@@ -41,13 +42,15 @@ public class CommunityController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> edit(@PathVariable Long id, @RequestBody CommunityRequest request) {
-        communityService.edit(id, request);
+        Community community = communityService.checkCommunity(id);
+        communityService.edit(request, community);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
-        communityService.delete(id);
+        Community community = communityService.checkCommunity(id);
+        communityService.delete(community);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

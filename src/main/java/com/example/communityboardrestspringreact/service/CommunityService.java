@@ -1,5 +1,6 @@
 package com.example.communityboardrestspringreact.service;
 
+import com.example.communityboardrestspringreact.domain.Community;
 import com.example.communityboardrestspringreact.web.dto.request.CommunityRequest;
 import com.example.communityboardrestspringreact.web.dto.response.CommunityListResponse;
 import com.example.communityboardrestspringreact.web.dto.response.CommunityResponse;
@@ -14,8 +15,10 @@ public interface CommunityService {
 
     CommunityResponse getOne(Long id);
 
-    void edit(Long id, CommunityRequest request);
+    void edit(CommunityRequest request, Community community);
 
-    void delete(Long id);
+    void delete(Community community);
+
+    Community checkCommunity(Long id);
 
 }

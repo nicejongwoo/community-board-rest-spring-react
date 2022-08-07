@@ -8,7 +8,9 @@ import com.example.communityboardrestspringreact.security.service.JwtTokenServic
 import com.example.communityboardrestspringreact.security.web.dto.response.TokenResponse;
 import com.example.communityboardrestspringreact.web.dto.mapper.AccountDtoMapper;
 import com.example.communityboardrestspringreact.web.dto.request.LoginRequest;
+import com.example.communityboardrestspringreact.web.dto.request.RoleRequest;
 import com.example.communityboardrestspringreact.web.dto.request.SignUpRequest;
+import com.example.communityboardrestspringreact.web.dto.response.CommonApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -18,13 +20,14 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
+import java.lang.reflect.Array;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -39,6 +42,7 @@ public class AuthController {
 
     private final JwtTokenService tokenService;
 
+    @Transactional
     @PostMapping("/signup")
     public ResponseEntity<?> register(@RequestBody SignUpRequest request) {
 
@@ -50,8 +54,8 @@ public class AuthController {
         Account account = AccountDtoMapper.MAPPER.toEntity(request);
         account.encryptPassword(passwordEncoder.encode(request.getPassword()));
 
-        Role roles = roleRepository.findByName("ROLE_USER").get();
-        account.setRoles(Collections.singleton(roles));
+        Role role = roleRepository.findByName("ROLE_USER").get();
+        account.setRoles(Collections.singleton(role));
 
         accountRepository.save(account);
 
@@ -66,6 +70,24 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authenticate);
         TokenResponse tokenResponse = tokenService.generateToken(authenticate);
         return ResponseEntity.ok(tokenResponse);
+    }
+
+    @Transactional
+    @PutMapping("/{id}/roles")
+    public ResponseEntity<?> giveRoles(@PathVariable Long id, @RequestBody RoleRequest request) {
+        Account account = accountRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("찾으시는 계정이 없습니다."));
+
+        Set<Role> currentRoles = account.getRoles();
+        Set<Role> newRoles = new HashSet<>();
+
+        request.getRoles().forEach(roleName -> {
+            newRoles.add(roleRepository.findByName(roleName).get());
+        });
+        newRoles.addAll(currentRoles);
+
+        account.setRoles(newRoles);
+
+        return new ResponseEntity<>(CommonApiResponse.success(account.getId(), "권한을 추가하였습니다."), HttpStatus.OK);
     }
 
 }

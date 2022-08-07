@@ -20,3 +20,11 @@ Content-Type: application/json
 > {%
     client.global.set("auth_token", response.body.accessToken);
   %}
+
+### give admin role
+PUT http://localhost:8080/api/auth/1/roles
+Content-Type: application/json
+
+{
+  "roles": ["ROLE_MANAGER", "ROLE_ADMIN"]
+}

@@ -1,6 +1,7 @@
 package com.example.communityboardrestspringreact.web.api;
 
 import com.example.communityboardrestspringreact.service.TagService;
+import com.example.communityboardrestspringreact.web.dto.response.CommonApiResponse;
 import com.example.communityboardrestspringreact.web.dto.response.TagResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +25,7 @@ public class TagController {
     @GetMapping("/bycommunity/{id}")
     public ResponseEntity<?> getByCommunity(@PathVariable Long id) {
         List<TagResponse> tags = tagService.getByCommunity(id);
-        return new ResponseEntity<>(tags, HttpStatus.OK);
+        return new ResponseEntity<>(CommonApiResponse.success(tags), HttpStatus.OK);
     }
 
 }

@@ -11,6 +11,16 @@ public class CommonApiResponse<T> {
     private Result result;
     private String message;
 
+
+    public static <T> CommonApiResponse<T> success(T data) {
+        return (CommonApiResponse<T>) CommonApiResponse.builder()
+                .result(Result.SUCCESS)
+                .data(data)
+                .message(null)
+                .build();
+    }
+
+
     public static <T> CommonApiResponse<T> success(T data, String message) {
         return (CommonApiResponse<T>) CommonApiResponse.builder()
                 .result(Result.SUCCESS)

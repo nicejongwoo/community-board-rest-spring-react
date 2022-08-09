@@ -1,5 +1,6 @@
 import React, {useRef} from 'react';
 import {useForm} from "react-hook-form";
+import AuthService from "../../service/auth/authService";
 
 function SignUp() {
 
@@ -7,7 +8,12 @@ function SignUp() {
     const password = useRef();
     password.current = watch("password", "");
     const onSubmit = (data) => {
-        alert(JSON.stringify(data));
+        //alert(JSON.stringify(data));
+        AuthService.signup(data).then(response => {
+            console.log("response:: ", response);
+        }).catch(error => {
+            console.error("error:: ", error);
+        })
     }
 
     return (
@@ -33,10 +39,26 @@ function SignUp() {
                                     }
                                 })
                             }
-                            placeholder="예) example@gmail.com"
+                            placeholder="example@gmail.com"
                         />
                         {errors.email && <span>{errors.email.message}</span>}
                     </div>
+
+                    <div className="form__input__block">
+                        <label htmlFor="name" className="form__label">이름</label>
+                        <input
+                            id="name"
+                            {...register(
+                                "name",
+                                {
+                                    required: "이름은 필수 입력 항목입니다.",
+                                })
+                            }
+                            placeholder="홍길동"
+                        />
+                        {errors.email && <span>{errors.email.message}</span>}
+                    </div>
+
                     <div className="form__input__block">
                         <label htmlFor="password" className="form__label">비밀번호</label>
                         <input
@@ -49,10 +71,10 @@ function SignUp() {
                                     message: "비밀번호는 최소 8자 이상 입력해주세요."
                                 }
                             })}
-                            placeholder="예) example@gmail.com"
                         />
                         {errors.password && <span>{errors.password.message}</span>}
                     </div>
+
                     <div className="form__input__block">
                         <label htmlFor="password_confirm" className="form__label">비밀번호 확인</label>
                         <input
@@ -61,7 +83,6 @@ function SignUp() {
                             {...register("password_confirm", {
                                 validate: value => value === password.current || "비밀번호와 일치하지 않습니다."
                             })}
-                            placeholder="예) example@gmail.com"
                         />
                         {errors.password_confirm && <span>{errors.password_confirm.message}</span>}
                     </div>

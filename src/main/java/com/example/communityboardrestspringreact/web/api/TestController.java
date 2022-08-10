@@ -16,7 +16,7 @@ public class TestController {
 
     @PostMapping("")
     public ResponseEntity<?> save(@RequestBody TestRequest test) {
-        Test build = Test.builder().useEnabled(false).useYn(true).build();
+        Test build = Test.builder().useEnabled(test.getUseEnabled()).useYn(test.getUseYn()).build();
         Test save = testRepository.save(build);
         return ResponseEntity.ok(save);
     }

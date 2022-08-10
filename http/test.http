@@ -1,0 +1,13 @@
+### register test
+POST http://localhost:8080/api/test
+Content-Type: application/json
+#Authorization: Bearer {{auth_token}}
+
+{
+  "useYn": true,
+  "useEnabled": false
+}
+
+
+### get all list
+GET http://localhost:8080/api/test

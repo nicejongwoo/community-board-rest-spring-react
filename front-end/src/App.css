@@ -1,4 +1,10 @@
-#main {
+.app-container {
+  padding-left: 14rem;
+  display: flex;
+}
+
+
+.main {
   max-width: 100%;
   margin: 0;
   padding: 5em 3rem 0;

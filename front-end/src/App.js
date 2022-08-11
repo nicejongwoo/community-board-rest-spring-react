@@ -13,13 +13,13 @@ function App() {
 
     return (
         <BrowserRouter>
-            <div style={{paddingLeft: "14rem"}}>
+            <div className="app-container">
                 {logged && (<div>
                     <Header/>
                     <Left/>
                 </div>)}
 
-                <main id="main">
+                <main className="main">
                     <AppRouter />
                 </main>
             </div>

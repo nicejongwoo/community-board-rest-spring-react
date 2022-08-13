@@ -93,12 +93,23 @@ const Community = () => {
                     </div>
                 </div>
 
-                <div className="content-item flex-root">
-                    <ul>
+                <div className="flex-root">
+                    <ul className="button-wrapper button-right">
                         <li>
-                            <Link to="/" className="">
-                                <span>추가</span>
-                            </Link>
+                            <button
+                                type="button"
+                                className="add-button"
+                            >
+                                ss
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                type="button"
+                                className="add-button"
+                            >
+                                등록
+                            </button>
                         </li>
                     </ul>
                 </div>

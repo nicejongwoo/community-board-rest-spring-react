@@ -7,22 +7,19 @@ import logo from '../logo.svg';
 
 const Header = () => {
     return (
-        <header>
-            <div className="header-container">
-                <div className="logo-container">
+        <header className="flex-root">
+            <div className="header-wrapper flex-root">
+                <div className="logo-wrapper flex-root">
                     <Link to="/" className="logo">
                         <img src={logo} className="App-logo" alt="logo" />
                     </Link>
                 </div>
 
-                <div>
+                <div className="direct-wrapper flex-root">
                     <Link to="/user" >바로가기</Link>
                 </div>
 
-                <div style={{flexGrow: "1"}}>
-                </div>
-
-                <div className="profile-container">
+                <div className="profile-wrapper flex-root">
                     <p><span className="profile-name">홍길동</span>님 반갑습니다.</p>
                     <button className="profile-button">
                         <span className="button-label">

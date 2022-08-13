@@ -1,32 +1,28 @@
 header {
-    box-shadow: 0 2px 4px 0 hsl(0deg 0% 81% / 50%);
-    width: 100%;
-    display: flex;
-    box-sizing: border-box;
-    flex-shrink: 0;
-    flex-direction: column;
     position: fixed;
-    left: auto;
-    right: 0;
-    top: 0;
     z-index: 999;
-    background-color: #fff;
+    top: 0;
+    left: auto;
+    height: 64px;
+    width: 100%;
+    box-shadow: 0 2px 4px 0 hsl(0deg 0% 81% / 50%);
 }
 
-.header-container {
-    display: flex;
+.header-wrapper {
     position: relative;
     align-items: center;
     padding: 0 16px;
     min-height: 64px;
+    width: 100%;
 }
 
-.logo-container {
+.logo-wrapper {
     display: block;
 }
 
 .logo {
-    margin-right: 10px;
+    /*margin-right: 10px;*/
+    display: inline-flex;
 }
 
 .App-logo {
@@ -34,16 +30,23 @@ header {
     height: 44px;
 }
 
-.profile-container {
-    display: flex;
-    padding: 12px;
+.direct-wrapper {
+    flex: 1 1 auto;
+    padding: 1rem;
+}
+
+.profile-wrapper {
+    flex: 1 1 auto;
+    padding: 1rem;
     overflow: visible;
     text-align: center;
     align-items: center;
+    vertical-align: middle;
+    justify-content: end;
 }
 
-.profile-container > p {
-    margin-right: 16px;
+.profile-wrapper p {
+    margin-right: .8em;
 }
 
 .profile-button {

@@ -13,13 +13,11 @@ function App() {
 
     return (
         <BrowserRouter>
-            <div className="app-container">
-                {logged && (<div>
-                    <Header/>
-                    <Left/>
-                </div>)}
+            <div className="app-container flex-root">
+                {logged && (<Header/>)}
 
-                <main className="main">
+                <main className="main flex-root">
+                    {logged && (<Left/>)}
                     <AppRouter />
                 </main>
             </div>

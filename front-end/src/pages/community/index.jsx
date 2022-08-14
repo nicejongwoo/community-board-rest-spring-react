@@ -1,39 +1,23 @@
 import React from 'react';
 import {Link} from "react-router-dom";
+import BreadcrumbComponent from "../../components/breadcrumbComponent";
+import SearchComponent from "../../components/SearchComponent";
+import {useRecoilValue} from "recoil";
+import {searchValueState} from "../../state/SearchState";
 
 const Community = () => {
 
     const tempArray = Array.from({length: 10}, () => 0);
+    const searchValues = useRecoilValue(searchValueState);
+    console.log("Community searchValues:: ", searchValues);
 
     return (
         <section id="section" className="flex-root">
             <div className="content-wrapper">
 
-                <div className="flex-root page-title-wrapper">
-                    <p className="page-title">community</p>
-                    <ul className="breadcrumb-wrapper">
-                        <li>
-                            <Link to="/">a</Link>
-                        </li>
-                        <li>
-                            <Link to="/">a</Link>
-                        </li>
-                    </ul>
-                    <div className="print">
-                        <Link to="/">
-                            <img alt="프린트"/>
-                        </Link>
-                    </div>
-                </div>
+                <BreadcrumbComponent title="커뮤니티" path1="community" name1="커뮤니티" />
 
-                <div className="search-wrapper">
-                    <div className="flex-root">
-                        <div>
-                            <label></label>
-                            <input type="text"/>
-                        </div>
-                    </div>
-                </div>
+                <SearchComponent />
 
                 <div className="content-item flex-root table-wrapper">
                     <table className="">

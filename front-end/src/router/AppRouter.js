@@ -1,10 +1,11 @@
 import React from 'react';
 import {Route, Routes} from "react-router-dom";
-import SignUp from "../pages/auth/SignUp";
-import Community from "../pages/community";
-import Login from "../pages/auth/Login";
 import {useRecoilValue} from "recoil";
 import {loggedState} from "../state/AuthState";
+import SignUp from "../pages/auth/SignUp";
+import Login from "../pages/auth/Login";
+import Community from "../pages/community";
+import Test from "../pages/test";
 
 function AppRouter() {
 
@@ -13,8 +14,9 @@ function AppRouter() {
     return (
         <>
             <Routes>
-                <Route path="/" element={logged ? <Community/> : <Login/>} />
-                <Route path="/signup" element={<SignUp/>} />
+                <Route path="/signup" element={<SignUp/>}/>
+                <Route path="/community" element={logged ? <Community/> : <Login/>}/>
+                <Route path="/test" element={<Test/>}/>
             </Routes>
         </>
     );

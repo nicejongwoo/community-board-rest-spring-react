@@ -1,26 +1,35 @@
 import React from 'react';
 import "./css/left.css";
 import {Link} from "react-router-dom";
+import {useRecoilValue} from "recoil";
+import {currentPageState, sizeState, sortState} from "../state/SearchState";
 
 const Left = () => {
 
-    const temps = Array.from({length: 10}, () => "메뉴");
+    const currentPage = useRecoilValue(currentPageState);
+    const size = useRecoilValue(sizeState);
+    const sort = useRecoilValue(sortState);
 
     return (
         <nav className="left-container content-root">
             <div className="left-content">
                 <ul className="menu-wrapper">
-                    {temps && temps.map((temp, index) => (<li key={index} className="menu-item">
-                        <Link to={`/${index}`}>
-                            <span className="menu-name">{temp}-{index}</span>
+                    <li className="menu-item">
+                        <Link to={`/test?page=${currentPage}&size=${size}&sort=${sort}`}>
+                            <span className="menu-name">테스트</span>
                         </Link>
-                    </li>))}
+                    </li>
+                    <li className="menu-item">
+                        <Link to="/community">
+                            <span className="menu-name">커뮤니티</span>
+                        </Link>
+                    </li>
                 </ul>
             </div>
 
             <footer>
                 <p>
-                    test
+                    FOOTER
                 </p>
             </footer>
         </nav>

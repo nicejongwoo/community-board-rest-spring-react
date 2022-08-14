@@ -19,6 +19,8 @@ public class Test {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String content;
+
 //    @Convert(converter = BooleanToYnConverter.class)
     @Type(type = "yes_no")
     private Boolean useYn;

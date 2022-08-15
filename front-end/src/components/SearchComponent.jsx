@@ -3,8 +3,11 @@ import {useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
 import {useRecoilValue, useResetRecoilState, useSetRecoilState} from "recoil";
 import {currentPageState, searchValueState, sizeState, sortState, totalElementState} from "../state/SearchState";
+import "./css/SearchComponent.css";
+import {ChevronDown, Search} from "react-bootstrap-icons";
 
-const SearchComponent = ({ url }) => {
+
+const SearchComponent = ({url}) => {
 
     const navigator = useNavigate();
     const {register, handleSubmit, watch, formState: {errors}} = useForm();
@@ -44,48 +47,77 @@ const SearchComponent = ({ url }) => {
     }, [])
 
     return (
-        <div className="search-wrapper">
-            <div className="flex-root">
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <div>
-                        <label>선택</label>
-                        <select
-                            id="keyword"
-                            {...register(
-                                "type",
-                                {
-                                }
-                            )}
-                        >
-                            <option value="">선택</option>
-                            <option value="content">TEST2</option>
-                        </select>
+        <div className="search-wrapper search-row">
+            <form onSubmit={handleSubmit(onSubmit)} className="">
+                <div className="search-select">
+                    <div className="select-item">
+                        <label>TEST</label>
+                        <div className="select-outer">
+                            <select
+                                id="test1"
+                                {...register(
+                                    "test1",
+                                    {}
+                                )}
+                            >
+                                <option value="">선택</option>
+                                <option value="content">TEST2</option>
+                            </select>
+                            <ChevronDown className="select-icon"/>
+                        </div>
                     </div>
-                    <div>
-                        <label>검색</label>
-                        <input
-                            type="text"
-                            id="keyword"
-                            {...register(
-                                "keyword",
-                                {
-                                }
-                            )
-                            }
-                            placeholder="...Search"
-                        />
+                    <div className="select-item">
+                        <label>TEST</label>
+                        <div className="select-outer">
+                            <select
+                                id="test"
+                                {...register(
+                                    "test",
+                                    {}
+                                )}
+                            >
+                                <option value="">선택</option>
+                                <option value="content">TEST2</option>
+                            </select>
+                            <ChevronDown className="select-icon"/>
+                        </div>
                     </div>
-                    <div>
-                        <button
-                            type="submit"
-                        >
-                            검색
+                </div>
+
+                <div className="search-keyword">
+                    <div className="keyword-outer">
+                        <div className="keyword-wrapper">
+                            <div className="search-select">
+                                <select
+                                    id="type"
+                                    {...register(
+                                        "type",
+                                        {}
+                                    )}
+                                >
+                                    <option value="">선택</option>
+                                    <option value="content">TEST2</option>
+                                </select>
+                                <ChevronDown className="select-icon"/>
+                            </div>
+                            <input
+                                type="text"
+                                id="keyword"
+                                placeholder="검색어를 입력해주세요."
+                                {...register(
+                                    "keyword",
+                                    {}
+                                )}
+                            />
+                        </div>
+                        <button type="submit">
+                            <Search className="search-icon"/>
                         </button>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
-    );
-};
+    )
+}
 
 export default SearchComponent;

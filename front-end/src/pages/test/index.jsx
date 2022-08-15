@@ -18,7 +18,7 @@ const Test = () => {
 
     function getList(parameters) {
         TestService.getList(parameters).then(response => {
-            // console.log(response);
+            console.log(response.data);
             setTestList(response.data.content);
             setTotalElements(response.data.totalElements);
         }).catch(error => {
@@ -72,8 +72,8 @@ const Test = () => {
                         {testList && testList.map((element, index) => (<tr key={index}>
                             <td>{element.id}</td>
                             <td>{element.content}</td>
-                            <td>{element.useYn}</td>
-                            <td>{element.useEnabled}</td>
+                            <td>{element.useYn ? "사용함" : "사용안함"}</td>
+                            <td>{element.useEnabled ? "사용함" : "사용안함"}</td>
                         </tr>))}
                         </tbody>
                     </table>

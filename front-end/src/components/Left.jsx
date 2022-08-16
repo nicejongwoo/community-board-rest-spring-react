@@ -20,7 +20,7 @@ const Left = () => {
                         </Link>
                     </li>
                     <li className="menu-item">
-                        <Link to="/community">
+                        <Link to={`/community?page=${currentPage}&size=${size}&sort=${sort}`}>
                             <span className="menu-name">커뮤니티</span>
                         </Link>
                     </li>

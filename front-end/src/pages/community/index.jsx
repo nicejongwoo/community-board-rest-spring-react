@@ -1,15 +1,52 @@
-import React from 'react';
-import {Link} from "react-router-dom";
+import React, {useState} from 'react';
+import {Link, useNavigate, useSearchParams} from "react-router-dom";
 import BreadcrumbComponent from "../../components/breadcrumbComponent";
 import SearchComponent from "../../components/SearchComponent";
-import {useRecoilValue} from "recoil";
-import {searchValueState} from "../../state/SearchState";
+import {useRecoilState, useRecoilValue} from "recoil";
+import {currentPageState, searchValueState, totalElementState} from "../../state/SearchState";
+import CommunityService from "../../service/community/CommunityService";
+import {useEffect} from "react";
 
 const Community = () => {
 
     const tempArray = Array.from({length: 10}, () => 0);
+    const [communities, setCommunities] = useState([]);
+    const navigate = useNavigate();
+
+    const [currentPage, setCurrentPage] = useRecoilState(currentPageState);
+    const [totalElements, setTotalElements] = useRecoilState(totalElementState);
     const searchValues = useRecoilValue(searchValueState);
-    console.log("Community searchValues:: ", searchValues);
+    const [searchParams] = useSearchParams();
+
+
+    const getCommunities = (parameters) => {
+        CommunityService.getList(parameters).then(response => {
+            console.log("response:: ", response);
+            setCommunities(response.data.content);
+            setTotalElements(response.data.totalElements);
+        }).catch(error => {
+            console.error("getCommunities Error:: ", error);
+        })
+    }
+
+    useEffect(() => {
+        searchParams.set("page", currentPage);
+        navigate({
+            pathname: "/community",
+            search: "?" + searchParams,
+        })
+    }, [currentPage]);
+
+
+    useEffect(() => {
+        getCommunities(window.location.search);
+    }, [currentPage, searchValues]);
+
+
+    // 브라우저의 뒤로가기 이벤트
+    window.onpopstate = () => {
+        getCommunities(window.location.search);
+    }
 
     return (
         <section id="section" className="flex-root">
@@ -17,7 +54,7 @@ const Community = () => {
 
                 <BreadcrumbComponent title="커뮤니티" path1="community" name1="커뮤니티" />
 
-                <SearchComponent />
+                <SearchComponent url="/community" />
 
                 <div className="content-item flex-root table-wrapper">
                     <table className="">
@@ -27,23 +64,19 @@ const Community = () => {
                         <thead>
                         <tr>
                             <th>번호</th>
-                            <th>a</th>
-                            <th>b</th>
-                            <th>c</th>
-                            <th>d</th>
-                            <th>e</th>
-                            <th>f</th>
+                            <th>제목</th>
+                            <th>답변수</th>
+                            <th>작성자</th>
+                            <th>작성일</th>
                         </tr>
                         </thead>
                         <tbody>
-                        {tempArray && tempArray.map((element, index) => (<tr key={index}>
-                            <td>{index}</td>
-                            <td>name</td>
-                            <td>name</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                        {communities && communities.map((element, index) => (<tr key={index}>
+                            <td>{element.id}</td>
+                            <td>{element.title}</td>
+                            <td>{element.answerCount}</td>
+                            <td>{element.createdBy}</td>
+                            <td>{element.createdAt}</td>
                         </tr>))}
                         </tbody>
                     </table>
@@ -83,14 +116,9 @@ const Community = () => {
                             <button
                                 type="button"
                                 className="add-button"
-                            >
-                                ss
-                            </button>
-                        </li>
-                        <li>
-                            <button
-                                type="button"
-                                className="add-button"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                }}
                             >
                                 등록
                             </button>

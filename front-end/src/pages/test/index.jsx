@@ -5,6 +5,7 @@ import TestService from "../../service/test/testService";
 import SearchComponent from "../../components/SearchComponent";
 import {useRecoilState, useRecoilValue} from "recoil";
 import {currentPageState, searchValueState, totalElementState} from "../../state/SearchState";
+import PaginationComponent from "../../components/PaginationComponent";
 
 const Test = () => {
 
@@ -78,33 +79,8 @@ const Test = () => {
                         </tbody>
                     </table>
 
-                    <div className="pagination-wrapper flex-root">
-                        <nav aria-label="Page navigation example">
-                            <ul className="pagination pagination-sm justify-content-center flex-root">
-                                <li className="page-item">
-                                    <Link
-                                        to="#"
-                                    >
-                                        <span aria-hidden="true">&lt;</span>
-                                    </Link>
-                                </li>
-                                <li><Link to="#"><span>...</span></Link></li>
-                                <li><Link to="#" onClick={(e) => { e.preventDefault(); setCurrentPage(0)}}><span>1</span></Link></li>
-                                <li><Link to="#" onClick={(e) => { e.preventDefault(); setCurrentPage(1)}}><span>2</span></Link></li>
-                                <li><Link to="#" onClick={(e) => { e.preventDefault(); setCurrentPage(2)}}><span>3</span></Link></li>
-                                <li><Link to="#" onClick={(e) => { e.preventDefault(); setCurrentPage(3)}}><span>4</span></Link></li>
-                                <li><Link to="#" onClick={(e) => { e.preventDefault(); setCurrentPage(4)}}><span>5</span></Link></li>
-                                <li><Link to="#"><span>...</span></Link></li>
-                                <li className="page-item">
-                                    <Link
-                                        to="#"
-                                    >
-                                        <span aria-hidden="true">&gt;</span>
-                                    </Link>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
+                    <PaginationComponent />
+
                 </div>
 
                 <div className="flex-root">

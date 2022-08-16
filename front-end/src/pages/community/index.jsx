@@ -12,6 +12,7 @@ import {
 } from "../../state/SearchState";
 import CommunityService from "../../service/community/CommunityService";
 import CategoryService from "../../service/category/CategoryService";
+import PaginationComponent from "../../components/PaginationComponent";
 
 const Community = () => {
 
@@ -126,33 +127,7 @@ const Community = () => {
                         </tbody>
                     </table>
 
-                    <div className="pagination-wrapper flex-root">
-                        <nav aria-label="Page navigation example">
-                            <ul className="pagination pagination-sm justify-content-center flex-root">
-                                <li className="page-item">
-                                    <Link
-                                        to="#"
-                                    >
-                                        <span aria-hidden="true">&lt;</span>
-                                    </Link>
-                                </li>
-                                <li><Link to="/"><span>...</span></Link></li>
-                                <li><Link to="/"><span>1</span></Link></li>
-                                <li><Link to="/"><span>2</span></Link></li>
-                                <li><Link to="/"><span>3</span></Link></li>
-                                <li><Link to="/"><span>4</span></Link></li>
-                                <li><Link to="/"><span>5</span></Link></li>
-                                <li><Link to="/"><span>...</span></Link></li>
-                                <li className="page-item">
-                                    <Link
-                                        to="#"
-                                    >
-                                        <span aria-hidden="true">&gt;</span>
-                                    </Link>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
+                    <PaginationComponent />
                 </div>
 
                 <div className="flex-root">

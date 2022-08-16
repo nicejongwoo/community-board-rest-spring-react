@@ -33,7 +33,7 @@ public class TestController {
     }
 
     private void initData() {
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 114; i++) {
             Test test = Test.builder()
                     .content("Content" + i)
                     .useYn(true)

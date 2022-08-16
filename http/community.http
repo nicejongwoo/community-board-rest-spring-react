@@ -34,4 +34,4 @@ DELETE http://localhost:8080/api/community/1
 Authorization: Bearer {{auth_token}}
 
 ### search community
-GET http://localhost:8080/api/community?page=0&size=10&sort=id,desc&type=name&keyword=TEST
+GET http://localhost:8080/api/community?page=0&size=10&sort=id,desc&type=createdName&keyword=&categoryId=1

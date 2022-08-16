@@ -12,4 +12,5 @@ public class CommunityListResponse extends BaseResponse{
     private String title;
     private String content;
     private Long answerCount;
+    private String createdName;
 }

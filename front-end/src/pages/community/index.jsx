@@ -60,6 +60,7 @@ const Community = () => {
                     <table className="">
                         <colgroup>
                             <col width="5%"/>
+                            <col width="45%"/>
                         </colgroup>
                         <thead>
                         <tr>
@@ -71,11 +72,18 @@ const Community = () => {
                         </tr>
                         </thead>
                         <tbody>
-                        {communities && communities.map((element, index) => (<tr key={index}>
+                        {communities && communities.map((element, index) => (<tr
+                            key={index}
+                            style={{cursor: "pointer"}}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                navigate(`/community/${element.id}${window.location.search}`)
+                            }
+                        }>
                             <td>{element.id}</td>
                             <td>{element.title}</td>
                             <td>{element.answerCount}</td>
-                            <td>{element.createdBy}</td>
+                            <td>{element.createdName}</td>
                             <td>{element.createdAt}</td>
                         </tr>))}
                         </tbody>

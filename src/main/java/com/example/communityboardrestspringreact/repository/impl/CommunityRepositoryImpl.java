@@ -1,6 +1,7 @@
 package com.example.communityboardrestspringreact.repository.impl;
 
 import com.example.communityboardrestspringreact.domain.Community;
+import com.example.communityboardrestspringreact.domain.QAccount;
 import com.example.communityboardrestspringreact.repository.custom.CommunityRepositoryCustom;
 import com.example.communityboardrestspringreact.web.dto.response.CommunityListResponse;
 import com.example.communityboardrestspringreact.web.dto.search.CommunitySearch;
@@ -20,6 +21,7 @@ import org.springframework.data.support.PageableExecutionUtils;
 import javax.persistence.EntityManager;
 import java.util.List;
 
+import static com.example.communityboardrestspringreact.domain.QAccount.*;
 import static com.example.communityboardrestspringreact.domain.QAnswer.answer;
 import static com.example.communityboardrestspringreact.domain.QCategory.category;
 import static com.example.communityboardrestspringreact.domain.QCommunity.community;
@@ -47,11 +49,17 @@ public class CommunityRepositoryImpl implements CommunityRepositoryCustom {
                                     community.createdBy,
                                     community.createdAt,
                                     community.updatedBy,
-                                    community.updatedAt
+                                    community.updatedAt,
+                                    account.name.as("createdName")
                                 )
                 )
                 .from(community)
-                .where();
+                .leftJoin(account)
+                .on(account.email.eq(community.createdBy))
+                .where(
+                        keywordContains(search.getType(), search.getKeyword()),
+                        eqCategory(search.getCategoryId())
+                );
 
         if (pageable != null) {
             query.offset(pageable.getOffset());
@@ -69,8 +77,11 @@ public class CommunityRepositoryImpl implements CommunityRepositoryCustom {
         JPAQuery<Community> countQuery = factory
                 .select(community)
                 .from(community)
+                .leftJoin(account)
+                .on(account.email.eq(community.createdBy))
                 .where(
-                        keywordContains(search.getType(), search.getKeyword())
+                        keywordContains(search.getType(), search.getKeyword()),
+                        eqCategory(search.getCategoryId())
                 );
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount);
@@ -81,14 +92,25 @@ public class CommunityRepositoryImpl implements CommunityRepositoryCustom {
         if (hasText(type)) {
             if (hasText(keyword)) {
                 switch (type) {
-                    case "name":
-                        return category.name.contains(keyword);
-                    case "type":
-                        return category.type.contains(keyword);
+                    case "title":
+                        return community.title.contains(keyword);
+                    case "content":
+                        return community.content.contains(keyword);
+                    case "createdName":
+                        return account.name.contains(keyword);
                     default:
                         return null;
                 }
             }
+        }
+
+        return null;
+    }
+
+    private BooleanExpression eqCategory(Long categoryId) {
+
+        if (categoryId != null) {
+            return community.category.id.eq(categoryId);
         }
 
         return null;

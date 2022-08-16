@@ -2,7 +2,14 @@ import React, {useEffect} from 'react';
 import {useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
 import {useRecoilValue, useResetRecoilState, useSetRecoilState} from "recoil";
-import {currentPageState, searchValueState, sizeState, sortState, totalElementState} from "../state/SearchState";
+import {
+    currentPageState,
+    searchValueState, selectConditionsState,
+    sizeState,
+    sortState,
+    totalElementState,
+    typeOptionsState
+} from "../state/SearchState";
 import "./css/SearchComponent.css";
 import {ChevronDown, Search} from "react-bootstrap-icons";
 
@@ -13,7 +20,6 @@ const SearchComponent = ({url}) => {
     const {register, handleSubmit, watch, formState: {errors}} = useForm();
 
     const setSearchValues = useSetRecoilState(searchValueState);
-
     const currentPage = useRecoilValue(currentPageState);
     const size = useRecoilValue(sizeState);
     const sort = useRecoilValue(sortState);
@@ -23,6 +29,11 @@ const SearchComponent = ({url}) => {
     const resetTotalElement = useResetRecoilState(totalElementState);
     const resetSize = useResetRecoilState(sizeState);
     const resetSort = useResetRecoilState(sortState);
+
+    const typeOptions = useRecoilValue(typeOptionsState);
+    const selectConditions = useRecoilValue(selectConditionsState);
+    const resetTypeOptions = useResetRecoilState(typeOptionsState);
+    const resetSelectConditions = useResetRecoilState(selectConditionsState);
 
     const onSubmit = (data) => {
         setSearchValues(data);
@@ -43,6 +54,8 @@ const SearchComponent = ({url}) => {
             resetTotalElement();
             resetSize();
             resetSort();
+            resetTypeOptions();
+            resetSelectConditions();
         }
     }, [])
 
@@ -50,38 +63,25 @@ const SearchComponent = ({url}) => {
         <div className="search-wrapper search-row">
             <form onSubmit={handleSubmit(onSubmit)} className="">
                 <div className="search-select">
-                    <div className="select-item">
-                        <label>TEST</label>
-                        <div className="select-outer">
-                            <select
-                                id="test1"
-                                {...register(
-                                    "test1",
-                                    {}
-                                )}
-                            >
-                                <option value="">선택</option>
-                                <option value="content">TEST2</option>
-                            </select>
-                            <ChevronDown className="select-icon"/>
-                        </div>
-                    </div>
-                    <div className="select-item">
-                        <label>TEST</label>
-                        <div className="select-outer">
-                            <select
-                                id="test"
-                                {...register(
-                                    "test",
-                                    {}
-                                )}
-                            >
-                                <option value="">선택</option>
-                                <option value="content">TEST2</option>
-                            </select>
-                            <ChevronDown className="select-icon"/>
-                        </div>
-                    </div>
+                    {selectConditions && selectConditions.map((element, index) => (
+                        <div key={index} className="select-item">
+                            <label>{element.label}</label>
+                            <div className="select-outer">
+                                <select
+                                    id={element.name}
+                                    {...register(
+                                        `${element.name}`,
+                                        {}
+                                    )}
+                                >
+                                    <option value="">선택</option>
+                                    {element.options && element.options.map((option, idx) => (
+                                        <option key={idx} value={option.value}>{option.name}</option>
+                                    ))}
+                                </select>
+                                <ChevronDown className="select-icon"/>
+                            </div>
+                    </div>))}
                 </div>
 
                 <div className="search-keyword">
@@ -96,7 +96,9 @@ const SearchComponent = ({url}) => {
                                     )}
                                 >
                                     <option value="">선택</option>
-                                    <option value="content">TEST2</option>
+                                    {typeOptions && typeOptions.map((element, index) => (
+                                        <option key={index} value={element.value}>{element.name}</option>
+                                    ))}
                                 </select>
                                 <ChevronDown className="select-icon"/>
                             </div>

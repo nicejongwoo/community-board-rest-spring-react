@@ -1,7 +1,7 @@
 import React, {useRef} from 'react';
 import {useForm} from "react-hook-form";
 import AuthService from "../../service/auth/authService";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import "./auth.css";
 
 function SignUp() {
@@ -101,6 +101,10 @@ function SignUp() {
                                 >
                                     회원가입
                                 </button>
+                            </li>
+
+                            <li>
+                                <label>이미 계정이 있으신가요?</label> <label><Link to="/login"><h6 style={{color: "blue"}}>로그인 하러가기 </h6></Link></label>
                             </li>
                         </ul>
                     </div>

@@ -8,9 +8,17 @@ const signup = (data) => {
     })
 }
 
+const login = (data) => {
+    return request({
+        url: "/auth/login",
+        method: "POST",
+        data: data
+    })
+}
+
 const AuthService = {
     signup,
-
+    login,
 }
 
 export default AuthService;

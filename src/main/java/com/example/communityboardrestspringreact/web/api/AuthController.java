@@ -4,12 +4,14 @@ import com.example.communityboardrestspringreact.domain.Account;
 import com.example.communityboardrestspringreact.domain.Role;
 import com.example.communityboardrestspringreact.repository.AccountRepository;
 import com.example.communityboardrestspringreact.repository.RoleRepository;
+import com.example.communityboardrestspringreact.security.service.CustomUser;
 import com.example.communityboardrestspringreact.security.service.JwtTokenService;
 import com.example.communityboardrestspringreact.security.web.dto.response.TokenResponse;
 import com.example.communityboardrestspringreact.web.dto.mapper.AccountDtoMapper;
 import com.example.communityboardrestspringreact.web.dto.request.LoginRequest;
 import com.example.communityboardrestspringreact.web.dto.request.RoleRequest;
 import com.example.communityboardrestspringreact.web.dto.request.SignUpRequest;
+import com.example.communityboardrestspringreact.web.dto.response.AccountResponse;
 import com.example.communityboardrestspringreact.web.dto.response.CommonApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -69,7 +71,13 @@ public class AuthController {
         );
         SecurityContextHolder.getContext().setAuthentication(authenticate);
         TokenResponse tokenResponse = tokenService.generateToken(authenticate);
-        return ResponseEntity.ok(tokenResponse);
+
+        AccountResponse accountResponse = AccountResponse.builder()
+                .token(tokenResponse)
+                .user((CustomUser) authenticate.getPrincipal())
+                .build();
+
+        return ResponseEntity.ok(CommonApiResponse.success(accountResponse));
     }
 
     @Transactional

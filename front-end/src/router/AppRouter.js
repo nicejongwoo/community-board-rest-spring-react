@@ -14,7 +14,9 @@ function AppRouter() {
     return (
         <>
             <Routes>
+                <Route path="/" element={logged ? <Community/> : <Login/>}/>
                 <Route path="/signup" element={<SignUp/>}/>
+                <Route path="/login" element={<Login/>}/>
                 <Route path="/community" element={logged ? <Community/> : <Login/>}/>
                 <Route path="/test" element={<Test/>}/>
             </Routes>

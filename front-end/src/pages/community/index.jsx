@@ -55,13 +55,11 @@ const Community = () => {
         if (categories.length === 0) {
             getCategories();
         }
-        if (typeOptions.length === 0) {
-            setTypeOptions([
-                {value: "createdName", name: "작성자명"},
-                {value: "title", name: "제목"},
-                {value: "content", name: "내용"},
-            ]);
-        }
+        setTypeOptions([
+            {value: "createdName", name: "작성자명"},
+            {value: "title", name: "제목"},
+            {value: "content", name: "내용"},
+        ]);
     }, []);
 
     useEffect(() => {
@@ -111,7 +109,7 @@ const Community = () => {
                         </tbody>
                     </table>
 
-                    <PaginationComponent />
+                    <PaginationComponent/>
                 </div>
 
                 <div className="flex-root">

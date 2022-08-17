@@ -26,11 +26,9 @@ const Test = () => {
     }
 
     useEffect(() => {
-        if (typeOptions.length === 0) {
-            setTypeOptions([
-                {value: "content", name: "내용"},
-            ]);
-        }
+        setTypeOptions([
+            {value: "content", name: "내용"},
+        ]);
     }, []);
 
 

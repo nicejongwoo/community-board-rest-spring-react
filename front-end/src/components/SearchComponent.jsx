@@ -33,6 +33,7 @@ const SearchComponent = ({url}) => {
 
     const typeOptions = useRecoilValue(typeOptionsState);
     const selectConditions = useRecoilValue(selectConditionsState);
+
     const resetTypeOptions = useResetRecoilState(typeOptionsState);
     const resetSelectConditions = useResetRecoilState(selectConditionsState);
 
@@ -49,6 +50,7 @@ const SearchComponent = ({url}) => {
     useEffect(() => {
         // console.log("컴포넌트 실행??");
         return () => { // 컴포넌트가 unmount 될 때 실행됨.
+            console.log(location.pathname + " is dying...");
             resetCurrentPage();
             resetTotalElement();
             resetSize();

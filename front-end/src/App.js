@@ -1,4 +1,5 @@
 import React from "react";
+
 import './App.css';
 import {BrowserRouter} from "react-router-dom";
 import AppRouter from "./router/AppRouter";
@@ -16,9 +17,10 @@ function App() {
             <div className="app-container flex-root">
                 {logged && (<Header/>)}
 
-                <main className="main flex-root">
+                <main className={`flex-root ${logged ? "main" : ""}`}>
+                {/*<main className="main flex-root">*/}
                     {logged && (<Left/>)}
-                    <AppRouter />
+                    <AppRouter/>
                 </main>
             </div>
         </BrowserRouter>

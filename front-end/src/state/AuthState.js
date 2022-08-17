@@ -2,7 +2,7 @@ import {atom} from "recoil";
 
 const loggedState = atom({
     key: "loggedState",
-    default: true
+    default: false
 });
 
 export {loggedState}

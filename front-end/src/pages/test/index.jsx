@@ -1,25 +1,23 @@
 import React, {useEffect, useState} from 'react';
-import {Link, useNavigate, useSearchParams} from "react-router-dom";
+import {useLocation} from "react-router-dom";
 import BreadcrumbComponent from "../../components/breadcrumbComponent";
 import TestService from "../../service/test/testService";
 import SearchComponent from "../../components/SearchComponent";
-import {useRecoilState, useRecoilValue} from "recoil";
-import {currentPageState, searchValueState, totalElementState} from "../../state/SearchState";
+import {useRecoilState} from "recoil";
+import {totalElementState, typeOptionsState} from "../../state/SearchState";
 import PaginationComponent from "../../components/PaginationComponent";
 
 const Test = () => {
 
     const [testList, setTestList] = useState([]);
-    const navigate = useNavigate();
+    const location = useLocation();
 
-    const [currentPage, setCurrentPage] = useRecoilState(currentPageState);
     const [totalElements, setTotalElements] = useRecoilState(totalElementState);
-    const searchValues = useRecoilValue(searchValueState);
-    const [searchParams] = useSearchParams();
+    const [typeOptions, setTypeOptions] = useRecoilState(typeOptionsState);
 
-    function getList(parameters) {
+    const getList = (parameters) => {
         TestService.getList(parameters).then(response => {
-            console.log(response.data);
+            // console.log(response.data);
             setTestList(response.data.content);
             setTotalElements(response.data.totalElements);
         }).catch(error => {
@@ -28,23 +26,18 @@ const Test = () => {
     }
 
     useEffect(() => {
-        searchParams.set("page", currentPage);
-        navigate({
-            pathname: "/test",
-            search: "?" + searchParams,
-        })
-    }, [currentPage]);
+        if (typeOptions.length === 0) {
+            setTypeOptions([
+                {value: "content", name: "내용"},
+            ]);
+        }
+    }, []);
 
 
     useEffect(() => {
-        getList(window.location.search);
-    }, [currentPage, searchValues]);
+        getList(location.search);
+    }, [location]);
 
-
-    // 브라우저의 뒤로가기 이벤트
-    window.onpopstate = () => {
-        getList(window.location.search);
-    }
 
     return (
         <section id="section" className="flex-root">

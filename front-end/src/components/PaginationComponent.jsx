@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
-import {Link} from "react-router-dom";
+import React, {useEffect, useState} from 'react';
 import {useRecoilState} from "recoil";
 import {currentPageState, sizeState, totalElementState} from "../state/SearchState";
 import "./css/PaginationComponent.css";
+import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
 
 const PaginationComponent = () => {
 
@@ -11,31 +11,53 @@ const PaginationComponent = () => {
     const [currentPage, setCurrentPage] = useRecoilState(currentPageState);
 
     const [pageNumberLimit, setPageNumberLimit] = useState(5);
-    const [maxPageNumberLimit, setMaxPageNumberLimit] = useState(5); //5, 10, 15
-    const [minPageNumberLimit, setMinPageNumberLimit] = useState(0); //0, 5, 10
+    const [maxPageNumberLimit, setMaxPageNumberLimit] = useState(5);
+    const [minPageNumberLimit, setMinPageNumberLimit] = useState(0);
+
+    const location = useLocation();
+    const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+
 
     const pages = [];
     for (let i = 0; i < Math.ceil(totalElements / size); i++) {
         pages.push(i);
     }
 
+    const calcPerPageRange = (page) => {
+        let floor = Math.floor((page) / pageNumberLimit);
+        setMaxPageNumberLimit(5 + (pageNumberLimit * floor));
+        setMinPageNumberLimit(0 + (pageNumberLimit * floor));
+    }
+
+    // 브라우저의 뒤로가기, 앞으로가기 이벤트
+    window.onpopstate = () => {
+        setCurrentPage(Number(searchParams.get("page")));
+        calcPerPageRange(Number(searchParams.get("page")));
+    }
+
+    const navigatePage = (page) => {
+        searchParams.set("page", String(page));
+        navigate({
+            pathname: location.pathname,
+            search: "?" + searchParams,
+        });
+    }
+
     const handlePrevPage = (e) => {
         e.preventDefault();
-        setCurrentPage(currentPage - 1);
-        if (currentPage - 1 < minPageNumberLimit) {
-            setMaxPageNumberLimit(maxPageNumberLimit - pageNumberLimit);
-            setMinPageNumberLimit(minPageNumberLimit - pageNumberLimit);
-        }
+        navigatePage(currentPage - 1);
     }
 
     const handleNextPage = (e) => {
         e.preventDefault();
-        setCurrentPage(currentPage + 1);
-        if (currentPage + 1 >= maxPageNumberLimit) {
-            setMaxPageNumberLimit(maxPageNumberLimit + pageNumberLimit);
-            setMinPageNumberLimit(minPageNumberLimit + pageNumberLimit);
-        }
+        navigatePage(currentPage + 1);
     }
+
+    useEffect(() => {
+        calcPerPageRange(Number(searchParams.get("page")));
+        setCurrentPage(Number(searchParams.get("page")));
+    }, [location]);
 
     const renderPageNumbers = pages.map((page, index) => {
         if (page < maxPageNumberLimit && page >= minPageNumberLimit) {
@@ -46,6 +68,7 @@ const PaginationComponent = () => {
                         onClick={(e) => {
                             e.preventDefault();
                             setCurrentPage(page);
+                            navigatePage(page);
                         }}
                     >
                         <span>{page + 1}</span>

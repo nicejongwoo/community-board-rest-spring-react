@@ -1,10 +1,10 @@
 import React, {useEffect} from 'react';
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
 import {useForm} from "react-hook-form";
-import {useRecoilValue, useResetRecoilState, useSetRecoilState} from "recoil";
+import {useRecoilValue, useResetRecoilState} from "recoil";
 import {
     currentPageState,
-    searchValueState, selectConditionsState,
+    selectConditionsState,
     sizeState,
     sortState,
     totalElementState,
@@ -16,15 +16,16 @@ import {ChevronDown, Search} from "react-bootstrap-icons";
 
 const SearchComponent = ({url}) => {
 
-    const navigator = useNavigate();
-    const {register, handleSubmit, watch, formState: {errors}} = useForm();
+    const navigate = useNavigate();
+    const location = useLocation();
+    const [searchParams] = useSearchParams();
+    const {register, handleSubmit, watch, reset, getValues, setValue, formState: {errors}} = useForm({
+        mode: "onChange"
+    });
 
-    const setSearchValues = useSetRecoilState(searchValueState);
-    const currentPage = useRecoilValue(currentPageState);
     const size = useRecoilValue(sizeState);
     const sort = useRecoilValue(sortState);
 
-    const resetSearchValues = useResetRecoilState(searchValueState);
     const resetCurrentPage = useResetRecoilState(currentPageState);
     const resetTotalElement = useResetRecoilState(totalElementState);
     const resetSize = useResetRecoilState(sizeState);
@@ -36,20 +37,18 @@ const SearchComponent = ({url}) => {
     const resetSelectConditions = useResetRecoilState(selectConditionsState);
 
     const onSubmit = (data) => {
-        setSearchValues(data);
         resetCurrentPage();
         resetTotalElement();
         resetSize();
         resetSort();
 
         const searchQueryString = Object.keys(data).map(key => key + "=" + data[key]).join("&"); // Object to QueryString
-        navigator(`${url}?page=${currentPage}&size=${size}&sort=${sort}&${searchQueryString}`)
+        navigate(`${url}?page=0&size=${size}&sort=${sort}&${searchQueryString}`);
     }
 
     useEffect(() => {
+        // console.log("컴포넌트 실행??");
         return () => { // 컴포넌트가 unmount 될 때 실행됨.
-            console.log("I'm dying...");
-            resetSearchValues();
             resetCurrentPage();
             resetTotalElement();
             resetSize();
@@ -57,7 +56,19 @@ const SearchComponent = ({url}) => {
             resetTypeOptions();
             resetSelectConditions();
         }
-    }, [])
+    }, []);
+
+    useEffect(() => {
+        const queryStringObject = Object.fromEntries(new URLSearchParams(location.search)); //querystring to object
+        const entries = Object.entries(getValues()) //react-hook-form data
+
+        reset();
+        for (const entry of entries) {
+            // console.log("entry:: ", entry[1]);
+            // console.log("entry:: ", entry[0]);
+            setValue(entry[0], queryStringObject[entry[0]]); //url 파라미터에 전달되는 쿼리스트링 값에 따라 동적으로 검색 폼 값 표시
+        }
+    }, [location])
 
     return (
         <div className="search-wrapper search-row">
@@ -94,6 +105,7 @@ const SearchComponent = ({url}) => {
                                         "type",
                                         {}
                                     )}
+                                    defaultValue={searchParams.get("type") &&searchParams.get("type") || ""}
                                 >
                                     <option value="">선택</option>
                                     {typeOptions && typeOptions.map((element, index) => (

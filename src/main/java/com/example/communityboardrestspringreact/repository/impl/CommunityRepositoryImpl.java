@@ -50,12 +50,15 @@ public class CommunityRepositoryImpl implements CommunityRepositoryCustom {
                                     community.createdAt,
                                     community.updatedBy,
                                     community.updatedAt,
-                                    account.name.as("createdName")
+                                    account.name.as("createdName"),
+                                    category.name.as("categoryName")
                                 )
                 )
                 .from(community)
                 .leftJoin(account)
                 .on(account.email.eq(community.createdBy))
+                .leftJoin(category)
+                .on(category.id.eq(community.category.id))
                 .where(
                         keywordContains(search.getType(), search.getKeyword()),
                         eqCategory(search.getCategoryId())
@@ -79,6 +82,8 @@ public class CommunityRepositoryImpl implements CommunityRepositoryCustom {
                 .from(community)
                 .leftJoin(account)
                 .on(account.email.eq(community.createdBy))
+                .leftJoin(category)
+                .on(category.id.eq(community.category.id))
                 .where(
                         keywordContains(search.getType(), search.getKeyword()),
                         eqCategory(search.getCategoryId())

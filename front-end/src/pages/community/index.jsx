@@ -1,35 +1,29 @@
 import React, {useEffect, useState} from 'react';
-import {Link, useNavigate, useSearchParams} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import BreadcrumbComponent from "../../components/breadcrumbComponent";
 import SearchComponent from "../../components/SearchComponent";
-import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
-import {
-    currentPageState,
-    searchValueState,
-    selectConditionsState,
-    totalElementState,
-    typeOptionsState
-} from "../../state/SearchState";
+import {useRecoilState, useSetRecoilState} from "recoil";
+import {selectConditionsState, totalElementState, typeOptionsState} from "../../state/SearchState";
 import CommunityService from "../../service/community/CommunityService";
 import CategoryService from "../../service/category/CategoryService";
 import PaginationComponent from "../../components/PaginationComponent";
 
 const Community = () => {
 
-    const [communities, setCommunities] = useState([]);
     const navigate = useNavigate();
+    const location = useLocation();
 
-    const currentPage = useRecoilValue(currentPageState);
+    const [communities, setCommunities] = useState([]);
+    const [categories, setCategories] = useState([]);
+
     const [totalElements, setTotalElements] = useRecoilState(totalElementState);
-    const searchValues = useRecoilValue(searchValueState);
-    const [searchParams] = useSearchParams();
 
-    const setTypeOptions = useSetRecoilState(typeOptionsState);
+    const [typeOptions, setTypeOptions] = useRecoilState(typeOptionsState);
     const setSelectConditions = useSetRecoilState(selectConditionsState);
 
     const getCommunities = (parameters) => {
         CommunityService.getList(parameters).then(response => {
-            console.log("response:: ", response);
+            // console.log("response:: ", response);
             setCommunities(response.data.content);
             setTotalElements(response.data.totalElements);
         }).catch(error => {
@@ -48,6 +42,7 @@ const Community = () => {
             let map = response.data.content.map(category => {
                 return {value: category.id, name: category.name}
             });
+            setCategories(response.data.content);
             categorySelectCondition.options = map;
         }).catch(error => console.error("getCategories Error:: ", error)).finally(() => {
             setSelectConditions(selectConditions =>
@@ -57,32 +52,21 @@ const Community = () => {
     }
 
     useEffect(() => {
-        getCategories();
-        setTypeOptions([
-            {value: "createdName", name: "작성자명"},
-            {value: "title", name: "제목"},
-            {value: "content", name: "내용"},
-        ]);
+        if (categories.length === 0) {
+            getCategories();
+        }
+        if (typeOptions.length === 0) {
+            setTypeOptions([
+                {value: "createdName", name: "작성자명"},
+                {value: "title", name: "제목"},
+                {value: "content", name: "내용"},
+            ]);
+        }
     }, []);
 
     useEffect(() => {
-        searchParams.set("page", currentPage);
-        navigate({
-            pathname: "/community",
-            search: "?" + searchParams,
-        })
-    }, [currentPage]);
-
-
-    useEffect(() => {
-        getCommunities(window.location.search);
-    }, [currentPage, searchValues]);
-
-
-    // 브라우저의 뒤로가기 이벤트
-    window.onpopstate = () => {
-        getCommunities(window.location.search);
-    }
+        getCommunities(location.search);
+    }, [location]);
 
     return (
         <section id="section" className="flex-root">
@@ -119,7 +103,7 @@ const Community = () => {
                             }
                             }>
                             <td>{element.id}</td>
-                            <td>{element.title}</td>
+                            <td>[{element.categoryName}] {element.title}</td>
                             <td>{element.answerCount}</td>
                             <td>{element.createdName}</td>
                             <td>{element.createdAt}</td>

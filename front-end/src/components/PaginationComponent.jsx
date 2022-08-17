@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useRecoilState} from "recoil";
 import {currentPageState, sizeState, totalElementState} from "../state/SearchState";
-import "./css/PaginationComponent.css";
+import "./css/paginationComponent.css";
 import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
 
 const PaginationComponent = () => {

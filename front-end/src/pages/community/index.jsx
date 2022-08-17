@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useLocation, useNavigate} from "react-router-dom";
-import BreadcrumbComponent from "../../components/breadcrumbComponent";
+import BreadcrumbComponent from "../../components/BreadcrumbComponent";
 import SearchComponent from "../../components/SearchComponent";
 import {useRecoilState, useSetRecoilState} from "recoil";
 import {selectConditionsState, totalElementState, typeOptionsState} from "../../state/SearchState";

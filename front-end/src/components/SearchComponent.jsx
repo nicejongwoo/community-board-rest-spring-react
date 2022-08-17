@@ -10,7 +10,7 @@ import {
     totalElementState,
     typeOptionsState
 } from "../state/SearchState";
-import "./css/SearchComponent.css";
+import "./css/searchComponent.css";
 import {ChevronDown, Search} from "react-bootstrap-icons";
 
 

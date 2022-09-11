@@ -8,11 +8,14 @@
 ## Environment
 - MacOS(M1)
 - JDK 11
-- Maven
+- Maven 3.8
 - Lombok
-- Junit5
+- Junit 5
 - IntelliJ
 - Git
+- Spring Boot 2.7
+- React 18
+- React Router Dom V6
 
 ## How to Run
 

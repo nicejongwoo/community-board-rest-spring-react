@@ -1,11 +1,11 @@
 package com.example.communityboardrestspringreact.domain;
 
 import com.example.communityboardrestspringreact.util.BooleanToStringConverter;
-import com.example.communityboardrestspringreact.util.BooleanToYnConverter;
 import lombok.*;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @ToString
 @Getter
@@ -19,13 +19,28 @@ public class Test {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "title", length = 200)
+    private String title;
+
+    @Column(name = "content", columnDefinition = "TEXT")
     private String content;
 
-//    @Convert(converter = BooleanToYnConverter.class)
-    @Type(type = "yes_no")
-    private Boolean useYn;
+    @Type(type = "yes_no") //Y or N 으로 값 저장
+    private Boolean notice;
 
-    @Convert(converter = BooleanToStringConverter.class)
-    private Boolean useEnabled;
+    @Column(name = "use_enabled")
+    @Convert(converter = BooleanToStringConverter.class) // true or false 로 값 저장
+    private Boolean deleted;
+
+    @Column(name = "created_by", length = 50)
+    private String createdBy;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    void prePersist() {
+        this.createdAt = LocalDateTime.now();
+    }
 
 }

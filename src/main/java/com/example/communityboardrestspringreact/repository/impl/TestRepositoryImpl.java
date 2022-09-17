@@ -1,11 +1,7 @@
 package com.example.communityboardrestspringreact.repository.impl;
 
-import com.example.communityboardrestspringreact.domain.Community;
-import com.example.communityboardrestspringreact.domain.QTest;
-import com.example.communityboardrestspringreact.domain.Test;
 import com.example.communityboardrestspringreact.repository.custom.TestRepositoryCustom;
 import com.example.communityboardrestspringreact.web.dto.request.TestSearch;
-import com.example.communityboardrestspringreact.web.dto.response.CommunityListResponse;
 import com.example.communityboardrestspringreact.web.dto.response.TestListResponse;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -23,8 +19,6 @@ import org.springframework.data.support.PageableExecutionUtils;
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static com.example.communityboardrestspringreact.domain.QCategory.category;
-import static com.example.communityboardrestspringreact.domain.QCommunity.community;
 import static com.example.communityboardrestspringreact.domain.QTest.*;
 import static org.springframework.util.StringUtils.hasText;
 
@@ -45,15 +39,19 @@ public class TestRepositoryImpl implements TestRepositoryCustom {
                         Projections.fields(
                                 TestListResponse.class,
                                 test.id,
+                                test.title,
                                 test.content,
-                                test.useYn,
-                                test.useEnabled
+                                test.notice,
+                                test.deleted,
+                                test.createdBy,
+                                test.createdAt
                         )
                 )
                 .from(test)
                 .where(
                         keywordContains(search.getType(), search.getKeyword()),
-                        eqUseYn(search.getUseYn())
+                        deleted(search.getDeleted()),
+                        notice(search.getNotice())
                 );
 
         if (pageable != null) {
@@ -69,21 +67,15 @@ public class TestRepositoryImpl implements TestRepositoryCustom {
 
         List<TestListResponse> content = query.fetch();
 
-        JPAQuery<Test> countQuery = factory
-                .select(test)
-                .from(test)
-                .where(
-                        keywordContains(search.getType(), search.getKeyword()),
-                        eqUseYn(search.getUseYn())
-                );
-
-        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount);
+        return PageableExecutionUtils.getPage(content, pageable, content::size);
     }
 
     private BooleanExpression keywordContains(String type, String keyword) {
         if (hasText(type)) {
             if (hasText(keyword)) {
                 switch (type) {
+                    case "title":
+                        return test.title.contains(keyword);
                     case "content":
                         return test.content.contains(keyword);
                     default:
@@ -94,13 +86,27 @@ public class TestRepositoryImpl implements TestRepositoryCustom {
         return null;
     }
 
-    private BooleanExpression eqUseYn(String useYn) {
-        if (hasText(useYn)) {
-                switch (useYn) {
+    private BooleanExpression deleted(String deleted) {
+        if (hasText(deleted)) {
+                switch (deleted) {
                     case "Y":
-                        return test.useYn.isTrue();
+                        return test.deleted.isTrue();
                     case "N":
-                        return test.useYn.isFalse();
+                        return test.deleted.isFalse();
+                    default:
+                        return null;
+                }
+        }
+        return null;
+    }
+
+    private BooleanExpression notice(String notice) {
+        if (hasText(notice)) {
+                switch (notice) {
+                    case "Y":
+                        return test.notice.isTrue();
+                    case "N":
+                        return test.notice.isFalse();
                     default:
                         return null;
                 }

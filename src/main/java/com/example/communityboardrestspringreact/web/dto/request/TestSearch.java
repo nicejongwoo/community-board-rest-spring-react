@@ -6,5 +6,7 @@ import lombok.Data;
 @Data
 public class TestSearch extends BaseSearch {
 
-    private String useYn;
+    private String deleted;
+    private String notice;
+
 }

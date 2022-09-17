@@ -1,7 +1,7 @@
 package com.example.communityboardrestspringreact.repository.impl;
 
 import com.example.communityboardrestspringreact.repository.custom.TestRepositoryCustom;
-import com.example.communityboardrestspringreact.web.dto.request.TestSearch;
+import com.example.communityboardrestspringreact.web.dto.search.TestSearch;
 import com.example.communityboardrestspringreact.web.dto.response.TestListResponse;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;

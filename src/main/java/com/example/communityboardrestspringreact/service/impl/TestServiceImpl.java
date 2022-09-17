@@ -5,7 +5,7 @@ import com.example.communityboardrestspringreact.repository.TestRepository;
 import com.example.communityboardrestspringreact.service.TestService;
 import com.example.communityboardrestspringreact.web.dto.mapper.TestDtoMapper;
 import com.example.communityboardrestspringreact.web.dto.request.TestRequest;
-import com.example.communityboardrestspringreact.web.dto.request.TestSearch;
+import com.example.communityboardrestspringreact.web.dto.search.TestSearch;
 import com.example.communityboardrestspringreact.web.dto.response.TestListResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

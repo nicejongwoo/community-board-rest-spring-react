@@ -1,4 +1,4 @@
-package com.example.communityboardrestspringreact.web.dto.request;
+package com.example.communityboardrestspringreact.web.dto.search;
 
 import com.example.communityboardrestspringreact.web.dto.search.BaseSearch;
 import lombok.Data;

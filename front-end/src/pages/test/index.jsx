@@ -6,6 +6,7 @@ import SearchComponent from "../../components/SearchComponent";
 import {useRecoilState} from "recoil";
 import {totalElementState, typeOptionsState} from "../../state/SearchState";
 import PaginationComponent from "../../components/PaginationComponent";
+import {calcPageRowNum} from "../../util/common";
 
 const Test = () => {
 
@@ -17,11 +18,14 @@ const Test = () => {
 
     const getList = (parameters) => {
         TestService.getList(parameters).then(response => {
-            // console.log(response.data);
+            console.log(response.data);
+            response.data.content.forEach((element, index) => {
+                element.rowNum = calcPageRowNum(response.data, index);
+            })
             setTestList(response.data.content);
             setTotalElements(response.data.totalElements);
         }).catch(error => {
-
+            console.error("error:: ", error);
         })
     }
 
@@ -62,7 +66,7 @@ const Test = () => {
                         </thead>
                         <tbody>
                         {testList && testList.map((element, index) => (<tr key={index}>
-                            <td>{element.id}</td>
+                            <td>{element.rowNum}</td>
                             <td>{element.content}</td>
                             <td>{element.useYn ? "사용함" : "사용안함"}</td>
                             <td>{element.useEnabled ? "사용함" : "사용안함"}</td>

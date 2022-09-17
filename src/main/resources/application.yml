@@ -1,24 +1,6 @@
 app:
   jwt-secret: jwt-secret
 
----
-spring:
-  config:
-    activate:
-      on-profile: test
-
-  datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:testdb
-
-  jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
-    hibernate:
-      ddl-auto: create-drop
-    properties:
-      hibernate:
-        format_sql: true
-        use_sql_comments: true
 
 ---
 
@@ -48,6 +30,10 @@ spring:
         format_sql: true
         use_sql_comments: true
     defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
+      data-locations: classpath*:data.sql
 
 logging:
   level:

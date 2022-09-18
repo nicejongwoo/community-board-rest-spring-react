@@ -1,6 +1,7 @@
 package com.example.communityboardrestspringreact.service;
 
 import com.example.communityboardrestspringreact.web.dto.request.TestRequest;
+import com.example.communityboardrestspringreact.web.dto.response.TestResponse;
 import com.example.communityboardrestspringreact.web.dto.search.TestSearch;
 import com.example.communityboardrestspringreact.web.dto.response.TestListResponse;
 import org.springframework.data.domain.Page;
@@ -10,4 +11,10 @@ public interface TestService {
     Long save(TestRequest request);
 
     Page<TestListResponse> search(TestSearch search, Pageable pageable);
+
+    TestResponse getTest(Long id);
+
+    TestResponse edit(Long id, TestRequest request);
+
+    void delete(Long id);
 }

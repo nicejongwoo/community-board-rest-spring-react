@@ -4,7 +4,7 @@ import com.example.communityboardrestspringreact.domain.Account;
 import com.example.communityboardrestspringreact.domain.Role;
 import com.example.communityboardrestspringreact.repository.AccountRepository;
 import com.example.communityboardrestspringreact.repository.RoleRepository;
-import com.example.communityboardrestspringreact.security.service.CustomUser;
+import com.example.communityboardrestspringreact.security.service.CustomUserDetails;
 import com.example.communityboardrestspringreact.security.service.JwtTokenService;
 import com.example.communityboardrestspringreact.security.web.dto.response.TokenResponse;
 import com.example.communityboardrestspringreact.web.dto.mapper.AccountDtoMapper;
@@ -20,16 +20,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.Array;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -72,9 +69,10 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authenticate);
         TokenResponse tokenResponse = tokenService.generateToken(authenticate);
 
+        CustomUserDetails userDetails = (CustomUserDetails) authenticate.getPrincipal();
         AccountResponse accountResponse = AccountResponse.builder()
                 .token(tokenResponse)
-                .user((CustomUser) authenticate.getPrincipal())
+                .account(userDetails.getAccount())
                 .build();
 
         return ResponseEntity.ok(CommonApiResponse.success(accountResponse));

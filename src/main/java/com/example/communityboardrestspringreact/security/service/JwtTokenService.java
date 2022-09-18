@@ -40,10 +40,12 @@ public class JwtTokenService {
 
     public TokenResponse generateToken(Authentication authentication) {
 
-        CustomUser customUser = (CustomUser) authentication.getPrincipal();
-        String roles = customUser.getAuthorities().stream().map(GrantedAuthority::getAuthority)
+//        AccountSecurityAdapter accountSecurityAdapter = (AccountSecurityAdapter) authentication.getPrincipal();
+
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        String roles = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
-        Claims claims = Jwts.claims().setSubject(customUser.getAccount().getEmail());
+        Claims claims = Jwts.claims().setSubject(userDetails.getAccount().getEmail());
 
         claims.put("roles", Arrays.asList(roles));
 

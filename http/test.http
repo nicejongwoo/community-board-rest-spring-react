@@ -1,13 +1,34 @@
-### register test
+### save test
 POST http://localhost:8080/api/test
 Content-Type: application/json
-#Authorization: Bearer {{auth_token}}
+Authorization: Bearer {{auth_token}}
 
 {
-  "useYn": true,
-  "useEnabled": false
+  "title": "TEST TITLE1",
+  "content": "TEST CONTENT1",
+  "notice": false
 }
 
 
-### get all list
-GET http://localhost:8080/api/test
+### search test
+GET http://localhost:8080/api/test?page=0&size=10&sort=id,desc&type=title&keyword=
+Authorization: Bearer {{auth_token}}
+
+
+### getOne test
+GET http://localhost:8080/api/community/1
+
+### edit test
+PUT http://localhost:8080/api/test/1
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "title": "수정~",
+  "content": "수정 내용...",
+  "notice": ""
+}
+
+### delete test
+DELETE http://localhost:8080/api/test/1
+Authorization: Bearer {{auth_token}}

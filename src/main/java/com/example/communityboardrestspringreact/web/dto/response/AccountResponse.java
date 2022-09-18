@@ -1,6 +1,6 @@
 package com.example.communityboardrestspringreact.web.dto.response;
 
-import com.example.communityboardrestspringreact.security.service.CustomUser;
+import com.example.communityboardrestspringreact.domain.Account;
 import com.example.communityboardrestspringreact.security.web.dto.response.TokenResponse;
 import lombok.*;
 
@@ -12,6 +12,7 @@ import lombok.*;
 public class AccountResponse {
 
     private TokenResponse token;
-    private CustomUser user;
+//    private AccountSecurityAdapter user;
+    private Account account;
 
 }

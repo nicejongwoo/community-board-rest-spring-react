@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -47,7 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/api/**").permitAll()
                 .antMatchers("/api/auth/**").permitAll()
-                .antMatchers("/api/test/**").anonymous()
+//                .antMatchers("/api/test/**").anonymous()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling()
@@ -64,8 +65,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
     }
 
-    @Override
-    @Bean
+//    @Override
+//    @Bean
+    @Bean(BeanIds.AUTHENTICATION_MANAGER)
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }

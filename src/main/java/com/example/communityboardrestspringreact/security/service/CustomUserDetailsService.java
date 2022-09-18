@@ -30,7 +30,10 @@ public class CustomUserDetailsService implements UserDetailsService {
                 () -> new UsernameNotFoundException("Not Found User with email: " + email)
         );
 
-        return new CustomUser(account, mapRolesToAuthorities(account.getRoles()));
+        return new CustomUserDetails(account);
+//        return account;
+//        return new AccountSecurityAdapter(account);
+//        return new AccountSecurityAdapter(account, mapRolesToAuthorities(account.getRoles()));
     }
 
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Set<Role> roles) {

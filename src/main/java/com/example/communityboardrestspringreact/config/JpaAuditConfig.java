@@ -1,6 +1,6 @@
 package com.example.communityboardrestspringreact.config;
 
-import com.example.communityboardrestspringreact.security.service.CustomUser;
+import com.example.communityboardrestspringreact.security.service.CustomUserDetails;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
@@ -28,8 +28,9 @@ public class JpaAuditConfig {
             if (authentication == null | !authentication.isAuthenticated() | authentication instanceof AnonymousAuthenticationToken) {
                 return Optional.empty();
             }
-            CustomUser principal = (CustomUser) authentication.getPrincipal();
-            return Optional.ofNullable(principal.getAccount().getEmail());
+//            AccountSecurityAdapter principal = (AccountSecurityAdapter) authentication.getPrincipal();
+            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+            return Optional.ofNullable(userDetails.getAccount().getEmail());
         }
     }
 

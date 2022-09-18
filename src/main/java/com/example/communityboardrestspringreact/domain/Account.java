@@ -1,5 +1,6 @@
 package com.example.communityboardrestspringreact.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.persistence.*;
@@ -21,8 +22,12 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
+
     private String email;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @Setter
@@ -38,4 +43,5 @@ public class Account {
     public void encryptPassword(String encodedPassword) {
         this.password = encodedPassword;
     }
+
 }

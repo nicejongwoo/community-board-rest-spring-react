@@ -1,6 +1,7 @@
 package com.example.communityboardrestspringreact.domain;
 
 import com.example.communityboardrestspringreact.util.BooleanToStringConverter;
+import com.example.communityboardrestspringreact.web.dto.request.TestRequest;
 import lombok.*;
 import org.hibernate.annotations.Type;
 
@@ -38,9 +39,23 @@ public class Test {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @Column(name = "updated_by", length = 50)
+    private String updatedBy;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
     @PrePersist
     void prePersist() {
+        this.deleted = false;
         this.createdAt = LocalDateTime.now();
     }
 
+    public void edit(TestRequest request) {
+        this.title = request.getTitle();
+        this.content = request.getContent();
+        this.notice = request.getNotice();
+        this.updatedBy = "TEST";
+        this.updatedAt = LocalDateTime.now();
+    }
 }

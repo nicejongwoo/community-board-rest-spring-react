@@ -1,11 +1,17 @@
-package com.example.communityboardrestspringreact.web.dto.request;
+package com.example.communityboardrestspringreact.web.dto.response;
 
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Data
-public class TestRequest {
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+public class TestResponse {
+
+    private Long id;
 
     private String title;
 

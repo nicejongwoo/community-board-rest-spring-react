@@ -82,44 +82,50 @@ const PaginationComponent = () => {
 
     let pageIncrementButton = null;
     if (pages.length > maxPageNumberLimit) {
-        pageIncrementButton = <li><button onClick={handleNextPage}><span>&hellip;</span></button></li>
+        pageIncrementButton = <li>
+            <button onClick={handleNextPage}><span>&hellip;</span></button>
+        </li>
     }
 
     let pageDecrementButton = null;
     if (minPageNumberLimit >= 1) {
-        pageDecrementButton = <li><button onClick={handlePrevPage}><span>&hellip;</span></button></li>
+        pageDecrementButton = <li>
+            <button onClick={handlePrevPage}><span>&hellip;</span></button>
+        </li>
     }
 
     return (
-        <div className="pagination-wrapper flex-root">
-            <nav aria-label="Page navigation example">
-                <ul className="pagination pagination-sm justify-content-center flex-root">
-                    <li className="page-item">
-                        <button
-                            onClick={handlePrevPage}
-                            disabled={currentPage === pages[0] ? true : false}
-                        >
-                            <span aria-hidden="true">&lt;</span>
-                        </button>
-                    </li>
+        <>
+            {pages.length > 0 && <div className="pagination-wrapper flex-root">
+                <nav aria-label="Page navigation example">
+                    <ul className="pagination pagination-sm justify-content-center flex-root">
+                        <li className="page-item">
+                            <button
+                                onClick={handlePrevPage}
+                                disabled={currentPage === pages[0] ? true : false}
+                            >
+                                <span aria-hidden="true">&lt;</span>
+                            </button>
+                        </li>
 
-                    {pageDecrementButton}
+                        {pageDecrementButton}
 
-                    {renderPageNumbers}
+                        {renderPageNumbers}
 
-                    {pageIncrementButton}
+                        {pageIncrementButton}
 
-                    <li className="page-item">
-                        <button
-                            onClick={handleNextPage}
-                            disabled={currentPage === pages[pages.length - 1] ? true : false}
-                        >
-                            <span aria-hidden="true">&gt;</span>
-                        </button>
-                    </li>
-                </ul>
-            </nav>
-        </div>
+                        <li className="page-item">
+                            <button
+                                onClick={handleNextPage}
+                                disabled={currentPage === pages[pages.length - 1] ? true : false}
+                            >
+                                <span aria-hidden="true">&gt;</span>
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+            </div>}
+        </>
     );
 };
 

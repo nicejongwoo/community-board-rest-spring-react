@@ -10,19 +10,18 @@ import {calcPageRowNum} from "../../util/common";
 
 const Test = () => {
 
-    const [testList, setTestList] = useState([]);
+    const [contents, setContents] = useState([]);
     const location = useLocation();
 
     const [totalElements, setTotalElements] = useRecoilState(totalElementState);
-    const [typeOptions, setTypeOptions] = useRecoilState(typeOptionsState);
 
     const getList = (parameters) => {
         TestService.getList(parameters).then(response => {
-            console.log(response.data);
+            // console.log(response.data);
             response.data.content.forEach((element, index) => {
                 element.rowNum = calcPageRowNum(response.data, index);
             })
-            setTestList(response.data.content);
+            setContents(response.data.content);
             setTotalElements(response.data.totalElements);
         }).catch(error => {
             console.error("error:: ", error);
@@ -30,9 +29,6 @@ const Test = () => {
     }
 
     useEffect(() => {
-        setTypeOptions([
-            {value: "content", name: "내용"},
-        ]);
     }, []);
 
 
@@ -40,6 +36,21 @@ const Test = () => {
         getList(location.search);
     }, [location]);
 
+    let renderContents = null;
+    if (contents.length > 0) {
+        renderContents = contents.map((element, index) => <>
+            <tr key={index}>
+                <td>{element.rowNum}</td>
+                <td>{element.content}</td>
+                <td>{element.notice ? "사용함" : "사용안함"}</td>
+                <td>{element.deleted ? "사용함" : "사용안함"}</td>
+                <td>{element.createdBy}</td>
+                <td>{element.createdAt}</td>
+            </tr>
+        </>);
+    } else {
+        renderContents = <tr><td colSpan="6">게시글이 없습니다.</td></tr>
+    }
 
     return (
         <section id="section" className="flex-root">
@@ -59,18 +70,15 @@ const Test = () => {
                         <thead>
                         <tr>
                             <th>번호</th>
-                            <th>내용</th>
-                            <th>useYn</th>
-                            <th>useEnabled</th>
+                            <th>제목</th>
+                            <th>알림여부</th>
+                            <th>사용여부</th>
+                            <th>작성자</th>
+                            <th>작성일</th>
                         </tr>
                         </thead>
                         <tbody>
-                        {testList && testList.map((element, index) => (<tr key={index}>
-                            <td>{element.rowNum}</td>
-                            <td>{element.content}</td>
-                            <td>{element.useYn ? "사용함" : "사용안함"}</td>
-                            <td>{element.useEnabled ? "사용함" : "사용안함"}</td>
-                        </tr>))}
+                        {renderContents}
                         </tbody>
                     </table>
 

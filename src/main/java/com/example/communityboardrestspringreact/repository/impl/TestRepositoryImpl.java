@@ -44,7 +44,9 @@ public class TestRepositoryImpl implements TestRepositoryCustom {
                                 test.notice,
                                 test.deleted,
                                 test.createdBy,
-                                test.createdAt
+                                test.createdAt,
+                                test.updatedBy,
+                                test.updatedAt
                         )
                 )
                 .from(test)

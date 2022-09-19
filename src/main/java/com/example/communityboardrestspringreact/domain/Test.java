@@ -2,19 +2,22 @@ package com.example.communityboardrestspringreact.domain;
 
 import com.example.communityboardrestspringreact.util.BooleanToStringConverter;
 import com.example.communityboardrestspringreact.web.dto.request.TestRequest;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
-@ToString
-@Getter
-@Builder
+@SuperBuilder
+//@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 @Entity
-public class Test {
+public class Test extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,29 +36,16 @@ public class Test {
     @Convert(converter = BooleanToStringConverter.class) // true or false 로 값 저장
     private Boolean deleted;
 
-    @Column(name = "created_by", length = 50)
-    private String createdBy;
-
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-
-    @Column(name = "updated_by", length = 50)
-    private String updatedBy;
-
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-
     @PrePersist
     void prePersist() {
         this.deleted = false;
-        this.createdAt = LocalDateTime.now();
     }
 
     public void edit(TestRequest request) {
         this.title = request.getTitle();
         this.content = request.getContent();
         this.notice = request.getNotice();
-        this.updatedBy = "TEST";
-        this.updatedAt = LocalDateTime.now();
     }
 }
+
+

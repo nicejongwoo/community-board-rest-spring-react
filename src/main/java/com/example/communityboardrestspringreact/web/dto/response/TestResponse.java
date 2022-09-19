@@ -1,5 +1,6 @@
 package com.example.communityboardrestspringreact.web.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -23,6 +24,12 @@ public class TestResponse {
 
     private String createdBy;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime createdAt;
+
+    private String updatedBy;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDateTime updatedAt;
 
 }

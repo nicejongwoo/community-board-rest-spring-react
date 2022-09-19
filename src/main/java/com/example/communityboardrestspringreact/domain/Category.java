@@ -1,13 +1,16 @@
 package com.example.communityboardrestspringreact.domain;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuperBuilder
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Entity
@@ -23,13 +26,6 @@ public class Category extends BaseEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
     private List<Community> communities = new ArrayList<>();
-
-    //toEntity
-    @Builder
-    public Category(String name, String type) {
-        this.name = name;
-        this.type = type;
-    }
 
     public void update(String name, String type) {
         this.name = name;

@@ -32,25 +32,25 @@ public class TestController {
     private final TestRepository testRepository;
     private final TestService testService;
 
-    @PostConstruct
-    public void run() {
-        if (Arrays.asList(environment.getActiveProfiles()).contains("dev")) {
-            initData();
-        }
-    }
+//    @PostConstruct
+//    public void run() {
+//        if (Arrays.asList(environment.getActiveProfiles()).contains("dev")) {
+//            initData();
+//        }
+//    }
 
-    private void initData() {
-        for (int i = 0; i < 114; i++) {
-            Test test = Test.builder()
-                    .title("TEST TITLE " + i)
-                    .content("TEST CONTENT " + i)
-                    .createdBy("admin")
-                    .deleted(false)
-                    .notice(false)
-                    .build();
-            testRepository.save(test);
-        }
-    }
+//    private void initData() {
+//        for (int i = 0; i < 114; i++) {
+//            Test test = Test.builder()
+//                    .title("TEST TITLE " + i)
+//                    .content("TEST CONTENT " + i)
+//                    .createdBy("admin")
+//                    .deleted(false)
+//                    .notice(false)
+//                    .build();
+//            testRepository.save(test);
+//        }
+//    }
 
     @PostMapping("")
     public ResponseEntity<?> save(@RequestBody TestRequest request) {
@@ -71,7 +71,7 @@ public class TestController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> edit(@PathVariable Long id, TestRequest request) {
+    public ResponseEntity<?> edit(@PathVariable Long id, @RequestBody TestRequest request) {
         TestResponse response = testService.edit(id, request);
         return ResponseEntity.ok(CommonApiResponse.success(response));
     }

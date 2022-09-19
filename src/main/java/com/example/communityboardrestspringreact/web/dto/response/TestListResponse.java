@@ -23,4 +23,9 @@ public class TestListResponse {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime createdAt;
 
+    private String updatedBy;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDateTime updatedAt;
+
 }

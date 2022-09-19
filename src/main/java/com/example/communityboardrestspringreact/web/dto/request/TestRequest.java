@@ -2,8 +2,6 @@ package com.example.communityboardrestspringreact.web.dto.request;
 
 import lombok.Data;
 
-import java.time.LocalDateTime;
-
 @Data
 public class TestRequest {
 
@@ -12,11 +10,5 @@ public class TestRequest {
     private String content;
 
     private Boolean notice;
-
-    private Boolean deleted;
-
-    private String createdBy;
-
-    private LocalDateTime createdAt;
 
 }

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import BreadcrumbComponent from "../../components/BreadcrumbComponent";
 import TestService from "../../service/test/testService";
 import SearchComponent from "../../components/SearchComponent";
@@ -7,11 +7,13 @@ import {useRecoilState} from "recoil";
 import {totalElementState, typeOptionsState} from "../../state/SearchState";
 import PaginationComponent from "../../components/PaginationComponent";
 import {calcPageRowNum} from "../../util/common";
+import {AddButton} from "../../components/ButtonComponent";
 
 const Test = () => {
 
     const [contents, setContents] = useState([]);
     const location = useLocation();
+    const navigate = useNavigate();
 
     const [totalElements, setTotalElements] = useRecoilState(totalElementState);
 
@@ -36,9 +38,9 @@ const Test = () => {
         getList(location.search);
     }, [location]);
 
-    let renderContents = null;
+    let renderContents;
     if (contents.length > 0) {
-        renderContents = contents.map((element, index) => <>
+        renderContents = contents.map((element, index) =>
             <tr key={index}>
                 <td>{element.rowNum}</td>
                 <td>{element.content}</td>
@@ -47,18 +49,20 @@ const Test = () => {
                 <td>{element.createdBy}</td>
                 <td>{element.createdAt}</td>
             </tr>
-        </>);
+        );
     } else {
-        renderContents = <tr><td colSpan="6">게시글이 없습니다.</td></tr>
+        renderContents = <tr>
+            <td colSpan="6">게시글이 없습니다.</td>
+        </tr>
     }
 
     return (
         <section id="section" className="flex-root">
             <div className="content-wrapper">
 
-                <BreadcrumbComponent title="테스트" path1="test" name1="테스트" />
+                <BreadcrumbComponent title="테스트" path1="test" name1="테스트"/>
 
-                <SearchComponent url="/test" />
+                <SearchComponent url="/test"/>
 
                 <p>{totalElements}</p>
 
@@ -82,30 +86,11 @@ const Test = () => {
                         </tbody>
                     </table>
 
-                    <PaginationComponent />
+                    <PaginationComponent/>
 
                 </div>
 
-                <div className="flex-root">
-                    <ul className="button-wrapper button-right">
-                        <li>
-                            <button
-                                type="button"
-                                className="add-button"
-                            >
-                                ss
-                            </button>
-                        </li>
-                        <li>
-                            <button
-                                type="button"
-                                className="add-button"
-                            >
-                                등록
-                            </button>
-                        </li>
-                    </ul>
-                </div>
+                <AddButton moveInsertPage={() => {navigate(`/test/insert${location.search}`);}}/>
             </div>
         </section>
     );

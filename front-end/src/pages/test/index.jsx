@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {useLocation, useNavigate} from "react-router-dom";
-import BreadcrumbComponent from "../../components/BreadcrumbComponent";
-import TestService from "../../service/test/testService";
-import SearchComponent from "../../components/SearchComponent";
+import BreadcrumbComponent from "components/BreadcrumbComponent";
+import TestService from "service/test/testService";
+import SearchComponent from "components/SearchComponent";
 import {useRecoilState} from "recoil";
-import {totalElementState, typeOptionsState} from "../../state/SearchState";
-import PaginationComponent from "../../components/PaginationComponent";
-import {calcPageRowNum} from "../../util/common";
-import {AddButton} from "../../components/ButtonComponent";
+import {totalElementState} from "state/SearchState";
+import PaginationComponent from "components/PaginationComponent";
+import {calcPageRowNum} from "util/common";
+import {AddButton} from "components/ButtonComponent";
 
 const Test = () => {
 

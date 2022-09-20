@@ -1,8 +1,61 @@
 import React from 'react';
-import "./css/left.css";
 import {Link, useNavigate} from "react-router-dom";
 import {useRecoilState, useRecoilValue} from "recoil";
-import {currentPageState, sizeState, sortState} from "../state/SearchState";
+import {currentPageState, sizeState, sortState} from "state/SearchState";
+import styled from "styled-components";
+// import "components/css/left.css";
+
+const MenuNav = styled.nav`
+  width: auto;
+  position: relative;
+  background-color: rgb(21, 21, 21);
+`
+
+const MenuList = styled.li`
+  width: 220px;
+  box-sizing: border-box;
+  border-bottom: 1px solid rgb(52, 52, 52);
+  transition: all 200ms ease 0s;
+`
+
+const MenuLink = styled(Link)`
+  display: block;
+  width: 100%;
+  padding: .8em;
+  color: rgb(153, 153, 153);
+  &:hover {
+    color: #ffffff;
+  }
+`
+
+const MenuTitle = styled.h2`
+  background-color: transparent;
+  text-align: center;
+  border-bottom: 1px solid rgb(52, 52, 52);
+  span {
+    display: block;
+    padding: 2em;
+    color: rgb(153, 153, 153);
+    font-width: 500;
+    font-size: 20px;
+  }
+`
+
+const Footer = styled.footer`
+  border-top: 1px solid rgb(52, 52, 52);
+  box-sizing: border-box;
+  position: absolute;
+  bottom: 0;  
+  left: 0;
+  width: 100%;
+  div {
+    position: relative;
+    display: block;
+    padding: .8em;
+    color: rgb(153, 153, 153);
+    text-align: center;
+  }
+`
 
 const Left = () => {
 
@@ -17,31 +70,37 @@ const Left = () => {
     }
 
     return (
-        <nav className="left-container content-root">
-            <div className="left-content">
-                <ul className="menu-wrapper">
-                    <li className="menu-item">
-                        <Link
+        <MenuNav>
+            <div>
+                <MenuTitle>
+                    <span>관리자 홈페이지</span>
+                </MenuTitle>
+                <ul>
+
+                    <MenuList>
+                        <MenuLink
                             to={`/test?page=0&size=${size}&sort=${sort}`}
                             onClick={handleLink}
                         >
-                            <span className="menu-name">테스트</span>
-                        </Link>
-                    </li>
-                    <li className="menu-item">
-                        <Link to={`/community?page=0&size=${size}&sort=${sort}`}>
-                            <span className="menu-name">커뮤니티</span>
-                        </Link>
-                    </li>
+                            <span>테스트</span>
+                        </MenuLink>
+                    </MenuList>
+
+                    <MenuList >
+                        <MenuLink to={`/community?page=0&size=${size}&sort=${sort}`}>
+                            <span >커뮤니티</span>
+                        </MenuLink>
+                    </MenuList>
+
                 </ul>
             </div>
 
-            <footer>
-                <p>
+            <Footer>
+                <div>
                     FOOTER
-                </p>
-            </footer>
-        </nav>
+                </div>
+            </Footer>
+        </MenuNav>
     );
 };
 

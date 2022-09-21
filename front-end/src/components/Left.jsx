@@ -6,13 +6,14 @@ import styled from "styled-components";
 // import "components/css/left.css";
 
 const MenuNav = styled.nav`
-  width: auto;
+  width: 220px;
   position: relative;
   background-color: rgb(21, 21, 21);
 `
 
 const MenuList = styled.li`
   width: 220px;
+  height: 100%;
   box-sizing: border-box;
   border-bottom: 1px solid rgb(52, 52, 52);
   transition: all 200ms ease 0s;

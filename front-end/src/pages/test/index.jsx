@@ -3,11 +3,12 @@ import {useLocation, useNavigate} from "react-router-dom";
 import BreadcrumbComponent from "components/BreadcrumbComponent";
 import TestService from "service/test/testService";
 import SearchComponent from "components/SearchComponent";
-import {useRecoilState} from "recoil";
-import {totalElementState} from "state/SearchState";
+import {useRecoilState, useResetRecoilState, useSetRecoilState} from "recoil";
+import {currentPageState, totalElementState} from "state/SearchState";
 import PaginationComponent from "components/PaginationComponent";
 import {calcPageRowNum} from "util/common";
 import {AddButton} from "components/ButtonComponent";
+import {TEST_MENU_NAME, TEST_PARAM} from "../../util/constant";
 
 const Test = () => {
 
@@ -16,6 +17,9 @@ const Test = () => {
     const navigate = useNavigate();
 
     const [totalElements, setTotalElements] = useRecoilState(totalElementState);
+
+    const setCurrentPage = useSetRecoilState(currentPageState);
+    const resetCurrentPage = useResetRecoilState(currentPageState);
 
     const getList = (parameters) => {
         TestService.getList(parameters).then(response => {
@@ -31,6 +35,10 @@ const Test = () => {
     }
 
     useEffect(() => {
+        setCurrentPage("test");
+        return () => {
+            resetCurrentPage();
+        }
     }, []);
 
 
@@ -60,7 +68,11 @@ const Test = () => {
         <section id="section" className="flex-root">
             <div className="content-wrapper">
 
-                <BreadcrumbComponent title="테스트" path1="test" name1="테스트"/>
+                <BreadcrumbComponent
+                    title={TEST_MENU_NAME}
+                    name1={TEST_MENU_NAME}
+                    path1={`/test${TEST_PARAM}`}
+                />
 
                 <SearchComponent url="/test"/>
 
@@ -69,7 +81,7 @@ const Test = () => {
                 <div className="content-item flex-root table-wrapper">
                     <table className="">
                         <colgroup>
-                            <col width="5%"/>
+                            <col width="7%"/>
                         </colgroup>
                         <thead>
                         <tr>

@@ -3,6 +3,7 @@ import {Link, useNavigate} from "react-router-dom";
 import {useRecoilState, useRecoilValue} from "recoil";
 import {currentPageState, sizeState, sortState} from "state/SearchState";
 import styled from "styled-components";
+import {TEST_PARAM} from "../util/constant";
 // import "components/css/left.css";
 
 const MenuNav = styled.nav`
@@ -16,18 +17,19 @@ const MenuList = styled.li`
   height: 100%;
   box-sizing: border-box;
   border-bottom: 1px solid rgb(52, 52, 52);
-  transition: all 200ms ease 0s;
 `
 
 const MenuLink = styled(Link)`
   display: block;
   width: 100%;
   padding: .8em;
-  color: rgb(153, 153, 153);
+  color: ${props => (props.page ? "#000" : "#f9f9f9")};
+  background-color: ${props => (props.page ? "#f9f9f9" : "rgb(21, 21, 21)")};
+  transition: all 150ms ease 0s;
   &:hover {
-    color: #ffffff;
+    color: ${props => (props.page ? "#000" : "#f9f9f9")};
   }
-`
+`;
 
 const MenuTitle = styled.h2`
   background-color: transparent;
@@ -65,11 +67,6 @@ const Left = () => {
     const sort = useRecoilValue(sortState);
     const navigate = useNavigate();
 
-    const handleLink = (e) => {
-        setCurrentPage(0);
-        // navigate(`/test?page=0&size=${size}&sort=${sort}`);
-    }
-
     return (
         <MenuNav>
             <div>
@@ -80,15 +77,18 @@ const Left = () => {
 
                     <MenuList>
                         <MenuLink
-                            to={`/test?page=0&size=${size}&sort=${sort}`}
-                            onClick={handleLink}
+                            page={currentPage === "test"}
+                            to={`/test${TEST_PARAM}`}
                         >
                             <span>테스트</span>
                         </MenuLink>
                     </MenuList>
 
                     <MenuList >
-                        <MenuLink to={`/community?page=0&size=${size}&sort=${sort}`}>
+                        <MenuLink
+                            page={currentPage === "community"}
+                            to={`/community?page=0&size=${size}&sort=${sort}`}
+                        >
                             <span >커뮤니티</span>
                         </MenuLink>
                     </MenuList>

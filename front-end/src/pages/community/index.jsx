@@ -2,8 +2,8 @@ import React, {useEffect, useState} from 'react';
 import {useLocation, useNavigate} from "react-router-dom";
 import BreadcrumbComponent from "../../components/BreadcrumbComponent";
 import SearchComponent from "../../components/SearchComponent";
-import {useRecoilState, useSetRecoilState} from "recoil";
-import {selectConditionsState, totalElementState, typeOptionsState} from "../../state/SearchState";
+import {useRecoilState, useResetRecoilState, useSetRecoilState} from "recoil";
+import {currentPageState, selectConditionsState, totalElementState, typeOptionsState} from "../../state/SearchState";
 import CommunityService from "../../service/community/CommunityService";
 import CategoryService from "../../service/category/CategoryService";
 import PaginationComponent from "../../components/PaginationComponent";
@@ -17,6 +17,9 @@ const Community = () => {
     const [categories, setCategories] = useState([]);
 
     const [totalElements, setTotalElements] = useRecoilState(totalElementState);
+
+    const setCurrentPage = useSetRecoilState(currentPageState);
+    const resetCurrentPage = useResetRecoilState(currentPageState);
 
     const [typeOptions, setTypeOptions] = useRecoilState(typeOptionsState);
     const setSelectConditions = useSetRecoilState(selectConditionsState);
@@ -52,6 +55,7 @@ const Community = () => {
     }
 
     useEffect(() => {
+        setCurrentPage("community");
         if (categories.length === 0) {
             getCategories();
         }
@@ -60,6 +64,9 @@ const Community = () => {
             {value: "title", name: "제목"},
             {value: "content", name: "내용"},
         ]);
+        return () => {
+            resetCurrentPage();
+        }
     }, []);
 
     useEffect(() => {

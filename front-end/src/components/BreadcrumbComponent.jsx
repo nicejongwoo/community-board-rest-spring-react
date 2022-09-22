@@ -19,11 +19,11 @@ const BreadcrumbComponent = ({title, path1, path2, name1, name2}) => {
                 </li>
 
                 {path1 && <li>
-                    <Link to={`/${path1}?page=0&size=${size}&sort=${sort}`} >{name1}</Link>
+                    <Link to={path1} >{name1}</Link>
                 </li>}
 
                 {path2 && <li>
-                    <Link to={`/${path2}?page=0&size=${size}&sort=${sort}`} >{name2}</Link>
+                    <Link to={path2} >{name2}</Link>
                 </li>}
             </ul>
             <div className="print">

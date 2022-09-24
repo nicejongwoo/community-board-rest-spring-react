@@ -14,7 +14,7 @@ import "components/css/searchComponent.css";
 import {ChevronDown, Search} from "react-bootstrap-icons";
 
 
-const SearchComponent = ({url}) => {
+const SearchComponent = ({page, url, typeOptions}) => {
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -31,19 +31,21 @@ const SearchComponent = ({url}) => {
     const resetSize = useResetRecoilState(sizeState);
     const resetSort = useResetRecoilState(sortState);
 
-    const typeOptions = useRecoilValue(typeOptionsState);
     const selectConditions = useRecoilValue(selectConditionsState);
 
     const resetTypeOptions = useResetRecoilState(typeOptionsState);
     const resetSelectConditions = useResetRecoilState(selectConditionsState);
 
     const onSubmit = (data) => {
+
+        console.log("search data::", data);
         resetCurrentPage();
         resetTotalElement();
         resetSize();
         resetSort();
 
         const searchQueryString = Object.keys(data).map(key => key + "=" + data[key]).join("&"); // Object to QueryString
+        console.log("search searchQueryString::", searchQueryString);
         navigate(`${url}?page=0&size=${size}&sort=${sort}&${searchQueryString}`);
     }
 
@@ -70,32 +72,60 @@ const SearchComponent = ({url}) => {
             // console.log("entry:: ", entry[0]);
             setValue(entry[0], queryStringObject[entry[0]]); //url 파라미터에 전달되는 쿼리스트링 값에 따라 동적으로 검색 폼 값 표시
         }
-    }, [location])
+    }, [location]);
+
+    const ynOptions = (label, name) => {
+        return (
+            <div className="select-item">
+                <label>{label}</label>
+                <div className="select-outer">
+                    <select
+                        id={name}
+                        {...register(
+                            `${name}`,
+                            {}
+                        )}
+                    >
+                        <option value="">선택</option>
+                        <option value="Y">Y</option>
+                        <option value="N">N</option>
+                    </select>
+                    <ChevronDown className="select-icon"/>
+                </div>
+            </div>
+        )
+    }
+
+    const dynamicOptions = (label, name, options) => {
+        return (
+            <div className="select-item">
+                <label>{label}</label>
+                <div className="select-outer">
+                    <select
+                        id={name}
+                        {...register(
+                            `${name}`,
+                            {}
+                        )}
+                    >
+                        <option value="">선택</option>
+                        {options && options.map((option, idx) => (
+                            <option key={idx} value={option.value}>{option.name}</option>
+                        ))}
+                    </select>
+                    <ChevronDown className="select-icon"/>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="search-wrapper">
             <form onSubmit={handleSubmit(onSubmit)} className="">
-                <div className="search-select">
-                    {selectConditions && selectConditions.map((element, index) => (
-                        <div key={index} className="select-item">
-                            <label>{element.label}</label>
-                            <div className="select-outer">
-                                <select
-                                    id={element.name}
-                                    {...register(
-                                        `${element.name}`,
-                                        {}
-                                    )}
-                                >
-                                    <option value="">선택</option>
-                                    {element.options && element.options.map((option, idx) => (
-                                        <option key={idx} value={option.value}>{option.name}</option>
-                                    ))}
-                                </select>
-                                <ChevronDown className="select-icon"/>
-                            </div>
-                    </div>))}
-                </div>
+                {page === "test" && <div className="search-select">
+                    {ynOptions("알림여부", "notice")}
+                    {ynOptions("사용여부", "deleted")}
+                </div>}
 
                 <div className="search-keyword">
                     <div className="keyword-outer">

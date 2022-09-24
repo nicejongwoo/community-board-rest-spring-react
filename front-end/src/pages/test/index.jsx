@@ -12,6 +12,7 @@ import {TEST_MENU_NAME, TEST_PARAM} from "util/constant";
 import {StyledSection, StyledTotalCount} from "App";
 import {TableComponent} from "components/TableComponent";
 import {currentMenuState} from "state/menuState";
+import {TEST_TYPE_OPTIONS} from "../../util/constant/options";
 
 const Test = () => {
 
@@ -24,14 +25,17 @@ const Test = () => {
     const setCurrentMenu = useSetRecoilState(currentMenuState);
     const resetCurrentMenu = useResetRecoilState(currentMenuState);
 
-    const getList = (parameters) => {
-        TestService.getList(parameters).then(response => {
+    const [loadingContents, setLoadingContents] = useState(false);
+
+    const search = (parameters) => {
+        TestService.search(parameters).then(response => {
             // console.log(response.data);
             response.data.content.forEach((element, index) => {
                 element.rowNum = calcPageRowNum(response.data, index);
             })
             setContents(response.data.content);
             setTotalElements(response.data.totalElements);
+            setLoadingContents(false);
         }).catch(error => {
             console.error("error:: ", error);
         })
@@ -39,7 +43,8 @@ const Test = () => {
 
     useEffect(() => {
         setCurrentMenu("test");
-        getList(location.search);
+        setLoadingContents(true);
+        search(location.search);
         return () => {
             resetCurrentMenu();
         }
@@ -82,13 +87,17 @@ const Test = () => {
 
                 <AddButton moveInsertPage={() => {navigate(`/test/insert${location.search}`);}}/>
 
-                <SearchComponent url="/test"/>
+                <SearchComponent
+                    page="test"
+                    url="/test"
+                    typeOptions={TEST_TYPE_OPTIONS}
+                />
 
                 <StyledTotalCount>검색: {totalElements} 건</StyledTotalCount>
 
-                <TableComponent columnNames={columnNames} renderContents={renderContents} />
+                {loadingContents ? "게시글 로딩중..." : <TableComponent columnNames={columnNames} renderContents={renderContents} />}
 
-                <PaginationComponent/>
+                {!loadingContents && <PaginationComponent/>}
 
             </div>
 

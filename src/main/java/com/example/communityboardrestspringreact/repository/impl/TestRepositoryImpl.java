@@ -78,8 +78,8 @@ public class TestRepositoryImpl implements TestRepositoryCustom {
                 switch (type) {
                     case "title":
                         return test.title.contains(keyword);
-                    case "content":
-                        return test.content.contains(keyword);
+                    case "createdBy":
+                        return test.createdBy.contains(keyword);
                     default:
                         return null;
                 }

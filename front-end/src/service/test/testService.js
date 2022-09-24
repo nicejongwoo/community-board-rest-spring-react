@@ -1,7 +1,7 @@
 import request from "../request";
 
 
-const getList = (parameters) => {
+const search = (parameters) => {
 
     // console.log("====getList====", parameters);
     return request({
@@ -11,8 +11,7 @@ const getList = (parameters) => {
 }
 
 const TestService = {
-    getList,
-
+    search,
 }
 
 export default TestService;

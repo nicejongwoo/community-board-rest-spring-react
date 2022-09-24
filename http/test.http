@@ -11,7 +11,7 @@ Authorization: Bearer {{auth_token}}
 
 
 ### search test
-GET http://localhost:8080/api/test?page=0&size=10&sort=id,desc&type=title&keyword=
+GET http://localhost:8080/api/test?page=0&size=10&sort=id,desc&type=title&keyword=18&
 Authorization: Bearer {{auth_token}}
 
 

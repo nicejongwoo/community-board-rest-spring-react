@@ -1,19 +1,53 @@
 import React from 'react';
 import {Link} from "react-router-dom";
 import {PrinterFill} from "react-bootstrap-icons";
-import {useRecoilValue} from "recoil";
-import {sizeState, sortState} from "../state/SearchState";
-import "./css/breadcrumbComponent.css";
+import styled from "styled-components";
+
+const PageTitleWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  padding-bottom: 1em;
+  box-sizing: border-box;
+`
+
+const StyledTitle = styled.p`
+  flex: 1 1 auto;
+  font-size: 32px;
+  font-weight: bold;
+`
+
+const BreadCrumbWrapper = styled.ul`
+  display: flex;
+  flex: 1 1 auto;
+  align-items: end;
+  justify-content: end;
+  list-style: none;
+  li {
+    display: inline;
+    a:hover {
+      text-decoration: underline;
+    }
+  }
+  li+li:before {
+    padding: 8px;
+    content: "\\3009"
+  }
+`
+
+const StyledPrint = styled.div`
+  padding-left: 10px;
+  display: flex;
+  align-items: end;
+  justify-content: end;
+`
 
 const BreadcrumbComponent = ({title, path1, path2, name1, name2}) => {
 
-    const size = useRecoilValue(sizeState);
-    const sort = useRecoilValue(sortState);
-
     return (
-        <div className="flex-root page-title-wrapper">
-            <p className="page-title">{title}</p>
-            <ul className="breadcrumb-wrapper">
+        <PageTitleWrapper>
+            <StyledTitle className="page-title">{title}</StyledTitle>
+            <BreadCrumbWrapper>
                 <li>
                     <Link to="/">HOME</Link>
                 </li>
@@ -25,13 +59,19 @@ const BreadcrumbComponent = ({title, path1, path2, name1, name2}) => {
                 {path2 && <li>
                     <Link to={path2} >{name2}</Link>
                 </li>}
-            </ul>
-            <div className="print">
-                <Link to="/print">
+            </BreadCrumbWrapper>
+            <StyledPrint className="print">
+                <Link
+                    to="#"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        window.print();
+                    }}
+                >
                     <PrinterFill />
                 </Link>
-            </div>
-        </div>
+            </StyledPrint>
+        </PageTitleWrapper>
     );
 };
 

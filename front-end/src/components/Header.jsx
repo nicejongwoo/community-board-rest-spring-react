@@ -84,7 +84,7 @@ const Header = () => {
     const account = useRecoilValue(accountState);
 
     return (
-        <HeaderContainer>
+        <HeaderContainer className="hidden_print">
             <HeaderWrapper>
                 <HeaderLogoWrapper>
                     <Link to="/">

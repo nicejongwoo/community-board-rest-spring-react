@@ -13,6 +13,26 @@ const AppContainer = styled.div`
   flex-wrap: wrap;
   width: 100%;
   flex-direction: row;
+  @media print {
+    html, body {
+      height:100%;
+      margin: 0 !important;
+      padding: 0 !important;
+      overflow: hidden;
+    }
+    .hidden_print {
+      display: none;
+    }
+    main {
+      position: relative;
+      .section {
+        display: block;
+        overflow-y: visible;
+        margin: 0;
+        padding: 0;
+      }
+    }
+  }
 `
 
 const Main = styled.main`
@@ -59,12 +79,12 @@ function App() {
 
     return (
         <BrowserRouter>
-            <AppContainer className="app-container flex-root">
-                {logged && (<Header/>)}
+            <AppContainer>
+                {logged && (<Header />)}
 
                 {/*<main className={`flex-root ${logged ? "main" : ""}`}>*/}
                 <Main logged={logged}>
-                    {logged && (<Left/>)}
+                    {logged && (<Left />)}
                     <AppRouter/>
                 </Main>
             </AppContainer>

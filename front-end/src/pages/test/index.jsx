@@ -75,7 +75,7 @@ const Test = () => {
     }
 
     return (
-        <StyledSection id="section" className="flex-root">
+        <StyledSection className="section">
 
             <div className="content-wrapper">
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link, useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {useRecoilValue} from "recoil";
 import styled from "styled-components";
 import {currentMenuState} from "state/menuState";
@@ -65,10 +65,9 @@ const Left = () => {
     const currentMenu = useRecoilValue(currentMenuState);
     const size = useRecoilValue(sizeState);
     const sort = useRecoilValue(sortState);
-    const navigate = useNavigate();
 
     return (
-        <MenuNav>
+        <MenuNav className="hidden_print">
             <div>
                 <MenuTitle>
                     <span>관리자 홈페이지</span>

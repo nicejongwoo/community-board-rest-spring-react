@@ -69,7 +69,7 @@ public class TestRepositoryImpl implements TestRepositoryCustom {
 
         List<TestListResponse> content = query.fetch();
 
-        return PageableExecutionUtils.getPage(content, pageable, content::size);
+        return PageableExecutionUtils.getPage(content, pageable, query::fetchCount);
     }
 
     private BooleanExpression keywordContains(String type, String keyword) {

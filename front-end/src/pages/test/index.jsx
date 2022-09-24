@@ -4,11 +4,14 @@ import BreadcrumbComponent from "components/BreadcrumbComponent";
 import TestService from "service/test/testService";
 import SearchComponent from "components/SearchComponent";
 import {useRecoilState, useResetRecoilState, useSetRecoilState} from "recoil";
-import {currentPageState, totalElementState} from "state/SearchState";
+import {totalElementState} from "state/SearchState";
 import PaginationComponent from "components/PaginationComponent";
 import {calcPageRowNum} from "util/common";
 import {AddButton} from "components/ButtonComponent";
-import {TEST_MENU_NAME, TEST_PARAM} from "../../util/constant";
+import {TEST_MENU_NAME, TEST_PARAM} from "util/constant";
+import {StyledSection} from "App";
+import {TableComponent} from "components/TableComponent";
+import {currentMenuState} from "state/menuState";
 
 const Test = () => {
 
@@ -18,8 +21,8 @@ const Test = () => {
 
     const [totalElements, setTotalElements] = useRecoilState(totalElementState);
 
-    const setCurrentPage = useSetRecoilState(currentPageState);
-    const resetCurrentPage = useResetRecoilState(currentPageState);
+    const setCurrentMenu = useSetRecoilState(currentMenuState);
+    const resetCurrentMenu = useResetRecoilState(currentMenuState);
 
     const getList = (parameters) => {
         TestService.getList(parameters).then(response => {
@@ -35,21 +38,23 @@ const Test = () => {
     }
 
     useEffect(() => {
-        setCurrentPage("test");
-        return () => {
-            resetCurrentPage();
-        }
-    }, []);
-
-
-    useEffect(() => {
+        setCurrentMenu("test");
         getList(location.search);
+        return () => {
+            resetCurrentMenu();
+        }
     }, [location]);
 
+    const columnNames = ["번호", "제목", "알림여부", "사용여부", "작성자", "작성일"];
     let renderContents;
     if (contents.length > 0) {
         renderContents = contents.map((element, index) =>
-            <tr key={index}>
+            <tr
+                key={index}
+                onClick={(e) => {
+                    navigate(`/test/${element.id}${location.search}`);
+                }}
+            >
                 <td>{element.rowNum}</td>
                 <td>{element.content}</td>
                 <td>{element.notice ? "사용함" : "사용안함"}</td>
@@ -60,12 +65,13 @@ const Test = () => {
         );
     } else {
         renderContents = <tr>
-            <td colSpan="6">게시글이 없습니다.</td>
+            <td colSpan={columnNames.length}>게시글이 없습니다.</td>
         </tr>
     }
 
     return (
-        <section id="section" className="flex-root">
+        <StyledSection id="section" className="flex-root">
+
             <div className="content-wrapper">
 
                 <BreadcrumbComponent
@@ -74,37 +80,19 @@ const Test = () => {
                     path1={`/test${TEST_PARAM}`}
                 />
 
+                <AddButton moveInsertPage={() => {navigate(`/test/insert${location.search}`);}}/>
+
                 <SearchComponent url="/test"/>
 
                 <p>{totalElements}</p>
 
-                <div className="content-item flex-root table-wrapper">
-                    <table className="">
-                        <colgroup>
-                            <col width="7%"/>
-                        </colgroup>
-                        <thead>
-                        <tr>
-                            <th>번호</th>
-                            <th>제목</th>
-                            <th>알림여부</th>
-                            <th>사용여부</th>
-                            <th>작성자</th>
-                            <th>작성일</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {renderContents}
-                        </tbody>
-                    </table>
+                <TableComponent columnNames={columnNames} renderContents={renderContents} />
 
-                    <PaginationComponent/>
+                <PaginationComponent/>
 
-                </div>
-
-                <AddButton moveInsertPage={() => {navigate(`/test/insert${location.search}`);}}/>
             </div>
-        </section>
+
+        </StyledSection>
     );
 };
 

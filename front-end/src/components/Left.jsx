@@ -1,10 +1,10 @@
 import React from 'react';
 import {Link, useNavigate} from "react-router-dom";
-import {useRecoilState, useRecoilValue} from "recoil";
-import {currentPageState, sizeState, sortState} from "state/SearchState";
+import {useRecoilValue} from "recoil";
 import styled from "styled-components";
-import {TEST_PARAM} from "../util/constant";
-// import "components/css/left.css";
+import {currentMenuState} from "state/menuState";
+import {sizeState, sortState} from "state/SearchState";
+import {TEST_PARAM} from "util/constant";
 
 const MenuNav = styled.nav`
   width: 220px;
@@ -23,11 +23,11 @@ const MenuLink = styled(Link)`
   display: block;
   width: 100%;
   padding: .8em;
-  color: ${props => (props.page ? "#000" : "#f9f9f9")};
-  background-color: ${props => (props.page ? "#f9f9f9" : "rgb(21, 21, 21)")};
+  color: ${props => (props.page === "currentPage" ? "#000" : "#f9f9f9")};
+  background-color: ${props => (props.page === "currentPage" ? "#f9f9f9" : "rgb(21, 21, 21)")};
   transition: all 150ms ease 0s;
   &:hover {
-    color: ${props => (props.page ? "#000" : "#f9f9f9")};
+    color: ${props => (props.page === "currentPage" ? "#000" : "#f9f9f9")};
   }
 `;
 
@@ -62,7 +62,7 @@ const Footer = styled.footer`
 
 const Left = () => {
 
-    const [currentPage, setCurrentPage] = useRecoilState(currentPageState);
+    const currentMenu = useRecoilValue(currentMenuState);
     const size = useRecoilValue(sizeState);
     const sort = useRecoilValue(sortState);
     const navigate = useNavigate();
@@ -77,7 +77,7 @@ const Left = () => {
 
                     <MenuList>
                         <MenuLink
-                            page={currentPage === "test"}
+                            page={currentMenu === "test" ? "currentPage" : ""}
                             to={`/test${TEST_PARAM}`}
                         >
                             <span>테스트</span>
@@ -86,7 +86,7 @@ const Left = () => {
 
                     <MenuList >
                         <MenuLink
-                            page={currentPage === "community"}
+                            page={currentMenu === "community" ? "currentPage" : ""}
                             to={`/community?page=0&size=${size}&sort=${sort}`}
                         >
                             <span >커뮤니티</span>

@@ -1,6 +1,5 @@
 import React from 'react';
 import {Link, useNavigate} from "react-router-dom";
-// import "./css/header.css"
 import {BoxArrowRight} from "react-bootstrap-icons";
 import logo from '../logo.svg';
 import {useRecoilValue, useSetRecoilState} from "recoil";

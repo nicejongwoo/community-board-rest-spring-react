@@ -47,6 +47,12 @@ export const StyledSection = styled.section`
   }
 `
 
+export const StyledTotalCount = styled.div`
+  text-align: right;
+  color: #333333;
+  margin: 1em 0 .5em 0;
+`
+
 function App() {
 
     const [logged, setLogged] = useRecoilState(loggedState);

@@ -9,7 +9,7 @@ import PaginationComponent from "components/PaginationComponent";
 import {calcPageRowNum} from "util/common";
 import {AddButton} from "components/ButtonComponent";
 import {TEST_MENU_NAME, TEST_PARAM} from "util/constant";
-import {StyledSection} from "App";
+import {StyledSection, StyledTotalCount} from "App";
 import {TableComponent} from "components/TableComponent";
 import {currentMenuState} from "state/menuState";
 
@@ -84,7 +84,7 @@ const Test = () => {
 
                 <SearchComponent url="/test"/>
 
-                <p>{totalElements}</p>
+                <StyledTotalCount>검색: {totalElements} 건</StyledTotalCount>
 
                 <TableComponent columnNames={columnNames} renderContents={renderContents} />
 

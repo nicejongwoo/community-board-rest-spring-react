@@ -9,8 +9,8 @@ import {
     sortState,
     totalElementState,
     typeOptionsState
-} from "../state/SearchState";
-import "./css/searchComponent.css";
+} from "state/SearchState";
+import "components/css/searchComponent.css";
 import {ChevronDown, Search} from "react-bootstrap-icons";
 
 
@@ -73,7 +73,7 @@ const SearchComponent = ({url}) => {
     }, [location])
 
     return (
-        <div className="search-wrapper search-row">
+        <div className="search-wrapper">
             <form onSubmit={handleSubmit(onSubmit)} className="">
                 <div className="search-select">
                     {selectConditions && selectConditions.map((element, index) => (

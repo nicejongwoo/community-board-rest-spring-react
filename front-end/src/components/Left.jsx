@@ -2,6 +2,7 @@ import React from 'react';
 import {Link} from "react-router-dom";
 import {useRecoilValue} from "recoil";
 import styled from "styled-components";
+import {accountState} from "state/AuthState";
 import {currentMenuState} from "state/menuState";
 import {sizeState, sortState} from "state/SearchState";
 import {TEST_PARAM} from "util/constant";
@@ -65,6 +66,9 @@ const Left = () => {
     const currentMenu = useRecoilValue(currentMenuState);
     const size = useRecoilValue(sizeState);
     const sort = useRecoilValue(sortState);
+    const account = useRecoilValue(accountState);
+
+    let isAdmin = account.roles.some(role => ["ROLE_ADMIN"].includes(role.name));
 
     return (
         <MenuNav className="hidden_print">
@@ -74,14 +78,14 @@ const Left = () => {
                 </MenuTitle>
                 <ul>
 
-                    <MenuList>
+                    {isAdmin && <MenuList>
                         <MenuLink
                             page={currentMenu === "test" ? "currentPage" : ""}
                             to={`/test${TEST_PARAM}`}
                         >
                             <span>테스트</span>
                         </MenuLink>
-                    </MenuList>
+                    </MenuList>}
 
                     <MenuList >
                         <MenuLink

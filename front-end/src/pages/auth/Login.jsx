@@ -1,9 +1,9 @@
 import React from 'react';
 import {Link, useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
-import AuthService from "../../service/auth/authService";
 import {useSetRecoilState} from "recoil";
-import {accountState, loggedState, tokenState} from "../../state/AuthState";
+import AuthService from "service/auth/authService";
+import {accountState, loggedState, tokenState} from "state/AuthState";
 
 const Login = () => {
 
@@ -12,20 +12,20 @@ const Login = () => {
         mode: "onChange"
     });
 
-    const setLogged = useSetRecoilState(loggedState);
     const setAccount = useSetRecoilState(accountState);
     const setToken = useSetRecoilState(tokenState);
+    const setLogged = useSetRecoilState(loggedState);
 
     const onSubmit = (data) => {
         //alert(JSON.stringify(data));
         AuthService.login(data).then(response => {
-            // console.log("response:: ", response);
+            console.log("response:: ", response);
 
-            sessionStorage.setItem("account", response.data.user.account);
-            sessionStorage.setItem("token", response.data.token);
-            setLogged(true);
-            setAccount(response.data.user.account);
+            sessionStorage.setItem("account", JSON.stringify(response.data.account));
+            sessionStorage.setItem("token", JSON.stringify(response.data.token));
+            setAccount(response.data.account);
             setToken(response.data.token);
+            setLogged(true);
             navigate("/");
         }).catch(error => {
             console.error("error:: ", error);

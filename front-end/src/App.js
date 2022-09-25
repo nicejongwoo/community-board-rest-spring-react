@@ -1,11 +1,11 @@
 import React from "react";
 import {BrowserRouter} from "react-router-dom";
-import AppRouter from "./router/AppRouter";
 import {useRecoilState} from "recoil";
-import {loggedState} from "./state/AuthState";
-import Header from "./components/Header";
-import Left from "./components/Left";
+import AppRouter from "router/AppRouter";
 import styled, {css} from "styled-components";
+import {loggedState} from "state/AuthState";
+import Header from "components/Header";
+import Left from "components/Left";
 
 const AppContainer = styled.div`
   display: flex;
@@ -76,6 +76,8 @@ export const StyledTotalCount = styled.div`
 function App() {
 
     const [logged, setLogged] = useRecoilState(loggedState);
+
+    console.log("logged:: ", logged);
 
     return (
         <BrowserRouter>

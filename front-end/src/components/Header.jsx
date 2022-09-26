@@ -5,6 +5,7 @@ import logo from '../logo.svg';
 import {useRecoilValue, useSetRecoilState} from "recoil";
 import {accountState, loggedState} from "../state/AuthState";
 import styled from "styled-components";
+import AuthService from "../service/auth/authService";
 
 const StyledFlex = styled.div`
 `
@@ -16,6 +17,7 @@ const HeaderContainer = styled.header`
   width: 100%;
   background-color: rgb(21, 21, 21);
   border-bottom: 1px solid #e9e9e9;
+  z-index: 999;
   div {
     box-sizing: border-box;
     display: flex;
@@ -101,14 +103,18 @@ const Header = () => {
                     <button
                         onClick={(e) => {
                             e.preventDefault();
-                            sessionStorage.removeItem("account");
-                            sessionStorage.removeItem("token");
-                            navigate("/login");
-                            setLogged(false);
+                            AuthService.logout().then(response => {
+                                sessionStorage.removeItem("account");
+                                sessionStorage.removeItem("token");
+                                setLogged(false);
+                                navigate("/login");
+                            }).catch(error => {
+                                console.error("error:: ", error);
+                            })
                         }}
                     >
                         <span>
-                            <BoxArrowRight/>
+                            <BoxArrowRight />
                         </span>
                     </button>
                 </HeaderProfileWrapper>

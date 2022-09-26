@@ -16,9 +16,17 @@ const login = (data) => {
     })
 }
 
+const logout = () => {
+    return request({
+        url: "/auth/logout",
+        method: "POST",
+    })
+}
+
 const AuthService = {
     signup,
     login,
+    logout
 }
 
 export default AuthService;

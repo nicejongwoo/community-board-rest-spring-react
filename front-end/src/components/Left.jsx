@@ -68,7 +68,8 @@ const Left = () => {
     const sort = useRecoilValue(sortState);
     const account = useRecoilValue(accountState);
 
-    let isAdmin = account.roles.some(role => ["ROLE_ADMIN"].includes(role.name));
+    let adminPermission = account.roles.some(role => ["ROLE_ADMIN"].includes(role.name));
+    let managerPermission = account.roles.some(role => ["ROLE_MANAGER"].includes(role.name));
 
     return (
         <MenuNav className="hidden_print">
@@ -78,7 +79,7 @@ const Left = () => {
                 </MenuTitle>
                 <ul>
 
-                    {isAdmin && <MenuList>
+                    {adminPermission && <MenuList>
                         <MenuLink
                             page={currentMenu === "test" ? "currentPage" : ""}
                             to={`/test${TEST_PARAM}`}

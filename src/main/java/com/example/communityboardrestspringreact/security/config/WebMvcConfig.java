@@ -11,10 +11,14 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**").allowedOrigins("*").allowedMethods("GET", "POST", "OPTIONS", "PUT")
-                .allowedHeaders("Content-Type", "X-Requested-With", "accept", "Origin", "Access-Control-Request-Method",
-                        "Access-Control-Request-Headers")
+        registry.addMapping("/**")
+//                .allowedOrigins("*")
+                .allowedOriginPatterns("*")
+                .allowedHeaders("*")
+                .allowedMethods("GET", "POST", "OPTIONS", "PUT", "DELETE")
+//                .allowedHeaders("Content-Type", "X-Requested-With", "accept", "Origin", "Access-Control-Request-Method","Access-Control-Request-Headers")
                 .exposedHeaders("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials")
-                .allowCredentials(false).maxAge(3600);
+                .allowCredentials(true)
+                .maxAge(3600);
     }
 }

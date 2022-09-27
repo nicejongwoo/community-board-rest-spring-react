@@ -6,6 +6,7 @@ const Main = () => {
         <StyledSection className="section">
 
             <div className="content-wrapper">
+                Main
             </div>
 
         </StyledSection>

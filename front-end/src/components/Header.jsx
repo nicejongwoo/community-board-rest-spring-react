@@ -103,14 +103,19 @@ const Header = () => {
                     <button
                         onClick={(e) => {
                             e.preventDefault();
-                            AuthService.logout().then(response => {
-                                sessionStorage.removeItem("account");
-                                sessionStorage.removeItem("token");
-                                setLogged(false);
-                                navigate("/login");
-                            }).catch(error => {
-                                console.error("error:: ", error);
-                            })
+                            if (window.confirm("로그아웃 하시겠습니까?")) {
+                                AuthService.logout().then(response => {
+                                    sessionStorage.removeItem("account");
+                                    sessionStorage.removeItem("token");
+                                    setLogged(false);
+                                    alert("로그아웃 되었습니다.");
+                                    navigate("/login");
+                                }).catch(error => {
+                                    console.error("error:: ", error);
+                                });
+                            } else {
+                                return false;
+                            }
                         }}
                     >
                         <span>

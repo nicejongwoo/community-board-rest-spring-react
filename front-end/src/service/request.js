@@ -1,11 +1,14 @@
 import React from "react";
 import axios from "axios";
 
-const client = axios.create({
-    baseURL: "http://localhost:8080/api",
-})
-
 const request = (options) => {
+
+    const client = axios.create({
+        baseURL: "http://localhost:8080/api",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
 
     const onSuccess = (response) => {
         console.debug("Request Successful:: ", response);
@@ -26,9 +29,9 @@ const request = (options) => {
         return Promise.reject(error.response || error.message);
     }
 
-    const token = JSON.parse(sessionStorage.getItem("token"));
-
     client.interceptors.request.use(function (config) {
+        const token = JSON.parse(sessionStorage.getItem("token"));
+
         config.headers.Authorization = token ? `Bearer ${token.accessToken}` : "";
         return config;
     });

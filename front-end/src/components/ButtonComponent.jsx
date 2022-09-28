@@ -21,15 +21,22 @@ const StyledButtonWrapper = styled(StyledFlexRoot)`
 `
 
 const StyledButton = styled.button`
-  background-color: transparent;
-  padding: .6em;
+  //background-color: transparent;
+  background-color: #2f315e;
+  color: #ffffff;
+  padding: .8em;
   border-radius: 5px;
   cursor: pointer;
-  border: 1px solid rgb(170, 170, 170);
+  //border: 1px solid rgb(170, 170, 170);
   min-width: 40px;
+  box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
+  line-height: 1.2;
+  font-size: .9em;
+  border: 0;
+
   &:hover {
-    background-color: rgb(170, 170, 170);
-    color: #ffffff;    
+    //background-color: rgb(170, 170, 170);
+    background-color: #3e407a;
   }
 `
 

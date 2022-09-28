@@ -17,36 +17,49 @@ const StyledTable = styled.table`
   display: table;
   border-spacing: 0;
   border-collapse: collapse;
+
   thead {
     font-size: 14px;
+
     tr {
-      background-color: #e0e0e0;
+      color: #ffffff;
+      background-color: #1f2937;
       display: table-row;
       vertical-align: middle;
       outline: 0;
+      //border-top: 2px solid #cccccc;
+      //border-bottom: 2px solid #cccccc;
       th {
         text-align: center;
         font-weight: 600;
         line-height: 1rem;
         display: table-cell;
         padding: 16px;
-        border-bottom: 1px solid rgba(244, 244, 244, 1);
+        //border-bottom: 1px solid rgba(244, 244, 244, 1);
         vertical-align: inherit;
       }
     }
   }
+
   tbody {
-    font-size: 14px;    
+    font-size: 14px;
+
     tr {
       cursor: pointer;
       color: inherit;
       outline: 0;
       vertical-align: middle;
       font-weight: 600;
+
       &:hover {
-        background-color: #e1e1e1;
+        //background-color: #393939;
+        background-color: #374151;
+        color: #ffffff;
+        //background-color: #dce2f9;
+        //background-color: #e1e1e1;
       }
     }
+
     td {
       display: table-cell;
       padding: 16px;
@@ -58,7 +71,7 @@ const StyledTable = styled.table`
       text-align: center;
     }
   }
-  
+
 `
 
 export const TableComponent = ({columnNames, renderContents}) => {

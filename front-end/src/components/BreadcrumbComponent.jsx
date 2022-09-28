@@ -7,8 +7,10 @@ const PageTitleWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   width: 100%;
-  padding-bottom: 1em;
+  padding-bottom: .25rem;
   box-sizing: border-box;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 1em;
 `
 
 const StyledTitle = styled.p`

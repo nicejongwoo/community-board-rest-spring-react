@@ -34,8 +34,10 @@
 
 .select-item label {
     position: absolute;
-    top: -20px;
+    top: -1.5em;
     left: 0;
+    font-size: .7em;
+    color: #1c1d1f;
 }
 
 .select-outer {
@@ -125,6 +127,10 @@
     text-align: center;
     cursor: pointer;
     height: 40px;
+}
+
+.keyword-outer button:hover {
+    background-color: #313334;
 }
 
 .keyword-outer .search-icon {

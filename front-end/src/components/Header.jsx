@@ -15,14 +15,16 @@ const HeaderContainer = styled.header`
   left: 0;
   height: 64px;
   width: 100%;
-  background-color: rgb(21, 21, 21);
-  border-bottom: 1px solid #e9e9e9;
+  background-color: #1f2937;
+  border-bottom: 1px solid #6b6b6b;
   z-index: 999;
+
   div {
     box-sizing: border-box;
     display: flex;
     flex-wrap: wrap;
   }
+
   p, a, span {
     color: #ffffff;
   }
@@ -52,6 +54,17 @@ const HeaderDirectionWrapper = styled.div`
   padding: 1em;
 `
 
+const LogoutTooltip = styled.p`
+  position: absolute;
+  bottom: -10px;
+  right: 50px;
+  background-color: #444444;
+  color: #ffffff;
+  padding: .5em;
+  font-size: .7em;
+  visibility: hidden;
+`
+
 const HeaderProfileWrapper = styled.div`
   flex: 1 1 auto;
   padding: 1rem;
@@ -68,6 +81,9 @@ const HeaderProfileWrapper = styled.div`
     border: none;
     background-color: transparent;
     cursor: pointer;
+    &:hover + ${LogoutTooltip} {
+      visibility: visible;
+    }
     span {
       width: 100%;
       display: flex;
@@ -122,6 +138,7 @@ const Header = () => {
                             <BoxArrowRight />
                         </span>
                     </button>
+                    <LogoutTooltip>로그아웃</LogoutTooltip>
                 </HeaderProfileWrapper>
             </HeaderWrapper>
         </HeaderContainer>

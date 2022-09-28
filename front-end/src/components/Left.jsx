@@ -10,7 +10,8 @@ import {TEST_PARAM} from "util/constant";
 const MenuNav = styled.nav`
   width: 220px;
   position: relative;
-  background-color: rgb(21, 21, 21);
+  //background-color: rgb(21, 21, 21);
+  background-color: #1f2937;
 `
 
 const MenuList = styled.li`
@@ -25,7 +26,7 @@ const MenuLink = styled(Link)`
   width: 100%;
   padding: .8em;
   color: ${props => (props.page === "currentPage" ? "#000" : "#f9f9f9")};
-  background-color: ${props => (props.page === "currentPage" ? "#f9f9f9" : "rgb(21, 21, 21)")};
+  background-color: ${props => (props.page === "currentPage" ? "#f9f9f9" : "#1f2937")};
   transition: all 150ms ease 0s;
   &:hover {
     color: ${props => (props.page === "currentPage" ? "#000" : "#f9f9f9")};

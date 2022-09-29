@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/api/category")
@@ -52,6 +54,12 @@ public class CategoryController {
         Category category = categoryService.checkCategory(id);
         categoryService.delete(category);
         return new ResponseEntity<>(CommonApiResponse.success(id, "삭제 되었습니다."), HttpStatus.OK);
+    }
+
+    @GetMapping("/options")
+    public ResponseEntity<?> options() {
+        List<CategoryResponse> categories = categoryService.getOptions();
+        return new ResponseEntity<>(CommonApiResponse.success(categories, null), HttpStatus.OK);
     }
 
 }

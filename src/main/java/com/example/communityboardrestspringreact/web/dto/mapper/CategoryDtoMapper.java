@@ -6,6 +6,8 @@ import com.example.communityboardrestspringreact.web.dto.response.CategoryRespon
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface CategoryDtoMapper {
 
@@ -15,4 +17,7 @@ public interface CategoryDtoMapper {
     Category toEntity(CategoryRequest request);
 
     CategoryResponse toDto(Category category);
+
+    List<CategoryResponse> toListDto(List<Category> categories);
+
 }

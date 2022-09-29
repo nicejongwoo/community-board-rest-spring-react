@@ -14,7 +14,7 @@ import "components/css/searchComponent.css";
 import {ChevronDown, Search} from "react-bootstrap-icons";
 
 
-const SearchComponent = ({page, url, typeOptions}) => {
+const SearchComponent = ({page, url, typeOptions, categoryOptions}) => {
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -45,14 +45,14 @@ const SearchComponent = ({page, url, typeOptions}) => {
         resetSort();
 
         const searchQueryString = Object.keys(data).map(key => key + "=" + data[key]).join("&"); // Object to QueryString
-        console.log("search searchQueryString::", searchQueryString);
+        // console.log("search searchQueryString::", searchQueryString);
         navigate(`${url}?page=0&size=${size}&sort=${sort}&${searchQueryString}`);
     }
 
     useEffect(() => {
         // console.log("컴포넌트 실행??");
         return () => { // 컴포넌트가 unmount 될 때 실행됨.
-            console.log(location.pathname + " is dying...");
+            // console.log(location.pathname + " is dying...");
             resetCurrentPage();
             resetTotalElement();
             resetSize();
@@ -125,6 +125,9 @@ const SearchComponent = ({page, url, typeOptions}) => {
                 {page === "test" && <div className="search-select">
                     {ynOptions("알림여부", "notice")}
                     {ynOptions("사용여부", "deleted")}
+                </div>}
+                {page === "community" && <div className="search-select">
+                    {dynamicOptions("카테고리", "categoryId", categoryOptions)}
                 </div>}
 
                 <div className="search-keyword">

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -63,6 +64,12 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Category checkCategory(Long id) {
         return categoryRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Not Found Category"));
+    }
+
+    @Override
+    public List<CategoryResponse> getOptions() {
+        List<Category> categories = categoryRepository.findAll();
+        return CategoryDtoMapper.MAPPER.toListDto(categories);
     }
 
 }

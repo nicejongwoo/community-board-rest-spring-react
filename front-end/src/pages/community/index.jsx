@@ -3,139 +3,119 @@ import {useLocation, useNavigate} from "react-router-dom";
 import BreadcrumbComponent from "../../components/BreadcrumbComponent";
 import SearchComponent from "../../components/SearchComponent";
 import {useRecoilState, useResetRecoilState, useSetRecoilState} from "recoil";
-import {currentPageState, selectConditionsState, totalElementState, typeOptionsState} from "../../state/SearchState";
+import {totalElementState} from "../../state/SearchState";
 import CommunityService from "../../service/community/CommunityService";
 import CategoryService from "../../service/category/CategoryService";
 import PaginationComponent from "../../components/PaginationComponent";
+import {calcPageRowNum} from "../../util/common";
+import {currentMenuState} from "../../state/menuState";
+import {COMMUNITY_MENU_NAME, COMMUNITY_PARAM} from "../../util/constant";
+import {StyledSection, StyledTotalCount} from "../../App";
+import {AddButton} from "../../components/ButtonComponent";
+import {COMMUNITY_TYPE_OPTIONS} from "../../util/constant/options";
+import {TableComponent} from "../../components/TableComponent";
 
 const Community = () => {
 
     const navigate = useNavigate();
     const location = useLocation();
 
-    const [communities, setCommunities] = useState([]);
-    const [categories, setCategories] = useState([]);
+    const [categoryOptions, setCategoryOptions] = useState([]);
+
+    const [contents, setContents] = useState([]);
 
     const [totalElements, setTotalElements] = useRecoilState(totalElementState);
 
-    const setCurrentPage = useSetRecoilState(currentPageState);
-    const resetCurrentPage = useResetRecoilState(currentPageState);
+    const setCurrentMenu = useSetRecoilState(currentMenuState);
+    const resetCurrentMenu = useResetRecoilState(currentMenuState);
 
-    const [typeOptions, setTypeOptions] = useRecoilState(typeOptionsState);
-    const setSelectConditions = useSetRecoilState(selectConditionsState);
+    const [loadingContents, setLoadingContents] = useState(false);
 
-    const getCommunities = (parameters) => {
-        CommunityService.getList(parameters).then(response => {
-            // console.log("response:: ", response);
-            setCommunities(response.data.content);
+    const search = (parameters) => {
+        CommunityService.search(parameters).then(response => {
+            // console.log(response.data);
+            response.data.content.forEach((element, index) => {
+                element.rowNum = calcPageRowNum(response.data, index);
+            })
+            setContents(response.data.content);
             setTotalElements(response.data.totalElements);
+            setLoadingContents(false);
         }).catch(error => {
-            console.error("getCommunities Error:: ", error);
+            console.error("error:: ", error);
         })
     }
 
-    const getCategories = () => {
-        let categorySelectCondition = {
-            label: "카테고리",
-            name: "categoryId",
-            options: []
-        }
-        CategoryService.getList(null).then(response => {
-            // console.log("response:: ", response);
-            let map = response.data.content.map(category => {
-                return {value: category.id, name: category.name}
+    const getCategoryOptions = () => {
+        CategoryService.options().then(response => {
+            console.log("response:: ", response);
+            let map = response.data.map(element => {
+                return {value: element.id, name: element.name}
             });
-            setCategories(response.data.content);
-            categorySelectCondition.options = map;
-        }).catch(error => console.error("getCategories Error:: ", error)).finally(() => {
-            setSelectConditions(selectConditions =>
-                [...selectConditions, categorySelectCondition]
-            );
+            setCategoryOptions(map);
         });
     }
 
     useEffect(() => {
-        setCurrentPage("community");
-        if (categories.length === 0) {
-            getCategories();
-        }
-        setTypeOptions([
-            {value: "createdName", name: "작성자명"},
-            {value: "title", name: "제목"},
-            {value: "content", name: "내용"},
-        ]);
+        setCurrentMenu("community");
+        setLoadingContents(true);
+        search(location.search);
+        getCategoryOptions();
         return () => {
-            resetCurrentPage();
+            resetCurrentMenu();
         }
-    }, []);
-
-    useEffect(() => {
-        getCommunities(location.search);
     }, [location]);
 
+    const columnNames = ["번호", "제목", "답변수", "작성자", "작성일"];
+    let renderContents;
+    if (contents.length > 0) {
+        renderContents = contents.map((element, index) =>
+            <tr
+                key={index}
+                onClick={(e) => {
+                    e.preventDefault();
+                    navigate(`/community/${element.id}${window.location.search}`)
+                }
+                }>
+                <td>{element.id}</td>
+                <td>[{element.categoryName}] {element.title}</td>
+                <td>{element.answerCount}</td>
+                <td>{element.createdName}</td>
+                <td>{element.createdAt}</td>
+            </tr>
+        );
+    } else {
+        renderContents = <tr>
+            <td colSpan={columnNames.length}>게시글이 없습니다.</td>
+        </tr>
+    }
+
     return (
-        <section id="section" className="flex-root">
+        <StyledSection className="section">
             <div className="content-wrapper">
 
-                <BreadcrumbComponent title="커뮤니티" path1="community" name1="커뮤니티"/>
+                <BreadcrumbComponent
+                    title={COMMUNITY_MENU_NAME}
+                    name1={COMMUNITY_MENU_NAME}
+                    path1={`/community${COMMUNITY_PARAM}`}
+                />
 
-                <SearchComponent url="/community"/>
+                <AddButton moveInsertPage={() => {navigate(`/community/insert${location.search}`);}}/>
 
-                <p style={{textAlign: "right"}}>검색 수: {totalElements}</p>
+                <SearchComponent
+                    page="community"
+                    url="/community"
+                    typeOptions={COMMUNITY_TYPE_OPTIONS}
+                    categoryOptions={categoryOptions}
+                />
 
-                <div className="content-item flex-root table-wrapper">
-                    <table className="">
-                        <colgroup>
-                            <col width="5%"/>
-                            <col width="45%"/>
-                        </colgroup>
-                        <thead>
-                        <tr>
-                            <th>번호</th>
-                            <th>제목</th>
-                            <th>답변수</th>
-                            <th>작성자</th>
-                            <th>작성일</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {communities && communities.map((element, index) => (<tr
-                            key={index}
-                            style={{cursor: "pointer"}}
-                            onClick={(e) => {
-                                e.preventDefault();
-                                navigate(`/community/${element.id}${window.location.search}`)
-                            }
-                            }>
-                            <td>{element.id}</td>
-                            <td>[{element.categoryName}] {element.title}</td>
-                            <td>{element.answerCount}</td>
-                            <td>{element.createdName}</td>
-                            <td>{element.createdAt}</td>
-                        </tr>))}
-                        </tbody>
-                    </table>
+                <StyledTotalCount>검색: {totalElements} 건</StyledTotalCount>
 
-                    <PaginationComponent/>
-                </div>
+                {loadingContents ? "게시글 로딩중..." : <TableComponent columnNames={columnNames} renderContents={renderContents} />}
 
-                <div className="flex-root">
-                    <ul className="button-wrapper button-right">
-                        <li>
-                            <button
-                                type="button"
-                                className="add-button"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                }}
-                            >
-                                등록
-                            </button>
-                        </li>
-                    </ul>
-                </div>
+                {!loadingContents && <PaginationComponent/>}
+
             </div>
-        </section>
+        </StyledSection>
     );
 };
 

@@ -1,5 +1,12 @@
 import request from "../request";
 
+const options = () => {
+    return request({
+        url: `/category/options`,
+        method: "GET"
+    });
+}
+
 const getList = (parameters) => {
     return request({
         url: `/category?${parameters}`,
@@ -8,6 +15,7 @@ const getList = (parameters) => {
 }
 
 const CategoryService = {
+    options,
     getList,
 }
 

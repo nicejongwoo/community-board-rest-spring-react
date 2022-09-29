@@ -1,6 +1,6 @@
 import request from "../request";
 
-const getList = (parameters) => {
+const search = (parameters) => {
     return request({
         url: `/community${parameters}`,
         method: "GET"
@@ -8,7 +8,7 @@ const getList = (parameters) => {
 }
 
 const CommunityService = {
-    getList,
+    search,
 
 }
 

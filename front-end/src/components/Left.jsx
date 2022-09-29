@@ -5,7 +5,7 @@ import styled from "styled-components";
 import {accountState} from "state/AuthState";
 import {currentMenuState} from "state/menuState";
 import {sizeState, sortState} from "state/SearchState";
-import {TEST_PARAM} from "util/constant";
+import {COMMUNITY_PARAM, TEST_PARAM} from "util/constant";
 
 const MenuNav = styled.nav`
   width: 220px;
@@ -92,7 +92,7 @@ const Left = () => {
                     <MenuList >
                         <MenuLink
                             page={currentMenu === "community" ? "currentPage" : ""}
-                            to={`/community?page=0&size=${size}&sort=${sort}`}
+                            to={`/community${COMMUNITY_PARAM}`}
                         >
                             <span >커뮤니티</span>
                         </MenuLink>

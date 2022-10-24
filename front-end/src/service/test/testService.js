@@ -10,8 +10,16 @@ const search = (parameters) => {
     })
 }
 
+const insert = (data) => {
+    return request({
+        url: `/test`,
+        method: "POST",
+    })
+}
+
 const TestService = {
     search,
+    insert,
 }
 
 export default TestService;

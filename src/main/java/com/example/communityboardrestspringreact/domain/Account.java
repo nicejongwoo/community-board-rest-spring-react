@@ -26,9 +26,9 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Comment("유저아이디")
-    @Column(unique = true)
-    private String username;
+    @Comment("계정토큰(랜덤 20자)")
+    @Column(name = "account_token", length = 20, unique = true)
+    private String accountToken;
 
     @Comment("이름")
     private String name;
@@ -45,6 +45,7 @@ public class Account {
     private String phone;
 
     @Comment("가입일")
+    @Column(name = "joined_at")
     private LocalDateTime joinedAt;
 
     @Comment("프로필이미지")

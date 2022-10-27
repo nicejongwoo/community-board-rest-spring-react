@@ -1,4 +1,8 @@
 package com.example.communityboardrestspringreact.web.dto.search.account;
 
-public class AccountSearch {
+import com.example.communityboardrestspringreact.web.dto.search.BaseSearch;
+import lombok.Data;
+
+@Data
+public class AccountSearch extends BaseSearch {
 }

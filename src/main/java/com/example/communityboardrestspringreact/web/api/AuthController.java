@@ -52,7 +52,7 @@ public class AuthController {
 
         //request to entity
         Account account = AccountDtoMapper.MAPPER.toEntity(request);
-        account.encryptPassword(passwordEncoder.encode(request.getPassword()));
+        account.updateEncodedPassword(passwordEncoder.encode(request.getPassword()));
 
         Role role = roleRepository.findByName("ROLE_USER").get();
         account.setRoles(Collections.singleton(role));

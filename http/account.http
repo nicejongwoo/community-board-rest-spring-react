@@ -1,0 +1,21 @@
+### register account
+POST http://localhost:8080/api/account
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "name": "사용자",
+  "email": "user@email.kr",
+  "password": "123qwe!@#",
+  "phone": "010-0101-0101"
+}
+
+### search account
+GET http://localhost:8080/api/account?page=0&size=10&sort=id,desc
+#GET http://localhost:8080/api/account?page=0&size=10&sort=id,desc&type=name&keyword=관리
+Authorization: Bearer {{auth_token}}
+
+### get account
+GET http://localhost:8080/api/account/1
+Authorization: Bearer {{auth_token}}
+

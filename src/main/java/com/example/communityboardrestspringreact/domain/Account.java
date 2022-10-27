@@ -63,7 +63,7 @@ public class Account {
     private Set<Role> roles;
 
 
-    public void encryptPassword(String encodedPassword) {
+    public void updateEncodedPassword(String encodedPassword) {
         this.password = encodedPassword;
     }
 

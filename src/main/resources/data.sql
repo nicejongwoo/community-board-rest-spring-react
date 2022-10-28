@@ -6,9 +6,9 @@ INSERT INTO category (name, type, created_by, created_at, updated_by, updated_at
 INSERT INTO category (name, type, created_by, created_at, updated_by, updated_at) VALUES ('자유주제', 'chat', 'admin', current_time, 'admin', current_time);
 INSERT INTO category (name, type, created_by, created_at, updated_by, updated_at) VALUES ('스터디', 'study', 'admin', current_time, 'admin', current_time);
 
-INSERT INTO account (account_token, email, name, password, phone, joined_at) VALUES ('erewADFffferewADFfff', 'admin@email.com', '관리자', '{noop}password', '010-1234-0000', CURRENT_TIMESTAMP);
-INSERT INTO account (account_token, email, name, password, phone, joined_at) VALUES ('ADFAEdfodsADFAEdfods', 'manager@email.com', '매니저', '{noop}password', '010-1234-9999', CURRENT_TIMESTAMP);
 INSERT INTO account (account_token, email, name, password, phone, joined_at) VALUES ('vcblpDDaEdvcblpDDaEd', 'user@email.com', '사용자', '{noop}password', '010-1234-1111', CURRENT_TIMESTAMP);
+INSERT INTO account (account_token, email, name, password, phone, joined_at) VALUES ('ADFAEdfodsADFAEdfods', 'manager@email.com', '매니저', '{noop}password', '010-1234-9999', CURRENT_TIMESTAMP);
+INSERT INTO account (account_token, email, name, password, phone, joined_at) VALUES ('erewADFffferewADFfff', 'admin@email.com', '관리자', '{noop}password', '010-1234-0000', CURRENT_TIMESTAMP);
 
 INSERT INTO account_roles (account_id, role_id) VALUES (1, 3);
 INSERT INTO account_roles (account_id, role_id) VALUES (2, 2);

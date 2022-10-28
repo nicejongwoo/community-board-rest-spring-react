@@ -1,6 +1,5 @@
 package com.example.communityboardrestspringreact.repository.impl;
 
-import com.example.communityboardrestspringreact.domain.QAccount;
 import com.example.communityboardrestspringreact.repository.custom.AccountRepositoryCustom;
 import com.example.communityboardrestspringreact.web.dto.response.account.AccountSearchResponse;
 import com.example.communityboardrestspringreact.web.dto.search.account.AccountSearch;
@@ -15,14 +14,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
-
 import java.util.List;
 
-import static com.example.communityboardrestspringreact.domain.QAccount.*;
+import static com.example.communityboardrestspringreact.domain.QAccount.account;
 
 public class AccountRepositoryImpl implements AccountRepositoryCustom {
 
@@ -37,7 +34,14 @@ public class AccountRepositoryImpl implements AccountRepositoryCustom {
         JPAQuery<AccountSearchResponse> query = factory
                 .select(
                         Projections.fields(
-                                AccountSearchResponse.class
+                                AccountSearchResponse.class,
+                                account.id,
+                                account.accountToken,
+                                account.name,
+                                account.email,
+                                account.phone,
+                                account.joinedAt,
+                                account.profileImage
                         )
                 )
                 .from(account)

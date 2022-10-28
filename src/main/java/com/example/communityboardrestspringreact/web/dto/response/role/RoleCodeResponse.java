@@ -9,4 +9,7 @@ public class RoleCodeResponse {
 
     private String code;
 
+    public RoleCodeResponse(String code) {
+        this.code = code;
+    }
 }

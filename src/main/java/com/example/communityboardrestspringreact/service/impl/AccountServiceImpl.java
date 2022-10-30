@@ -7,8 +7,8 @@ import com.example.communityboardrestspringreact.repository.RoleRepository;
 import com.example.communityboardrestspringreact.service.AccountService;
 import com.example.communityboardrestspringreact.web.dto.mapper.AccountDtoMapper;
 import com.example.communityboardrestspringreact.web.dto.request.account.AccountRegisterRequest;
-import com.example.communityboardrestspringreact.web.dto.response.account.AccountSearchResponse;
 import com.example.communityboardrestspringreact.web.dto.response.account.AccountResponse;
+import com.example.communityboardrestspringreact.web.dto.response.account.AccountSearchResponse;
 import com.example.communityboardrestspringreact.web.dto.response.role.RoleCodeResponse;
 import com.example.communityboardrestspringreact.web.dto.search.account.AccountSearch;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -53,11 +53,11 @@ public class AccountServiceImpl implements AccountService {
             data.setRowNum(index + 1);
 
             Account account = accountRepository.findByAccountToken(data.getAccountToken()).get();
-            Set<Role> roles = account.getRoles();
+            List<Role> roles = account.getRoles();
 
             data.setRoles(roles.stream().map(role -> {
-                return new RoleCodeResponse(role.getCode());
-            }).collect(Collectors.toSet()));
+                return new RoleCodeResponse(role.getCode(), role.getName());
+            }).collect(Collectors.toList()));
 
         });
 

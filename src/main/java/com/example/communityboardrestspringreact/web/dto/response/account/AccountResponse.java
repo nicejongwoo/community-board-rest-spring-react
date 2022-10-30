@@ -3,7 +3,8 @@ package com.example.communityboardrestspringreact.web.dto.response.account;
 import com.example.communityboardrestspringreact.web.dto.response.role.RoleCodeResponse;
 import lombok.*;
 
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Builder
 @AllArgsConstructor
@@ -18,6 +19,6 @@ public class AccountResponse {
     private String phone;
     private String profileImage;
 
-    private Set<RoleCodeResponse> roles;
+    private List<RoleCodeResponse> roles = new ArrayList<>();
 
 }

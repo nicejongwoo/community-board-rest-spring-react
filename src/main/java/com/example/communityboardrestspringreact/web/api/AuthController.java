@@ -27,7 +27,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -55,7 +57,7 @@ public class AuthController {
         account.updateEncodedPassword(passwordEncoder.encode(request.getPassword()));
 
         Role role = roleRepository.findByName("ROLE_USER").get();
-        account.setRoles(Collections.singleton(role));
+        account.setRoles(Arrays.asList(role));
 
         accountRepository.save(account);
 
@@ -92,8 +94,8 @@ public class AuthController {
     public ResponseEntity<?> giveRoles(@PathVariable Long id, @RequestBody RoleRequest request) {
         Account account = accountRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("찾으시는 계정이 없습니다."));
 
-        Set<Role> currentRoles = account.getRoles();
-        Set<Role> newRoles = new HashSet<>();
+        List<Role> currentRoles = account.getRoles();
+        List<Role> newRoles = new ArrayList<>();
 
         request.getRoles().forEach(roleName -> {
             newRoles.add(roleRepository.findByName(roleName).get());

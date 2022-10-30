@@ -1,6 +1,6 @@
-INSERT INTO roles (name, code) VALUES('ROLE_ADMIN', 'regaXL');
-INSERT INTO roles (name, code) VALUES('ROLE_MANAGER', 'rGrAql');
-INSERT INTO roles (name, code) VALUES('ROLE_USER', 'rwCtSm');
+INSERT INTO roles (role, code, name) VALUES('ROLE_ADMIN', 'regaXL', '관리자');
+INSERT INTO roles (role, code, name) VALUES('ROLE_MANAGER', 'rGrAql', '매니저');
+INSERT INTO roles (role, code, name) VALUES('ROLE_USER', 'rwCtSm', '사용자');
 
 INSERT INTO category (name, type, created_by, created_at, updated_by, updated_at) VALUES ('질문', 'question', 'admin', current_time, 'admin', current_time);
 INSERT INTO category (name, type, created_by, created_at, updated_by, updated_at) VALUES ('자유주제', 'chat', 'admin', current_time, 'admin', current_time);

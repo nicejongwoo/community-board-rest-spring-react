@@ -8,8 +8,10 @@ import lombok.Setter;
 public class RoleCodeResponse {
 
     private String code;
+    private String name;
 
-    public RoleCodeResponse(String code) {
+    public RoleCodeResponse(String code, String name) {
         this.code = code;
+        this.name = name;
     }
 }

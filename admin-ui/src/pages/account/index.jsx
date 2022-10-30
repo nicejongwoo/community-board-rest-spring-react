@@ -62,9 +62,7 @@ const Account = () => {
                 <td>{element.phone}</td>
                 <td>
                     {element.roles && element.roles.map((role, index) =>
-                        <span key={index}>
-                            {role.code}
-                        </span>
+                        `${role.name}${index !== (element.roles.length - 1) ? ", " : ""}`
                     )}
                 </td>
                 <td>{element.joinedAt}</td>

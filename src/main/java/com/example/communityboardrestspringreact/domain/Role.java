@@ -16,9 +16,9 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Comment("권한명")
-    @Column(length = 60)
-    private String name;
+    @Comment("권한")
+    @Column(length = 100)
+    private String role;
 
     /**
      * RandomCharacterGenerator
@@ -30,4 +30,7 @@ public class Role {
     @Column(length = 10)
     private String code;
 
+    @Comment("권한명")
+    @Column(length = 100)
+    private String name;
 }

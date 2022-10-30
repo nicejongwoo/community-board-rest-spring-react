@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link, useNavigate} from "react-router-dom";
 import {BoxArrowRight} from "react-bootstrap-icons";
-import logo from '../logo.svg';
+import logo from 'assets/images/main_logo.png';
 import {useRecoilValue, useSetRecoilState} from "recoil";
 import {accountState, loggedState} from "../state/AuthState";
 import styled from "styled-components";
@@ -110,9 +110,9 @@ const Header = () => {
                     </Link>
                 </HeaderLogoWrapper>
 
-                <HeaderDirectionWrapper className="direct-wrapper">
-                    <Link to="/user" >바로가기</Link>
-                </HeaderDirectionWrapper>
+                {/*<HeaderDirectionWrapper className="direct-wrapper">*/}
+                    {/*<Link to="/user" >바로가기</Link>*/}
+                {/*</HeaderDirectionWrapper>*/}
 
                 <HeaderProfileWrapper>
                     <p><span>{account && account.name}</span>님 반갑습니다.</p>

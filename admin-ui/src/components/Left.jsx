@@ -5,7 +5,7 @@ import styled from "styled-components";
 import {accountState} from "state/AuthState";
 import {currentMenuState} from "state/menuState";
 import {sizeState, sortState} from "state/SearchState";
-import {COMMUNITY_PARAM, TEST_PARAM} from "util/constant";
+import {ACCOUNT_MENU_NAME, ACCOUNT_PARAM, COMMUNITY_PARAM, TEST_PARAM} from "util/constant";
 
 const MenuNav = styled.nav`
   width: 220px;
@@ -79,6 +79,15 @@ const Left = () => {
                     <span>관리자 홈페이지</span>
                 </MenuTitle>
                 <ul>
+
+                    {adminPermission && <MenuList>
+                        <MenuLink
+                            page={currentMenu === "account" ? "currentPage" : ""}
+                            to={`/account${ACCOUNT_PARAM}`}
+                        >
+                            <span>{ACCOUNT_MENU_NAME}</span>
+                        </MenuLink>
+                    </MenuList>}
 
                     {adminPermission && <MenuList>
                         <MenuLink

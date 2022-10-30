@@ -9,6 +9,7 @@ import Community from "pages/community";
 import Test from "pages/test";
 import Main from "pages/main";
 import TestInsert from "pages/test/insert";
+import Account from "../pages/account";
 
 function AppRouter() {
 
@@ -22,6 +23,10 @@ function AppRouter() {
                 <Route
                     path="/"
                     element={<ProtectedRoute account={account} children={<Main />} requiredRoles={["ROLE_ADMIN"]} />}
+                />
+                <Route
+                    path="/account"
+                    element={<ProtectedRoute account={account} children={<Account />} requiredRoles={["ROLE_ADMIN"]} />}
                 />
                 <Route
                     path="/test"

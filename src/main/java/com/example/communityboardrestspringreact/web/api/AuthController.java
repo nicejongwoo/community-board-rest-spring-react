@@ -52,11 +52,10 @@ public class AuthController {
             return new ResponseEntity<>("Email is already taken: " + request.getEmail(), HttpStatus.BAD_REQUEST);
         }
 
-        //request to entity
+        Role role = roleRepository.findByRole("ROLE_USER").get();
+
         Account account = AccountDtoMapper.MAPPER.toEntity(request);
         account.updateEncodedPassword(passwordEncoder.encode(request.getPassword()));
-
-        Role role = roleRepository.findByName("ROLE_USER").get();
         account.setRoles(Arrays.asList(role));
 
         accountRepository.save(account);

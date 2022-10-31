@@ -1,5 +1,6 @@
 package com.example.communityboardrestspringreact.domain;
 
+import com.example.communityboardrestspringreact.util.RandomCharacterGenerator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.hibernate.annotations.Comment;
@@ -69,4 +70,9 @@ public class Account {
         this.password = encodedPassword;
     }
 
+    @PrePersist
+    void prePersist() {
+        this.joinedAt = LocalDateTime.now();
+        this.accountToken = RandomCharacterGenerator.randomCharacterWithPrefix("user", 20);
+    }
 }

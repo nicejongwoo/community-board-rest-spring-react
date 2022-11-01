@@ -1,6 +1,8 @@
-app:
-  jwt-secret: jwt-secret
 
+jwt:
+  secret: jwtSecret
+  accessExpirationsMs: 1800000 # 30 min
+  refreshExpirationMs: 604800000 # 7 day
 
 ---
 

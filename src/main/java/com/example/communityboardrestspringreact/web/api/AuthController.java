@@ -1,24 +1,29 @@
 package com.example.communityboardrestspringreact.web.api;
 
 import com.example.communityboardrestspringreact.domain.Account;
+import com.example.communityboardrestspringreact.domain.RefreshToken;
 import com.example.communityboardrestspringreact.domain.Role;
 import com.example.communityboardrestspringreact.repository.AccountRepository;
 import com.example.communityboardrestspringreact.repository.RoleRepository;
 import com.example.communityboardrestspringreact.security.service.CustomUserDetails;
 import com.example.communityboardrestspringreact.security.service.JwtTokenService;
-import com.example.communityboardrestspringreact.security.web.dto.response.TokenResponse;
+import com.example.communityboardrestspringreact.service.RefreshTokenService;
 import com.example.communityboardrestspringreact.web.dto.mapper.AccountDtoMapper;
 import com.example.communityboardrestspringreact.web.dto.request.LoginRequest;
 import com.example.communityboardrestspringreact.web.dto.request.RoleRequest;
 import com.example.communityboardrestspringreact.web.dto.request.SignUpRequest;
-import com.example.communityboardrestspringreact.web.dto.response.AccountResponse;
 import com.example.communityboardrestspringreact.web.dto.response.CommonApiResponse;
+import com.example.communityboardrestspringreact.web.dto.response.auth.AuthResponse;
+import com.example.communityboardrestspringreact.web.dto.response.role.RoleCodeResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,6 +35,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -37,12 +43,14 @@ import java.util.List;
 @RestController
 public class AuthController {
 
-    private final AuthenticationManager authenticationManager;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final AccountRepository accountRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
-
     private final JwtTokenService tokenService;
+    private final RefreshTokenService refreshTokenService;
+    @Value("${jwt.refreshExpirationMs}")
+    private Long REFRESH_TOKEN_PERIOD;
 
     @Transactional
     @PostMapping("/signup")
@@ -65,19 +73,42 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        Authentication authenticate = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
-        );
+
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword());
+        Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authenticate);
-        TokenResponse tokenResponse = tokenService.generateToken(authenticate);
 
         CustomUserDetails userDetails = (CustomUserDetails) authenticate.getPrincipal();
-        AccountResponse accountResponse = AccountResponse.builder()
-                .token(tokenResponse)
-                .account(userDetails.getAccount())
+        Account account = userDetails.getAccount();
+        List<RoleCodeResponse> roleCodeResponses = account.getRoles().stream().map(role -> {
+            return new RoleCodeResponse(role.getCode(), role.getName());
+        }).collect(Collectors.toList());
+
+        String accessToken = tokenService.createAccessToken(authenticate);
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(account.getAccountToken());
+
+        AuthResponse response = AuthResponse.builder()
+                .token(accessToken)
+                .expiryDate(refreshToken.getExpiryDate())
+                .accountToken(account.getAccountToken())
+                .email(account.getEmail())
+                .name(account.getName())
+                .phone(account.getPhone())
+                .profileImage(account.getProfileImage())
+                .roles(roleCodeResponses)
                 .build();
 
-        return ResponseEntity.ok(CommonApiResponse.success(accountResponse));
+        ResponseCookie responseCookie = ResponseCookie.from("refreshToken", refreshToken.getToken())
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(REFRESH_TOKEN_PERIOD / 1000)
+                .build();
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
+                .body(CommonApiResponse.success(response));
     }
 
     @PostMapping("/logout")

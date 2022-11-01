@@ -1,81 +1,67 @@
 package com.example.communityboardrestspringreact.security.config;
 
-import com.example.communityboardrestspringreact.security.filter.JwtAuthenticationFilter;
 import com.example.communityboardrestspringreact.security.handler.CustomAccessDeniedHandler;
 import com.example.communityboardrestspringreact.security.handler.CustomAuthenticationEntryPoint;
-import com.example.communityboardrestspringreact.security.service.CustomUserDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.communityboardrestspringreact.security.service.JwtTokenService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.BeanIds;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.filter.CorsFilter;
 
+@RequiredArgsConstructor
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
-    @Autowired
-    private CustomUserDetailsService customUserDetailsService;
+public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
+    private final JwtTokenService jwtTokenService;
+    private final CorsFilter corsFilter;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+
     @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter();
-    }
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.csrf().disable().addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class);
 
+        http.exceptionHandling()
+                .authenticationEntryPoint(customAuthenticationEntryPoint)
+                .accessDeniedHandler(customAccessDeniedHandler);
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.cors();
-        http.csrf().disable();
+        http.headers().frameOptions().sameOrigin(); // for h2 console
 
-        //for h2
-        http.headers().frameOptions().disable();
-        http.authorizeRequests().antMatchers("/h2-console/**").permitAll();
+        http.sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.authorizeRequests()
-//                .antMatchers("/api/auth/**").permitAll()
-//                .antMatchers(HttpMethod.GET, "/api/**").permitAll()
-//                .antMatchers(HttpMethod.POST.toString(), HttpMethod.PUT.toString(), HttpMethod.DELETE.toString(), "/api/**").hasRole("ADMIN")
-                .antMatchers("/api/**").permitAll() //DEV
-                .anyRequest().authenticated()
-                .and()
-                .exceptionHandling()
-                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-                .accessDeniedHandler(new CustomAccessDeniedHandler());
+                .antMatchers("/api/**").permitAll() // for Development
+                .anyRequest().authenticated();
 
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.apply(new JwtSecurityConfig(jwtTokenService));
 
-        http.headers().frameOptions().disable();
-
-        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        return http.build();
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web -> web.ignoring().antMatchers(
+                "'/h2-console",
+                "/static/**",
+                "/templates/**",
+                "/public/**"
+        ).requestMatchers(PathRequest.toStaticResources().atCommonLocations()));
     }
-
-//    @Override
-//    @Bean
-    @Bean(BeanIds.AUTHENTICATION_MANAGER)
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
-
-
 
 }

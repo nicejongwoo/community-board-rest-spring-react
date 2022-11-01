@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.Comment;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ import java.util.Set;
                 @UniqueConstraint(columnNames = {"email"})
         }
 )
-public class Account {
+public class Account implements Serializable {
 
     @Comment("일련번호")
     @Id

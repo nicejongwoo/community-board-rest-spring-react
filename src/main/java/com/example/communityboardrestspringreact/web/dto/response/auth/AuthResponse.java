@@ -23,6 +23,7 @@ public class AuthResponse {
     private List<RoleCodeResponse> roles = new ArrayList<>();
 
     private String token;
+    private String refresh;
     private LocalDateTime expiryDate;
 
 }

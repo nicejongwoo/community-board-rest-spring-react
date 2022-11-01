@@ -18,7 +18,10 @@ Content-Type: application/json
 }
 
 > {%
-    client.global.set("auth_token", response.body.data.token.accessToken);
+    client.global.set("auth_token", response.body.data.token);
+    client.global.set("refresh_token", response.body.data.refresh);
+    client.log("auth_token:: " + client.global.get("auth_token"));
+    client.log("refresh_token:: " + client.global.get("refresh_token"));
   %}
 
 ### give admin role
@@ -28,3 +31,35 @@ Content-Type: application/json
 {
   "roles": ["ROLE_MANAGER", "ROLE_ADMIN"]
 }
+
+
+### class com.example.communityboardrestspringreact.domain.Account cannot be cast to class java.io.Serializable (com.example.communityboardrestspringreact.domain.Account is in unnamed module of loader org.springframework.boot.devtools.restart.classloader.RestartClassLoader @432c0997; java.io.Serializable is in module java.base of loader 'bootstrap')
+#	at org.hibernate.type.ManyToOneType.hydrate(ManyToOneType.java:211) ~[hibernate-core-5.6.10.Final.jar:5.6.10.Final]
+#	at org.hibernate.persister.entity.AbstractEntityPersister.hydrate(AbstractEntityPersister.java:3214) ~[hibernate-core-5.6.10.Final.jar:5.6.10.Final]
+#	at org.hibernate.loader.Loader.loadFromResultSet(Loader.java:1887) ~[hibernate-core-5.6.10.Final.jar:5.6.10.Final]
+#	at org.hibernate.loader.Loader.hydrateEntityState(Loader.java:1811) ~[hibernate-core-5.6.10.Final.jar:5.6.10.Final]
+#	at org.hibernate.loader.Loader.instanceNotYetLoaded(Loader.java:1784) ~[hibernate-core-5.6.10.Final.jar:5.6.10.Final]
+#	at org.hibernate.loader.Loader.getRow(Loader.java:1624) ~[hibernate-core-5.6.10.Final.jar:5.6.10.Final]
+#	at org.hibernate.loader.Loader.getRowFromResultSet(Loader.java:748) ~[hibernate-core-5.6.10.Final.jar:5.6.10.Final]
+#	at org.hibernate.loader.Loader.getRowsFromResultSet(Loader.java:1047) ~[hibernate-core-5.6.10.Final.jar:5.6.10.Final]
+#	at org.hibernate.loader.Loader.processResultSet(Loader.java:998) ~[hibernate-core-5.6.10.Final.jar:5.6.10.Final]
+#	at org.hibernate.loader.Loader.doQuery(Loader.java:967) ~[hibernate-core-5.6.10.Final.jar:5.6.10.Final]
+#	at org.hibernate.loader.Loader.doQueryAndInitializeNonLazyCollections(Loader.java:357) ~[hibernate-core-5.6.10.Final.jar:5.6.10.Final]
+#	at org.hibernate.loader.Loader.doList(Loader.java:2868) ~[hibernate-core-5.6.10.Final.jar:5.6.10.Final]
+#	at org.hibernate.loader.Loader.doList(Loader.java:2850) ~[hibernate-core-5.6.10.Final.jar:5.6.10.Final]
+#	at org.hibernate.loader.Loader.listIgnoreQueryCache(Loader.java:2682) ~[hibernate-core-5.6.10.Final.jar:5.6.10.Final]
+#	at org.hibernate.loader.Loader.list(Loader.java:2677) ~[hibernate-core-5.6.10.Final.jar:5.6.10.Final]
+#	at org.hibernate.loader.hql.QueryLoader.list(QueryLoader.java:540) ~[hibernate-core-5.6.10.Final.jar:5.6.10.Final]
+#	at org.hibernate.hql.internal.ast.QueryTranslatorImpl.list(QueryTranslatorImpl.java:400) ~[hibernate-core-5.6.10.Final.jar:5.6.10.Final]
+#	at org.hibernate.engine.query.spi.HQLQueryPlan.performList(HQLQueryPlan.java:219) ~[hibernate-core-5.6.10.Final.jar:5.6.10.Final]
+#	at org.hibernate.internal.SessionImpl.list(SessionImpl.java:1459) ~[hibernate-core-5.6.10.Final.jar:5.6.10.Final]
+#	at org.hibernate.query.internal.AbstractProducedQuery.doList(AbstractProducedQuery.java:1649) ~[hibernate-core-5.6.10.Final.jar:5.6.10.Final]
+#	at org.hibernate.query.internal.AbstractProducedQuery.list(AbstractProducedQuery.java:1617) ~[hibernate-core-5.6.10.Final.jar:5.6.10.Final]
+#	at org.hibernate.query.Query.getResultList(Query.java:165) ~[hibernate-core-5.6.10.Final.jar:5.6.10.Final]
+#	at org.hibernate.query.criteria.internal.compile.CriteriaQueryTypeQueryAdapter.getResultList(CriteriaQueryTypeQueryAdapter.java:76) ~[hibernate-core-5.6.10.Final.jar:5.6.10.Final]
+### ->>> 해결 방법: 참조 된 Entity 클래스에 implement Serializable을 사용, 오류 발생 이유 : Entity를 조인하는 과정 중 PK를 조인한게 아닌 Unique Key를 사용해서 조인
+### logout
+POST http://localhost:8080/api/auth/logout
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+Cookie: refreshToken={{refresh_token}}

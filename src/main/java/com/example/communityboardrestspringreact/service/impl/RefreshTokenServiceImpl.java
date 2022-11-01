@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -22,6 +23,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final AccountRepository accountRepository;
 
+    @Transactional
     @Override
     public RefreshToken createRefreshToken(String accountToken) {
 
@@ -34,5 +36,11 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         refreshTokenRepository.save(refreshToken);
 
         return refreshToken;
+    }
+
+    @Transactional
+    @Override
+    public void deleteByToken(String cookieValue) {
+        refreshTokenRepository.deleteByToken(cookieValue);
     }
 }

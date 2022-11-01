@@ -46,6 +46,7 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.authorizeRequests()
+                .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/api/**").permitAll() // for Development
                 .anyRequest().authenticated();
 
@@ -57,7 +58,7 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web -> web.ignoring().antMatchers(
-                "'/h2-console",
+                "/h2-console/**",
                 "/static/**",
                 "/templates/**",
                 "/public/**"

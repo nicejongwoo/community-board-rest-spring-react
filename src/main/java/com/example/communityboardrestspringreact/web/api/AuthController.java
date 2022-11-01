@@ -8,6 +8,7 @@ import com.example.communityboardrestspringreact.repository.RoleRepository;
 import com.example.communityboardrestspringreact.security.service.CustomUserDetails;
 import com.example.communityboardrestspringreact.security.service.JwtTokenService;
 import com.example.communityboardrestspringreact.service.RefreshTokenService;
+import com.example.communityboardrestspringreact.util.ResponseCookieGenerator;
 import com.example.communityboardrestspringreact.web.dto.mapper.AccountDtoMapper;
 import com.example.communityboardrestspringreact.web.dto.request.LoginRequest;
 import com.example.communityboardrestspringreact.web.dto.request.RoleRequest;
@@ -90,6 +91,7 @@ public class AuthController {
 
         AuthResponse response = AuthResponse.builder()
                 .token(accessToken)
+                .refresh(refreshToken.getToken())
                 .expiryDate(refreshToken.getExpiryDate())
                 .accountToken(account.getAccountToken())
                 .email(account.getEmail())
@@ -99,12 +101,9 @@ public class AuthController {
                 .roles(roleCodeResponses)
                 .build();
 
-        ResponseCookie responseCookie = ResponseCookie.from("refreshToken", refreshToken.getToken())
-                .httpOnly(true)
-                .secure(true)
-                .path("/")
-                .maxAge(REFRESH_TOKEN_PERIOD / 1000)
-                .build();
+        long maxAgeSeconds = REFRESH_TOKEN_PERIOD / 1000;
+        ResponseCookie responseCookie = ResponseCookieGenerator.responseCookie(
+                "refreshToken", refreshToken.getToken(), true, true, "/", maxAgeSeconds);
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
@@ -112,11 +111,13 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(@AuthenticationPrincipal CustomUserDetails principal) {
-        log.debug("principal:: " + principal);
+    public ResponseEntity<?> logout(@CookieValue(name = "refreshToken") String cookieValue) {
+        refreshTokenService.deleteByToken(cookieValue);
         SecurityContextHolder.clearContext();
-
-        return ResponseEntity.ok(CommonApiResponse.success(null));
+        ResponseCookie responseCookie = ResponseCookieGenerator.responseCookie("refreshToken", null, true, true, "/", 0);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
+                .body(CommonApiResponse.success(null));
     }
 
     @Transactional

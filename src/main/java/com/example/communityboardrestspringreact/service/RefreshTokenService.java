@@ -4,4 +4,6 @@ import com.example.communityboardrestspringreact.domain.RefreshToken;
 
 public interface RefreshTokenService {
     RefreshToken createRefreshToken(String accountToken);
+
+    void deleteByToken(String cookieValue);
 }

@@ -20,6 +20,27 @@ const Login = () => {
         //alert(JSON.stringify(data));
         AuthService.login(data).then(response => {
             console.log("response:: ", response);
+            /*
+            {
+              "data": {
+                "auth": {
+                  "accountToken": "vcblpDDaEdvcblpDDaEd",
+                  "name": "사용자",
+                  "email": "user@email.com",
+                  "phone": "010-1234-1111",
+                  "profileImage": null,
+                  "roles": [
+                    {
+                      "code": "rwCtSm",
+                      "name": "사용자"
+                    }
+                  ]
+                }
+              },
+              "result": "SUCCESS",
+              "message": null
+            }
+            */
 
             sessionStorage.setItem("account", JSON.stringify(response.data.account));
             sessionStorage.setItem("token", JSON.stringify(response.data.token));

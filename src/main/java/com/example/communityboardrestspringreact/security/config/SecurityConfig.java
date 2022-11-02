@@ -61,7 +61,9 @@ public class SecurityConfig {
                 "/h2-console/**",
                 "/static/**",
                 "/templates/**",
-                "/public/**"
+                "/public/**",
+                "/api/auth/signup",
+                "/api/auth/login"
         ).requestMatchers(PathRequest.toStaticResources().atCommonLocations()));
     }
 

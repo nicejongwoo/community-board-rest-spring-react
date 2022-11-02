@@ -14,6 +14,7 @@ import com.example.communityboardrestspringreact.web.dto.request.LoginRequest;
 import com.example.communityboardrestspringreact.web.dto.request.RoleRequest;
 import com.example.communityboardrestspringreact.web.dto.request.SignUpRequest;
 import com.example.communityboardrestspringreact.web.dto.response.CommonApiResponse;
+import com.example.communityboardrestspringreact.web.dto.response.account.AccountResponse;
 import com.example.communityboardrestspringreact.web.dto.response.auth.AuthResponse;
 import com.example.communityboardrestspringreact.web.dto.response.role.RoleCodeResponse;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -53,6 +53,9 @@ public class AuthController {
     @Value("${jwt.refreshExpirationMs}")
     private Long REFRESH_TOKEN_PERIOD;
 
+    @Value("${jwt.accessExpirationsMs}")
+    private Long TOKEN_PERIOD;
+
     @Transactional
     @PostMapping("/signup")
     public ResponseEntity<?> register(@RequestBody SignUpRequest request) {
@@ -75,24 +78,26 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
 
+        //authenticationToken
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword());
+
+        //setAuthentication
         Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authenticate);
 
+        //userDetails
         CustomUserDetails userDetails = (CustomUserDetails) authenticate.getPrincipal();
         Account account = userDetails.getAccount();
         List<RoleCodeResponse> roleCodeResponses = account.getRoles().stream().map(role -> {
             return new RoleCodeResponse(role.getCode(), role.getName());
         }).collect(Collectors.toList());
 
+        //token
         String accessToken = tokenService.createAccessToken(authenticate);
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(account.getAccountToken());
 
-        AuthResponse response = AuthResponse.builder()
-                .token(accessToken)
-                .refresh(refreshToken.getToken())
-                .expiryDate(refreshToken.getExpiryDate())
+        AccountResponse accountResponse = AccountResponse.builder()
                 .accountToken(account.getAccountToken())
                 .email(account.getEmail())
                 .name(account.getName())
@@ -101,22 +106,32 @@ public class AuthController {
                 .roles(roleCodeResponses)
                 .build();
 
-        long maxAgeSeconds = REFRESH_TOKEN_PERIOD / 1000;
-        ResponseCookie responseCookie = ResponseCookieGenerator.responseCookie(
-                "refreshToken", refreshToken.getToken(), true, true, "/", maxAgeSeconds);
+        AuthResponse response = AuthResponse.builder().auth(accountResponse).build();
+
+        long maxAgeRefreshToken = REFRESH_TOKEN_PERIOD / 1000;
+        long maxAgeAccessToken = TOKEN_PERIOD / 1000;
+
+        ResponseCookie refreshCookie = ResponseCookieGenerator.responseCookie(
+                "r_auth_token", refreshToken.getToken(), true, true, "/", maxAgeRefreshToken);
+
+        ResponseCookie accessCookie = ResponseCookieGenerator.responseCookie(
+                "a_auth_token", accessToken, true, true, "/", maxAgeAccessToken);
 
         return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
+                .header(HttpHeaders.SET_COOKIE, refreshCookie.toString(), accessCookie.toString())
                 .body(CommonApiResponse.success(response));
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(@CookieValue(name = "refreshToken") String cookieValue) {
+    public ResponseEntity<?> logout(@CookieValue(name = "r_auth_token") String cookieValue) {
         refreshTokenService.deleteByToken(cookieValue);
         SecurityContextHolder.clearContext();
-        ResponseCookie responseCookie = ResponseCookieGenerator.responseCookie("refreshToken", null, true, true, "/", 0);
+
+        ResponseCookie refreshCookie = ResponseCookieGenerator.responseCookie("r_auth_token", null, true, true, "/", 0);
+        ResponseCookie accessCookie = ResponseCookieGenerator.responseCookie("a_auth_token", null, true, true, "/", 0);
+
         return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
+                .header(HttpHeaders.SET_COOKIE, refreshCookie.toString(), accessCookie.toString())
                 .body(CommonApiResponse.success(null));
     }
 

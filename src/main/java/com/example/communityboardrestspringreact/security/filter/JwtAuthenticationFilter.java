@@ -1,7 +1,6 @@
 package com.example.communityboardrestspringreact.security.filter;
 
 import com.example.communityboardrestspringreact.security.service.JwtTokenService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
@@ -9,9 +8,11 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -27,7 +28,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        String token = getJwtFromRequest(request);
+
+        String token = Arrays.stream(request.getCookies())
+                .filter(cookie -> cookie.getName().equals("a_auth_token"))
+                .findFirst()
+                .map(Cookie::getValue)
+                .orElse(null);
+
+//        String token = getJwtFromRequest(request);
 
         if (StringUtils.hasText(token) && tokenService.validateToken(token)) {
             Authentication authentication = tokenService.getAuthentication(token);

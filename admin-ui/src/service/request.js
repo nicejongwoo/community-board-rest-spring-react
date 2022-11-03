@@ -8,6 +8,7 @@ const request = (options) => {
         headers: {
             'Content-Type': 'application/json',
         },
+        withCredentials: true
     })
 
     const onSuccess = (response) => {

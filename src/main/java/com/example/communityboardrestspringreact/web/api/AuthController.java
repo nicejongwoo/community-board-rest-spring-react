@@ -33,6 +33,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -111,14 +113,14 @@ public class AuthController {
         long maxAgeRefreshToken = REFRESH_TOKEN_PERIOD / 1000;
         long maxAgeAccessToken = TOKEN_PERIOD / 1000;
 
-        ResponseCookie refreshCookie = ResponseCookieGenerator.responseCookie(
-                "r_auth_token", refreshToken.getToken(), true, true, "/", maxAgeRefreshToken);
+        ResponseCookie rAuthToken = ResponseCookieGenerator.responseCookie(
+                "r_auth", refreshToken.getToken(), true, true, "/", maxAgeRefreshToken);
 
-        ResponseCookie accessCookie = ResponseCookieGenerator.responseCookie(
-                "a_auth_token", accessToken, true, true, "/", maxAgeAccessToken);
+        ResponseCookie aAuthToken = ResponseCookieGenerator.responseCookie(
+                "a_auth", accessToken, true, true, "/", maxAgeAccessToken);
 
         return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, refreshCookie.toString(), accessCookie.toString())
+                .header(HttpHeaders.SET_COOKIE, rAuthToken.toString(), aAuthToken.toString())
                 .body(CommonApiResponse.success(response));
     }
 

@@ -42,11 +42,11 @@ const Login = () => {
             }
             */
 
-            sessionStorage.setItem("account", JSON.stringify(response.data.account));
-            sessionStorage.setItem("token", JSON.stringify(response.data.token));
-            setAccount(response.data.account);
-            setToken(response.data.token);
-            setLogged(true);
+            // sessionStorage.setItem("account", JSON.stringify(response.data.auth));
+            // sessionStorage.setItem("token", JSON.stringify(response.data.token));
+            // setAccount(response.data.auth);
+            // setToken(response.data.token);
+            // setLogged(true);
             navigate("/");
         }).catch(error => {
             console.error("error:: ", error);

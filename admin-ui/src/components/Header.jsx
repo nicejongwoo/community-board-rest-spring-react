@@ -1,11 +1,10 @@
 import React from 'react';
-import {Link, useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {BoxArrowRight} from "react-bootstrap-icons";
 import logo from 'assets/images/main_logo.png';
-import {useRecoilValue, useSetRecoilState} from "recoil";
-import {accountState, loggedState} from "../state/AuthState";
 import styled from "styled-components";
 import AuthService from "../service/auth/authService";
+import useAuth from "../hooks/useAuth";
 
 const StyledFlex = styled.div`
 `
@@ -95,11 +94,7 @@ const HeaderProfileWrapper = styled.div`
 `
 
 const Header = () => {
-
-    const navigate = useNavigate();
-
-    const setLogged = useSetRecoilState(loggedState);
-    const account = useRecoilValue(accountState);
+    const {auth, setAuth} = useAuth();
 
     return (
         <HeaderContainer className="hidden_print">
@@ -110,22 +105,16 @@ const Header = () => {
                     </Link>
                 </HeaderLogoWrapper>
 
-                {/*<HeaderDirectionWrapper className="direct-wrapper">*/}
-                    {/*<Link to="/user" >바로가기</Link>*/}
-                {/*</HeaderDirectionWrapper>*/}
-
                 <HeaderProfileWrapper>
-                    <p><span>{account && account.name}</span>님 반갑습니다.</p>
+                    <p><span>{auth?.name}</span>님 반갑습니다.</p>
                     <button
                         onClick={(e) => {
                             e.preventDefault();
                             if (window.confirm("로그아웃 하시겠습니까?")) {
                                 AuthService.logout().then(response => {
-                                    sessionStorage.removeItem("account");
-                                    sessionStorage.removeItem("token");
-                                    setLogged(false);
+                                    setAuth({});
                                     alert("로그아웃 되었습니다.");
-                                    navigate("/login");
+                                    window.location.replace("/login");
                                 }).catch(error => {
                                     console.error("error:: ", error);
                                 });

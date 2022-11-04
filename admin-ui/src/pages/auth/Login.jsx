@@ -1,53 +1,28 @@
 import React from 'react';
-import {Link, useNavigate} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
-import {useSetRecoilState} from "recoil";
 import AuthService from "service/auth/authService";
-import {accountState, loggedState, tokenState} from "state/AuthState";
+import useAuth from "hooks/useAuth";
 
 const Login = () => {
 
     const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from?.pathname || "/";
+
     const {register, handleSubmit, watch, formState: {errors, isValid}} = useForm({
         mode: "onChange"
     });
-
-    const setAccount = useSetRecoilState(accountState);
-    const setToken = useSetRecoilState(tokenState);
-    const setLogged = useSetRecoilState(loggedState);
+    const {setAuth} = useAuth();
 
     const onSubmit = (data) => {
-        //alert(JSON.stringify(data));
         AuthService.login(data).then(response => {
-            console.log("response:: ", response);
-            /*
-            {
-              "data": {
-                "auth": {
-                  "accountToken": "vcblpDDaEdvcblpDDaEd",
-                  "name": "사용자",
-                  "email": "user@email.com",
-                  "phone": "010-1234-1111",
-                  "profileImage": null,
-                  "roles": [
-                    {
-                      "code": "rwCtSm",
-                      "name": "사용자"
-                    }
-                  ]
-                }
-              },
-              "result": "SUCCESS",
-              "message": null
-            }
-            */
-
-            // sessionStorage.setItem("account", JSON.stringify(response.data.auth));
-            // sessionStorage.setItem("token", JSON.stringify(response.data.token));
-            // setAccount(response.data.auth);
-            // setToken(response.data.token);
-            // setLogged(true);
-            navigate("/");
+            // console.log("response:: ", response);
+            // console.log("from:: ", from);
+            // setAuth(response.data.auth);
+            localStorage.setItem("userInfo", JSON.stringify(response.data.auth));
+            setAuth(JSON.parse(localStorage.getItem("userInfo")));
+            navigate(from, {replace: true});
         }).catch(error => {
             console.error("error:: ", error);
         })

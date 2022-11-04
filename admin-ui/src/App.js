@@ -1,11 +1,10 @@
 import React from "react";
 import {BrowserRouter} from "react-router-dom";
-import {useRecoilState} from "recoil";
 import AppRouter from "router/AppRouter";
 import styled, {css} from "styled-components";
-import {loggedState} from "state/AuthState";
 import Header from "components/Header";
 import Left from "components/Left";
+import {AuthProvider} from "context/AuthProvider";
 
 const AppContainer = styled.div`
   display: flex;
@@ -15,16 +14,19 @@ const AppContainer = styled.div`
   flex-direction: row;
   @media print {
     html, body {
-      height:100%;
+      height: 100%;
       margin: 0 !important;
       padding: 0 !important;
       overflow: hidden;
     }
+
     .hidden_print {
       display: none;
     }
+
     main {
       position: relative;
+
       .section {
         display: block;
         overflow-y: visible;
@@ -45,7 +47,7 @@ const Main = styled.main`
     width: 100%;
     height: 100%;
     flex-direction: row;
-    flex: 1 1 100%;    
+    flex: 1 1 100%;
   `}
 `
 
@@ -58,12 +60,13 @@ export const StyledSection = styled.section`
   width: 100%;
   height: 100%;
   overflow-y: auto;
+
   div.content-wrapper {
     flex-direction: row;
     padding: 2em;
     overflow: auto;
     min-width: 960px;
-    width: 1080px;    
+    width: 1080px;
   }
 `
 
@@ -75,21 +78,18 @@ export const StyledTotalCount = styled.div`
 
 function App() {
 
-    const [logged, setLogged] = useRecoilState(loggedState);
-
-    console.log("logged:: ", logged);
-
     return (
         <BrowserRouter>
-            <AppContainer>
-                {logged && (<Header />)}
+            <AuthProvider>
+                <AppContainer>
+                    <Header/>
 
-                {/*<main className={`flex-root ${logged ? "main" : ""}`}>*/}
-                <Main logged={logged}>
-                    {logged && (<Left />)}
-                    <AppRouter/>
-                </Main>
-            </AppContainer>
+                    <Main>
+                        <Left/>
+                        <AppRouter/>
+                    </Main>
+                </AppContainer>
+            </AuthProvider>
         </BrowserRouter>
     );
 }

@@ -1,23 +1,18 @@
 import React from 'react';
-import {Navigate, useNavigate} from "react-router-dom";
+import {Navigate, useLocation} from "react-router-dom";
+import useAuth from "hooks/useAuth";
 
-const ProtectedRoute = ({account, children, redirectPath = "/login", requiredRoles}) => {
+const ProtectedRoute = ({children, requiredRoles}) => {
+    const location = useLocation();
+    const {auth} = useAuth();
 
-    const navigate = useNavigate();
-
-    if (!account) {
-        return <Navigate to={redirectPath} replace/>;
-    }
-
-    // console.log("account:: ", account);
-    let isPermissions = account.roles.some(role => requiredRoles.includes(role.name));
-    if (!isPermissions) {
-        alert("잘못된 요청입니다."); //권한없음...
-        navigate(-1);
-        return false;
-    }
-
-    return children;
+    return (
+        auth?.roles?.find(role => requiredRoles.includes(role.code))
+            ? children
+            : auth?.name
+                ? <Navigate to="/unauthorized" state={{from: location}} replace/>
+                : <Navigate to="/login" state={{from: location}} replace/>
+    );
 };
 
 export default ProtectedRoute;

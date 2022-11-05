@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyledSection} from "App";
+import {StyledBtnWrapper, StyledFormWrapper, StyledInputWrapper, StyledSection} from "App";
 import BreadcrumbComponent from "components/BreadcrumbComponent";
 import {TEST_MENU_NAME, TEST_PARAM} from "util/constant";
 import {useForm} from "react-hook-form";
@@ -35,55 +35,71 @@ const TestInsert = () => {
                     path1={`/test${TEST_PARAM}`}
                 />
 
-                <div>
+                <StyledFormWrapper>
 
                     <form noValidate onSubmit={handleSubmit(onSubmit)}>
 
-                        <div>
-                            <label>알림여부</label>
-                            <input
-                                type="checkbox"
-                                {...register(
-                                    "notice"
-                                )}
-                            />
-                            {errors.notice && errors.notice.message}
-                        </div>
+                        <StyledInputWrapper>
+                            <div className="flex">
+                                <label htmlFor="notice">알림여부</label>
+                                <input
+                                    id="notice"
+                                    type="checkbox"
+                                    {...register(
+                                        "notice"
+                                    )}
+                                />
+                            </div>
 
-                        <div>
-                            <label htmlFor="title">제목</label>
-                            <input
-                                {...register(
-                                    "title",
-                                    {
-                                        required: "필수 입력 항목입니다."
-                                    }
-                                )}
-                            />
-                            {errors.title && errors.title.message}
-                        </div>
+                            <div className="grid">
+                                <div className="grid-c">
+                                    <label htmlFor="title">제목</label>
+                                    <div>
+                                        <input
+                                            id="title"
+                                            {...register(
+                                                "title",
+                                                {
+                                                    required: "필수 입력 항목입니다."
+                                                }
+                                            )}
+                                        />
+                                    </div>
+                                    <span className="error-msg">
+                                        {errors.title && errors.title.message}
+                                    </span>
+                                </div>
+                            </div>
 
-                        <div>
-                            <label htmlFor="content">내용</label>
-                            <textarea
-                                {...register(
-                                    "content",
-                                    {
-                                        required: "필수 입력 항목입니다."
-                                    }
-                                )}
-                            />
-                            {errors.content && errors.content.message}
-                        </div>
+                            <div className="grid">
+                                <div className="grid-c">
+                                    <label htmlFor="content">내용</label>
+                                    <div>
+                                    <textarea
+                                        id="content"
+                                        {...register(
+                                            "content",
+                                            {
+                                                required: "필수 입력 항목입니다."
+                                            }
+                                        )}
+                                        rows="10"
+                                    />
+                                    </div>
+                                    <span className="error-msg">
+                                        {errors.content && errors.content.message}
+                                    </span>
+                                </div>
+                            </div>
+                        </StyledInputWrapper>
 
-
-                        <div>
+                        <StyledBtnWrapper>
                             <button>저장</button>
-                        </div>
+                        </StyledBtnWrapper>
 
                     </form>
 
-                </div>
+                </StyledFormWrapper>
 
             </div>
 

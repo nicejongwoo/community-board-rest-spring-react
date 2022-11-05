@@ -41,14 +41,12 @@ const Main = styled.main`
   display: flex;
   box-sizing: border-box;
   flex-wrap: wrap;
-  ${props => props.logged && css`
-    position: fixed;
-    padding-top: 64px;
-    width: 100%;
-    height: 100%;
-    flex-direction: row;
-    flex: 1 1 100%;
-  `}
+  position: fixed;
+  padding-top: 64px;
+  width: 100%;
+  height: 100%;
+  flex-direction: row;
+  flex: 1 1 100%;
 `
 
 export const StyledSection = styled.section`

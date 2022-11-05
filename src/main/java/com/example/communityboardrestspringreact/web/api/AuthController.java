@@ -125,12 +125,12 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(@CookieValue(name = "r_auth_token") String cookieValue) {
+    public ResponseEntity<?> logout(@CookieValue(name = "r_auth") String cookieValue) {
         refreshTokenService.deleteByToken(cookieValue);
         SecurityContextHolder.clearContext();
 
-        ResponseCookie refreshCookie = ResponseCookieGenerator.responseCookie("r_auth_token", null, true, true, "/", 0);
-        ResponseCookie accessCookie = ResponseCookieGenerator.responseCookie("a_auth_token", null, true, true, "/", 0);
+        ResponseCookie refreshCookie = ResponseCookieGenerator.responseCookie("r_auth", null, true, true, "/", 0);
+        ResponseCookie accessCookie = ResponseCookieGenerator.responseCookie("a_auth", null, true, true, "/", 0);
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, refreshCookie.toString(), accessCookie.toString())

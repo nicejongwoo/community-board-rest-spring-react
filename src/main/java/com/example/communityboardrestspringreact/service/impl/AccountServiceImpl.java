@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -37,7 +38,10 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Long register(AccountRegisterRequest request) {
         Account account = AccountDtoMapper.MAPPER.register(request);
+        Role role = roleRepository.findByRole("ROLE_USER").get();
+
         account.updateEncodedPassword(passwordEncoder.encode(INIT_PASSWORD));
+        account.setRoles(Arrays.asList(role));
 
         accountRepository.save(account);
         return account.getId();

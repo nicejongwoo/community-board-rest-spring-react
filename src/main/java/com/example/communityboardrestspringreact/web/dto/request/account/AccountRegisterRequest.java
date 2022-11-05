@@ -9,7 +9,6 @@ public class AccountRegisterRequest {
 
     private String name;
     private String email;
-    private String password;
     private String phone;
 
 }

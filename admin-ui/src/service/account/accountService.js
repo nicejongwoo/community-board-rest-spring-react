@@ -11,6 +11,7 @@ const insert = (data) => {
     return request({
         url: `/account`,
         method: "POST",
+        data: data
     })
 }
 

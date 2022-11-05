@@ -85,7 +85,7 @@ const Account = () => {
                     path1={`/account${ACCOUNT_PARAM}`}
                 />
 
-                <AddButton moveInsertPage={() => {navigate(`/test/insert${location.search}`);}}/>
+                <AddButton moveInsertPage={() => {navigate(`/account/insert${location.search}`);}}/>
 
                 <SearchComponent
                     page="account"

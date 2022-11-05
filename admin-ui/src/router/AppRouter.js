@@ -8,6 +8,7 @@ import Test from "pages/test";
 import Main from "pages/main";
 import TestInsert from "pages/test/insert";
 import Account from "pages/account";
+import AccountInsert from "pages/account/insert";
 
 function AppRouter() {
 
@@ -23,6 +24,10 @@ function AppRouter() {
                 <Route
                     path="/account"
                     element={<ProtectedRoute children={<Account />} requiredRoles={["regaXL"]} />}
+                />
+                <Route
+                    path="/account/insert"
+                    element={<ProtectedRoute children={<AccountInsert />} requiredRoles={["regaXL"]} />}
                 />
                 <Route
                     path="/test"

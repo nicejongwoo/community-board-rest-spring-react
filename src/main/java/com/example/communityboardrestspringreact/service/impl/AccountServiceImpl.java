@@ -31,12 +31,13 @@ public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final String INIT_PASSWORD = "password123!@#";
 
     @Transactional
     @Override
     public Long register(AccountRegisterRequest request) {
         Account account = AccountDtoMapper.MAPPER.register(request);
-        account.updateEncodedPassword(passwordEncoder.encode(request.getPassword()));
+        account.updateEncodedPassword(passwordEncoder.encode(INIT_PASSWORD));
 
         accountRepository.save(account);
         return account.getId();

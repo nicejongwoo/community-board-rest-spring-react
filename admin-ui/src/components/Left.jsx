@@ -85,23 +85,23 @@ const Left = () => {
                         </MenuLink>
                     </MenuList>}
 
-                    {adminPermission && <MenuList>
+                    <MenuList>
                         <MenuLink
                             page={currentMenu === "test" ? "currentPage" : ""}
                             to={`/test${TEST_PARAM}`}
                         >
                             <span>테스트</span>
                         </MenuLink>
-                    </MenuList>}
+                    </MenuList>
 
-                    <MenuList >
+                    {adminPermission && <MenuList >
                         <MenuLink
                             page={currentMenu === "community" ? "currentPage" : ""}
                             to={`/community${COMMUNITY_PARAM}`}
                         >
                             <span >커뮤니티</span>
                         </MenuLink>
-                    </MenuList>
+                    </MenuList>}
 
                 </ul>
             </div>

@@ -9,6 +9,7 @@ import Main from "pages/main";
 import TestInsert from "pages/test/insert";
 import Account from "pages/account";
 import AccountInsert from "pages/account/insert";
+import Unauthorized from "../pages/error/Unauthorized";
 
 function AppRouter() {
 
@@ -31,16 +32,21 @@ function AppRouter() {
                 />
                 <Route
                     path="/test"
-                    element={<ProtectedRoute children={<Test />} requiredRoles={["regaXL"]} />}
+                    element={<ProtectedRoute children={<Test />} requiredRoles={["regaXL", "rwCtSm"]} />}
                 />
                 <Route
                     path="test/insert"
-                    element={<ProtectedRoute children={<TestInsert />} requiredRoles={["regaXL"]}/>}
+                    element={<ProtectedRoute children={<TestInsert />} requiredRoles={["regaXL", "rwCtSm"]}/>}
                 />
 
                 <Route
                     path="/community"
-                    element={<ProtectedRoute children={<Community />} requiredRoles={["rwCtSm", "regaXL"]} />}
+                    element={<ProtectedRoute children={<Community />} requiredRoles={["regaXL"]} />}
+                />
+
+                <Route
+                    path="/unauthorized"
+                    element={<Unauthorized/>}
                 />
             </Routes>
         </>

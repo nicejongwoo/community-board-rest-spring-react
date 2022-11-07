@@ -3,8 +3,9 @@ import {Link} from "react-router-dom";
 import {BoxArrowRight} from "react-bootstrap-icons";
 import logo from 'assets/images/main_logo.png';
 import styled from "styled-components";
-import AuthService from "../service/auth/authService";
-import useAuth from "../hooks/useAuth";
+import AuthService from "service/auth/authService";
+import {useRecoilState} from "recoil";
+import {authState} from "state/authState";
 
 const StyledFlex = styled.div`
 `
@@ -94,7 +95,7 @@ const HeaderProfileWrapper = styled.div`
 `
 
 const Header = () => {
-    const {auth, setAuth} = useAuth();
+    const [auth, setAuth] = useRecoilState(authState);
 
     return (
         <HeaderContainer className="hidden_print">

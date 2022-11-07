@@ -4,7 +4,7 @@ import {useRecoilValue} from "recoil";
 import styled from "styled-components";
 import {currentMenuState} from "state/menuState";
 import {ACCOUNT_MENU_NAME, ACCOUNT_PARAM, COMMUNITY_PARAM, TEST_PARAM} from "util/constant";
-import useAuth from "../hooks/useAuth";
+import {authState} from "state/authState";
 
 const MenuNav = styled.nav`
   width: 220px;
@@ -64,7 +64,7 @@ const Footer = styled.footer`
 const Left = () => {
 
     const currentMenu = useRecoilValue(currentMenuState);
-    const {auth} = useAuth();
+    const auth = useRecoilValue(authState);
 
     let adminPermission = auth?.roles?.find(role => ["regaXL"].includes(role.code));
 

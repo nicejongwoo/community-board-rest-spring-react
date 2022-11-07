@@ -5,6 +5,8 @@ import styled, {css} from "styled-components";
 import Header from "components/Header";
 import Left from "components/Left";
 import {AuthProvider} from "context/AuthProvider";
+import {useRecoilState} from "recoil";
+import {authState} from "state/authState";
 
 const AppContainer = styled.div`
   display: flex;
@@ -142,19 +144,19 @@ export const StyledBtnWrapper = styled.div`
 `
 
 function App() {
+    const [auth, setAuth] = useRecoilState(authState);
 
     return (
         <BrowserRouter>
-            <AuthProvider>
+            {/*<AuthProvider>*/}
                 <AppContainer>
-                    <Header/>
-
                     <Main>
-                        <Left/>
+                        {auth && <Header/>}
+                        {auth && <Left/>}
                         <AppRouter/>
                     </Main>
                 </AppContainer>
-            </AuthProvider>
+            {/*</AuthProvider>*/}
         </BrowserRouter>
     );
 }

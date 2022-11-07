@@ -1,10 +1,11 @@
 import React from 'react';
 import {Navigate, useLocation} from "react-router-dom";
-import useAuth from "hooks/useAuth";
+import {useRecoilValue} from "recoil";
+import {authState} from "state/authState";
 
 const ProtectedRoute = ({children, requiredRoles}) => {
     const location = useLocation();
-    const {auth} = useAuth();
+    const auth = useRecoilValue(authState);
 
     return (
         auth?.roles?.find(role => requiredRoles.includes(role.code))

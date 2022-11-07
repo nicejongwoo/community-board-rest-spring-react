@@ -2,7 +2,8 @@ import React from 'react';
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
 import AuthService from "service/auth/authService";
-import useAuth from "hooks/useAuth";
+import {useRecoilState} from "recoil";
+import {authState} from "state/authState";
 
 const Login = () => {
 
@@ -13,15 +14,12 @@ const Login = () => {
     const {register, handleSubmit, watch, formState: {errors, isValid}} = useForm({
         mode: "onChange"
     });
-    const {setAuth} = useAuth();
 
+    const [auth, setAuth] = useRecoilState(authState);
     const onSubmit = (data) => {
         AuthService.login(data).then(response => {
-            // console.log("response:: ", response);
-            // console.log("from:: ", from);
-            // setAuth(response.data.auth);
-            localStorage.setItem("userInfo", JSON.stringify(response.data.auth));
-            setAuth(JSON.parse(localStorage.getItem("userInfo")));
+            localStorage.setItem("auth", JSON.stringify(response.data.auth));
+            setAuth(response.data.auth);
             navigate(from, {replace: true});
         }).catch(error => {
             console.error("error:: ", error);

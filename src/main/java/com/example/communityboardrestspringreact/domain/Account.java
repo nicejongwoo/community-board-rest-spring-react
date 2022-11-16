@@ -1,6 +1,7 @@
 package com.example.communityboardrestspringreact.domain;
 
 import com.example.communityboardrestspringreact.util.RandomCharacterGenerator;
+import com.example.communityboardrestspringreact.web.dto.request.account.AccountEditRequest;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.hibernate.annotations.Comment;
@@ -75,5 +76,12 @@ public class Account implements Serializable {
     void prePersist() {
         this.joinedAt = LocalDateTime.now();
         this.accountToken = RandomCharacterGenerator.randomCharacterWithPrefix("user", 20);
+    }
+
+    public void edit(AccountEditRequest request) {
+        this.name = request.getName();
+        this.email = request.getEmail();
+        this.phone = request.getPhone();
+        this.profileImage = request.getProfileImage();
     }
 }

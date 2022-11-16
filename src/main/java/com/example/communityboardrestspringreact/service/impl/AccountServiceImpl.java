@@ -6,6 +6,7 @@ import com.example.communityboardrestspringreact.repository.AccountRepository;
 import com.example.communityboardrestspringreact.repository.RoleRepository;
 import com.example.communityboardrestspringreact.service.AccountService;
 import com.example.communityboardrestspringreact.web.dto.mapper.AccountDtoMapper;
+import com.example.communityboardrestspringreact.web.dto.request.account.AccountEditRequest;
 import com.example.communityboardrestspringreact.web.dto.request.account.AccountRegisterRequest;
 import com.example.communityboardrestspringreact.web.dto.response.account.AccountResponse;
 import com.example.communityboardrestspringreact.web.dto.response.account.AccountSearchResponse;
@@ -72,9 +73,28 @@ public class AccountServiceImpl implements AccountService {
     @Transactional(readOnly = true)
     @Override
     public AccountResponse getOne(String token) {
+        Account account = getAccount(token);
+        return AccountDtoMapper.MAPPER.getOne(account);
+    }
+
+    @Transactional
+    @Override
+    public void edit(String token, AccountEditRequest request) {
+        Account account = getAccount(token);
+        account.edit(request);
+        account.updateEncodedPassword(request.getPassword());
+    }
+
+    @Transactional
+    @Override
+    public void delete(String token) {
+        Account account = getAccount(token);
+        accountRepository.delete(account);
+    }
+
+    private Account getAccount(String token) {
         Account account = accountRepository.findByAccountToken(token)
                 .orElseThrow(() -> new RuntimeException("Not Found Account"));
-
-        return AccountDtoMapper.MAPPER.getOne(account);
+        return account;
     }
 }

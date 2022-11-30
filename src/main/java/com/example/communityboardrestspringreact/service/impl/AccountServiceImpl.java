@@ -37,7 +37,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Transactional
     @Override
-    public Long register(AccountRegisterRequest request) {
+    public String register(AccountRegisterRequest request) {
         Account account = AccountDtoMapper.MAPPER.register(request);
         Role role = roleRepository.findByRole("ROLE_USER").get();
 
@@ -45,7 +45,7 @@ public class AccountServiceImpl implements AccountService {
         account.setRoles(Arrays.asList(role));
 
         accountRepository.save(account);
-        return account.getId();
+        return account.getAccountToken();
     }
 
     @Transactional(readOnly = true)

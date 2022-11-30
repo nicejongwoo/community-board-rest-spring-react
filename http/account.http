@@ -1,21 +1,48 @@
 ### register account
-POST http://localhost:8080/api/account
+POST http://localhost:8080/api/accounts
 Content-Type: application/json
-Authorization: Bearer {{auth_token}}
+#Authorization: Bearer {{auth_token}}
 
 {
-  "name": "사용자",
-  "email": "user@email.kr",
+  "name": "사용자1",
+  "email": "user1@email.kr",
   "password": "123qwe!@#",
-  "phone": "010-0101-0101"
+  "phone": "010-1111-1111"
+}
+
+### register account
+POST http://localhost:8080/api/accounts
+Content-Type: application/json
+#Authorization: Bearer {{auth_token}}
+
+{
+  "name": "사용자2",
+  "email": "user2@email.kr",
+  "password": "123qwe!@#",
+  "phone": "010-2222-2222"
 }
 
 ### search account
-GET http://localhost:8080/api/account?page=0&size=10&sort=id,desc
+GET http://localhost:8080/api/accounts?page=0&size=10&sort=id,desc
 #GET http://localhost:8080/api/account?page=0&size=10&sort=id,desc&type=name&keyword=관리
 Authorization: Bearer {{auth_token}}
 
 ### get account
-GET http://localhost:8080/api/account/1
+GET http://localhost:8080/api/accounts/userZvJCoWiqqEBWmgaD
 Authorization: Bearer {{auth_token}}
 
+### put account
+PUT http://localhost:8080/api/accounts/userZvJCoWiqqEBWmgaD
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "name": "사용자1_수정",
+  "email": "user1_modify@email.kr",
+  "password": "password123!@#",
+  "phone": "010-0000-9999"
+}
+
+### delete account
+DELETE http://localhost:8080/api/accounts/userZvJCoWiqqEBWmgaD
+Authorization: Bearer {{auth_token}}

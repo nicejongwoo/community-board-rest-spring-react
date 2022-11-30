@@ -9,7 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface AccountService {
-    Long register(AccountRegisterRequest request);
+    String register(AccountRegisterRequest request);
 
     Page<AccountSearchResponse> search(AccountSearch search, Pageable pageable);
 
